@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="./public/assets/img/icon/hollow-icon.ico" type="image/x-icon">
     <title>Hollow Page</title>
 
     <link rel="stylesheet" href="./public/assets/css/global.style.css">
@@ -18,14 +18,23 @@
 
 <body>
 
-    <div class="home-bg-wrapper">
+    <section class="home-section" id="home">
 
-        <img src="" alt="Hollow Page">
+        <div class="embed-wrapper">
 
-        <iframe id="ytplayer" type="text/html" src="https://www.youtube.com/embed/NhG6PA9Xoog?playlist=NhG6PA9Xoog&controls=0&disablekb=1&enablejsapi=1&fs=0&loop=1&autoplay=1&mute=1" frameborder="0">
-        </iframe>
+            <img id="embed_img" class="embed-img    " src="./public/assets/img/bg/background-embed.png" alt="Hollow Page">
 
-    </div>
+            <div id="player" class="embed-iframe"></div>
+
+        </div>
+
+    </section>
+
+    <section class="teste" id="teste">
+
+        <p>teste</p>
+
+    </section>
 
 </body>
 
@@ -33,8 +42,22 @@
 
 <script>
 
-    // function startVideoBg() {
+    var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+            videoId: 'NhG6PA9Xoog?playlist=NhG6PA9Xoog&controls=0&disablekb=1&fs=0&loop=1&autoplay=1&mute=1&modestbranding=1&rel=0&showinfo=0&origin=https://www.youtube.com',
+            referrerpolicy: 'no-referrer'
+        });
+    }
 
-    // }
+    function setHidden(id) {
+        document.getElementById(id).classList.add('hidden');
+    }
+
+    window.onload = function () {
+        setInterval(
+            setHidden('embed_img'), 3000
+        );
+    }
 
 </script>
