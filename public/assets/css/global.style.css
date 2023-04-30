@@ -1,9 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend&family=Poppins:wght@300;400;500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+:root {
+    --white: #FFFFFF;
+    --black: #000000;
+    --black2: #020204;
+    --gray-bg: #0F0F0F;
+    --light-gray: #525252;
+    --grimm1: #6D1930;
+    --grimm2: #EF6069;
+    --crystal: #E9AFE9;
+    --dreams: #BF78CE;
+    --lifeblood: #69E2EE;
+    --godmaster: #DDC890;
+}
+
+.grimm1 {
+    color: var(--grimm1);
+}
+
+.grimm2 {
+    color: var(--grimm2);
+}
+
+.crystal {
+    color: var(--crystal);
+}
+
+.dreams {
+    color: var(--dreams);
+}
+
+.lifeblood {
+    color: var(--lifeblood);
+}
+
+.godmaster {
+    color: var(--godmaster);
+}
+
 .hidden {
     display: none;
+}
+
+.title {
+    color: var(--white);
+    font-family: 'Poppins';
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.subtitle {
+    color: var(--white);
+    font-size: 36px;
+    font-family: 'Poppins';
+    font-weight: bold;
+}
+
+.text {
+    color: var(--white);
+    font-family: 'Poppins';
+    font-weight: regular;
+}
+
+.big-text {
+    font-size: 24px;
+    color: var(--white);
+    font-family: 'Poppins';
+    font-weight: regular;
+}
+
+.btn {
+    border: 2px solid var(--black);
+    border-radius: 15px;
+    background-color: var(--white);
+    color: var(--black);
+    font-family: 'Poppins';
+    font-size: 20px;
+    padding: 10px 100px;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+
+.btn:hover{
+    transform: scale(1.1);
+}
+
+.copyright {
+
+}
+
+.reverse {
+    flex-direction: row-reverse;
 }
