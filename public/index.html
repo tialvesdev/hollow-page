@@ -18,6 +18,61 @@
 
 <body>
 
+    <nav class="nav">
+
+        <a class="nav-logo" href="./index.html">
+            <img class="nav-img" src="./assets/img/icon/hollow-icon.ico" alt="Hollow Page">
+        </a>
+
+        <ul class="nav-ul">
+            <li>
+                <a class="nav-a text" href="#">Início</a>
+            </li>
+            <li>
+                <a class="nav-a text" href="#main">Hollow Knight</a>
+            </li>
+            <li>
+                <a class="nav-a text" href="#community">Projeto</a>
+            </li>
+            <li>
+                <button class="btn nav-btn" href="./login/login.html">Entrar</button>
+            </li>
+            <li>
+                <button id="nav_btn_tema" class="nav-btn-tema" onclick="dropdownCores()">
+                    <img src="./assets/img/icon/colors-icon.png" alt="Tema de Cores">
+                </button>
+            </li>
+            <li class="nav-li-cores" id="nav_li_cores">
+                <div class="nav-cores" id="nav_cores">
+                    <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <div class="nav-sel-cor bg-grimm1"></div>
+                    </button>
+
+                    <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <div class="nav-sel-cor bg-grimm2"></div>
+                    </button>
+
+                    <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <div class="nav-sel-cor bg-crystal"></div>
+                    </button>
+
+                    <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <div class="nav-sel-cor bg-dreams"></div>
+                    </button>
+
+                    <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <div class="nav-sel-cor bg-lifeblood"></div>
+                    </button>
+
+                    <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <div class="nav-sel-cor bg-godmaster"></div>
+                    </button>
+                </div>
+            </li>
+        </ul>
+
+    </nav>
+
     <header class="header" id="header">
 
         <div class="embed-wrapper">
@@ -25,7 +80,6 @@
             <img id="embed_img" class="embed-img" src="./assets/img/bg/background-embed.png" alt="Hollow Page">
 
             <div id="embed_front" class="embed-front">
-                <img class="embed-knight" src="./assets/img/icon/hollow-icon.ico" alt="Knight">
                 <img class="embed-logo" src="./assets/img/hp-logo.png" alt="Hollow Page">
                 <p class="embed-text big-text">Uma complexidade capaz de
                     <br>
@@ -198,6 +252,20 @@
         setInterval(
             setHidden('embed_img'), 3000
         );
+    }
+
+    function dropdownCores() {
+        var paleta = document.getElementById('nav_btn_tema');
+        paleta.classList.toggle('rotate');
+        console.log('rodou');
+        
+        var drop = document.getElementById('nav_li_cores'); 
+        if(drop.classList.toggle('aparecer')) {
+            drop.style.display = 'flex';
+        } else {
+            drop.style.display = 'none';
+        }
+        console.log('Apareceu');
     }
 
 </script>

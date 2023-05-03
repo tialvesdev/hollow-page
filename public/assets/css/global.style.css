@@ -44,6 +44,30 @@
     color: var(--godmaster);
 }
 
+.bg-grimm1 {
+    background-color: var(--grimm1);
+}
+
+.bg-grimm2 {
+    background-color: var(--grimm2);
+}
+
+.bg-crystal {
+    background-color: var(--crystal);
+}
+
+.bg-dreams {
+    background-color: var(--dreams);
+}
+
+.bg-lifeblood {
+    background-color: var(--lifeblood);
+}
+
+.bg-godmaster {
+    background-color: var(--godmaster);
+}
+
 .hidden {
     display: none;
 }
@@ -89,12 +113,26 @@
 
 .btn:hover{
     transform: scale(1.1);
-}
-
-.copyright {
-
+    filter: brightness(0.75);
 }
 
 .reverse {
     flex-direction: row-reverse;
+}
+
+.aparecer {
+    display: flex;
+}
+
+.rotate {
+    animation: 1s rotation;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
 }
