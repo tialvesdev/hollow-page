@@ -18,7 +18,7 @@
 
 <body>
 
-    <nav class="nav">
+    <nav class="nav" id="nav">
 
         <a class="nav-logo" href="./index.html">
             <img class="nav-img" src="./assets/img/icon/hollow-icon.ico" alt="Hollow Page">
@@ -35,7 +35,9 @@
                 <a class="nav-a text" href="#community">Projeto</a>
             </li>
             <li>
-                <button class="btn nav-btn" href="./login/login.html">Entrar</button>
+                <a href="./login/login.html">
+                    <button class="btn nav-btn">Entrar</button>
+                </a>
             </li>
             <li>
                 <button id="nav_btn_tema" class="nav-btn-tema" onclick="dropdownCores()">
@@ -106,9 +108,11 @@
                         Explore o reino esquecido de <span class="lifeblood">Hallownest</span>
                     </h2>
                     <p class="text">
-                        Embaixo da cidade desbotada de Dirtmouth descansa um vasto reino antigo. Muitos são atraídos sob a superfície, a procura por riqueza, ou glória, ou respostas para velhos segredos.
+                        Embaixo da cidade desbotada de Dirtmouth descansa um vasto reino antigo. Muitos são atraídos sob
+                        a superfície, a procura por riqueza, ou glória, ou respostas para velhos segredos.
                         <br>
-                        Como o enigmático Cavaleiro, você irá cruzar as profundezas, desvendar seus mistérios e conquistar seus males.
+                        Como o enigmático Cavaleiro, você irá cruzar as profundezas, desvendar seus mistérios e
+                        conquistar seus males.
                     </p>
                 </figcaption>
             </figure>
@@ -123,7 +127,8 @@
                         Sobreviva com o <span class="godmaster">reflexo mais afiado</span> que tiver
                     </h2>
                     <p class="text">
-                        Jogabilidade é importante e é entregue com Hollow Knight, indo de mapas com ótimos <i>level design</i> e curva de aprendizado até o Coliseu dos Tolos para testar suas habilidades.
+                        Jogabilidade é importante e é entregue com Hollow Knight, indo de mapas com ótimos <i>level
+                            design</i> e curva de aprendizado até o Coliseu dos Tolos para testar suas habilidades.
                     </p>
                 </figcaption>
             </figure>
@@ -138,13 +143,15 @@
                         Uma pontuação <span class="grimm2">assombrada</span> e <span class="grimm2">orchestral</span>
                     </h2>
                     <p class="text">
-                        Com uma ambientalização assustadora, ele consegue expressar cada sentimento para a história e o lugar com seu visual e principalmente com suas músicas, como por exemplo:
+                        Com uma ambientalização assustadora, ele consegue expressar cada sentimento para a história e o
+                        lugar com seu visual e principalmente com suas músicas, como por exemplo:
                         <br> <br>
-                        <ul class="hk-ul text">
-                            <li><span class="grimm1">Vazio:</span> Uma cidadezinha deserta com ventos uivantes;</li>
-                            <li><span class="grimm1">Melancolia:</span> A metropole devastada com sons de chuva;</li>
-                            <li><span class="grimm1">Intensidade:</span> Uma batalha em outro plano com um mestre de um culto.</li>
-                        </ul>
+                    <ul class="hk-ul text">
+                        <li><span class="grimm1">Vazio:</span> Uma cidadezinha deserta com ventos uivantes;</li>
+                        <li><span class="grimm1">Melancolia:</span> A metropole devastada com sons de chuva;</li>
+                        <li><span class="grimm1">Intensidade:</span> Uma batalha em outro plano com um mestre de um
+                            culto.</li>
+                    </ul>
                     </p>
                 </figcaption>
             </figure>
@@ -159,7 +166,9 @@
                         O jogo de insetos <span class="dreams">mais lindo</span> de todos
                     </h2>
                     <p class="text">
-                        Justamente o inverso quando é imaginado um jogo de insetos, Hollow Knight tem áreas repletas de detalhes e uma ambientalização impressionante, com luzes e efeitos gráficos que acentuam toda a sua essência.
+                        Justamente o inverso quando é imaginado um jogo de insetos, Hollow Knight tem áreas repletas de
+                        detalhes e uma ambientalização impressionante, com luzes e efeitos gráficos que acentuam toda a
+                        sua essência.
                     </p>
                 </figcaption>
             </figure>
@@ -170,9 +179,10 @@
                 <h1 class="title h1-community">Uma cominudade unida e retroativa</h1>
                 <figure class="figure-community">
                     <img src="./assets/img/char/red-grimm.png" alt="Grimm">
-                        <p class="big-text p-community">
-                            Um feed usado de fãs para fãs, para a procura de imagens de Hollow Knight, sinta-se livre para explorar e contribuir
-                        </p>
+                    <p class="big-text p-community">
+                        Um feed usado de fãs para fãs, para a procura de imagens de Hollow Knight, sinta-se livre para
+                        explorar e contribuir
+                    </p>
                 </figure>
                 <!-- <article class="examples">
                     <img src="./assets/img/temp/example1.png" alt="example">
@@ -183,7 +193,7 @@
                     <img src="./assets/img/temp/example6.png" alt="example">
                 </article> -->
             </article>
-            
+
         </section>
 
         <section class="hp">
@@ -196,7 +206,7 @@
                 </figcaption>
                 <button class="btn">Fazer Parte</button>
             </figure>
-            
+
         </section>
 
     </main>
@@ -237,8 +247,8 @@
 <script>
 
     var player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
             videoId: 'NhG6PA9Xoog?playlist=NhG6PA9Xoog&controls=0&disablekb=1&fs=0&loop=1&autoplay=1&mute=1&modestbranding=1&rel=0&showinfo=0&origin=https://www.youtube.com',
             referrerpolicy: 'no-referrer'
         });
@@ -254,13 +264,22 @@
         );
     }
 
+    const navbar = document.getElementById('nav');
+    window.onscroll = () => {
+        if (window.scrollY > 0) {
+            navbar.classList.add('blur');
+        } else {
+            navbar.classList.remove('blur');
+        }
+    };
+
     function dropdownCores() {
         var paleta = document.getElementById('nav_btn_tema');
         paleta.classList.toggle('rotate');
         console.log('rodou');
-        
-        var drop = document.getElementById('nav_li_cores'); 
-        if(drop.classList.toggle('aparecer')) {
+
+        var drop = document.getElementById('nav_li_cores');
+        if (drop.classList.toggle('aparecer')) {
             drop.style.display = 'flex';
         } else {
             drop.style.display = 'none';

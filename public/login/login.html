@@ -14,32 +14,32 @@
 
     <main class="wrapper">
 
-        <section class="sign-in">
-            <h1>Sign In</h1>
+        <section class="login-section">
+            <h1>Log In</h1>
 
-            <input type="email" id="ipt_sign_in_email" placeholder="fulano@email.com">
+            <input type="email" id="ipt_login_email" placeholder="fulano@email.com">
             <br>
-            <input type="password" id="ipt_sign_in_password" placeholder="bananinha123">
+            <input type="password" id="ipt_login_password" placeholder="bananinha123">
             <br>
-            <button onclick="signIn()">Sign In</button>
+            <button onclick="login()">Log In</button>
         </section>
 
         <br><br>
 
-        <section class="sign-up">
-            <h1>Sign Up</h1>
+        <section class="entrar-section">
+            <h1>Entrar</h1>
 
-            <input id="ipt_sign_up_nome" placeholder="Jão">
+            <input id="ipt_entrar_nome" placeholder="Jão">
             <br>
-            <input type="email" id="ipt_sign_up_email" placeholder="fulano@email.com">
+            <input type="email" id="ipt_entrar_email" placeholder="fulano@email.com">
             <br>
-            <input type="password" id="ipt_sign_up_password" placeholder="bananinha123">
+            <input type="password" id="ipt_entrar_password" placeholder="bananinha123">
             <br>
-            <input type="password" id="ipt_sign_up_confirm_password" placeholder="bananinha123">
+            <input type="password" id="ipt_entrar_confirm_password" placeholder="bananinha123">
             <br>
-            <input type="date" id="ipt_sign_up_dt_birth" placeholder="01/01/2001">
+            <input type="date" id="ipt_entrar_dt_birth" placeholder="01/01/2001">
             <br>
-            <button onclick="signUp()">Sign Up</button>
+            <button onclick="entrar()">Entrar</button>
         </section>
 
     </main>
@@ -49,12 +49,31 @@
 
 <script>
 
-    function signIn() {
+    function login() {
+        var dadosLogin = [
+            ipt_login_email.value,
+            ipt_login_password.value
+        ];
 
+        if(login[0] == "" || login[0] == undefined){
+            console.log('Email Inválido, digite um email.')
+        } else if (login[1] == "" || login[1] == undefined){
+            console.log('Senha Inválida, digite uma senha.')
+        } else {
+
+            if(login[0].includes('@')) {
+
+            }
+
+            if(login[1].length >= 3) {
+
+            }
+
+        }
     }
 
-    function signUp() {
-        
+    function entrar() {
+
     }
 
 </script>
