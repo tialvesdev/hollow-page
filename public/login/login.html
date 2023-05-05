@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,8 +9,18 @@
     <link rel="shortcut icon" href="../assets/img/icon/hollow-icon.ico" type="image/x-icon">
     <title>Login</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="../assets/css/global.style.css">
+
+    <!-- <script src="../assets/js/login.js" type="module"></script>
+
+    <script src="../../node_modules/sweetalert2/src/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="../../node_modules/sweetalert2/dist/sweetalert2.css"> -->
+
 </head>
+
 <body>
 
     <main class="wrapper">
@@ -43,11 +54,66 @@
         </section>
 
     </main>
-    
+
 </body>
+
 </html>
 
 <script>
+
+    var dadosAlerta = [];
+
+    function validarEmail(email) {
+        if (email == "" || email == undefined) {
+            console.log('Email nulo');
+
+            dadosAlerta = [
+                'error',
+                'Email inválido',
+                'Digite um email...'
+            ];
+        } else if (email.includes('@') || email.substring(email.indexOf('@') + 1) != "") {
+            console.log('Email com @ inválido');
+
+            dadosAlerta = [
+                'error',
+                'Email inválido',
+                'Digite um email que contenha @ e o provedor de email logo após ...'
+            ];
+        } else {
+            return true;
+        }
+
+        console.log('Email: ' + email);
+
+        return false;
+    }
+
+    function validarSenha(senha) {
+        if (senha == "" || senha == undefined) {
+            console.log('Senha nula');
+
+            dadosAlerta = [
+                'error',
+                'Senha inválida',
+                'Digite uma senha...'
+            ];
+        } else if (senha.length < 5) {
+            console.log('Senha pequena');
+
+            dadosAlerta = [
+                'error',
+                'Senha inválida',
+                'Digite uma senha com no mínimo 5 caracteres...'
+            ];
+        } else {
+            return true;
+        }
+
+        console.log('Senha: ' + senha);
+        
+        return false;
+    }
 
     function login() {
         var dadosLogin = [
@@ -55,21 +121,28 @@
             ipt_login_password.value
         ];
 
-        if(login[0] == "" || login[0] == undefined){
-            console.log('Email Inválido, digite um email.')
-        } else if (login[1] == "" || login[1] == undefined){
-            console.log('Senha Inválida, digite uma senha.')
+        if (validarEmail(dadosLogin[0]) && validarSenha(dadosLogin[1])) {
+            console.log('Login válido');
+            Swal.fire({
+                icon: 'success',
+                title: 'LogIn válido!',
+                text: 'Entrando em segundos...',
+                background: '#000',
+                color: '#FFF',
+            });
         } else {
-
-            if(login[0].includes('@')) {
-
-            }
-
-            if(login[1].length >= 3) {
-
-            }
-
+            console.log('Login inválido');
+            Swal.fire({
+                icon: dadosAlerta[0],
+                title: dadosAlerta[1],
+                text: dadosAlerta[2],
+                background: '#000',
+                color: '#FFF',
+            })
         }
+
+        console.log(dadosAlerta);
+
     }
 
     function entrar() {

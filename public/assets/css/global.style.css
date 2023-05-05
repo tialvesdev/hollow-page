@@ -132,6 +132,10 @@
     backdrop-filter: blur(8px);
 }
 
+.swal2-popup {
+    font-family: 'Poppins';
+  }
+
 @keyframes rotation {
     0% {
         transform: rotate(360deg);
