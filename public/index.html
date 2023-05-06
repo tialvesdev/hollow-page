@@ -101,7 +101,7 @@
             
             <section class="hk" id="hollow_knight">
 
-                <figure class="figure-hk passar reverse">
+                <figure class="figure-hk front reverse">
                     <div class="hk-cards">
                         <img class="hk-img" src="./assets/img/hk-print/dirtmouth-well.png" alt="Poço de Dirtmouth">
                         <img class="hk-img" src="./assets/img/hk-print/dirtmouth-bench.png" alt="Banco de Dirtmouth">
@@ -121,7 +121,7 @@
                     </figcaption>
                 </figure>
                 
-                <figure class="figure-hk passar">
+                <figure class="figure-hk front">
                     <div class="hk-cards">
                         <img class="hk-img" src="./assets/img/hk-print/colosseum-of-fools.png" alt="Coliseu dos Tolos">
                         <img class="hk-img" src="./assets/img/hk-print/the-hive.png" alt="A Colmeia">
@@ -137,7 +137,7 @@
                     </figcaption>
                 </figure>
 
-                <figure class="figure-hk passar reverse">
+                <figure class="figure-hk front reverse">
                     <div class="hk-cards">
                         <img class="hk-img" src="./assets/img/hk-print/gods-and-nightmares.png" alt="Gods & Nightmares">
                         <img class="hk-img" src="./assets/img/hk-print/grimm-nightmare.png" alt="Pesadelo do Grimm">
@@ -162,7 +162,7 @@
                     </figcaption>
                 </figure>
 
-                <figure class="figure-hk passar">
+                <figure class="figure-hk front">
                     <div class="hk-cards">
                         <img class="hk-img" src="./assets/img/hk-print/crystal-bench.png"
                             alt="Banco no Pico de Crystal">
@@ -306,20 +306,13 @@
         console.log('Apareceu');
     }
 
-    const colors = [
-        '#550000',
-        '#005500',
-        '#000055',
-        '#000000'
-    ];
-
     function createSquare() {
         var section = document.getElementById('hollow_knight');
         var square = document.createElement('img');
-        square.classList.add('img-teste');
+        square.classList.add('dream-efx-img');
         square.src = './assets/img/dream-particle.png';
 
-        var size = Math.random() * 100;
+        var size = Math.random() * 500;
 
         square.style.width = 50 + size + 'px';
         square.style.height = 50 + size + 'px';
@@ -327,8 +320,8 @@
         square.style.top = Math.random() * innerHeight + 'px';
         square.style.left = Math.random() * innerWidth + 'px';
 
-        const bg = colors[Math.floor(Math.random() * colors.length)];
-        square.style.background = bg;
+        square.style.filter = `invert(97%) sepia(97%) saturate(4%) hue-rotate(77deg) brightness(104%) contrast(100%) 
+        drop-shadow(0 0 5px #c13bff) drop-shadow(0 0 10px #c13bff) drop-shadow(0 0 15px #c13bff) blur(${Math.floor(Math.random() * 10)}px) `;
 
         section.appendChild(square);
 

@@ -217,7 +217,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    z-index: 1;
+    z-index: 3;
 }
 
 .article-community {
@@ -338,27 +338,16 @@
     color: var(--light-gray);
 }
 
-.passar {
+.front {
     position: relative;
     z-index: 3;
 }
 
-.div-teste {
-    height: 100vh;
-    overflow: hidden;
-    background: #000;
-}
-
-.section-teste {
-    height: 100%;
-}
-
-.img-teste {
-    margin-top: 150vh;
+.dream-efx-img {
+    margin-top: 100vh;
     z-index: 2;
     position: absolute;
     pointer-events: none;
-    background: #FFF;
     animation: animate 10s linear infinite;
 }
 
