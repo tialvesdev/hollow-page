@@ -1,3 +1,7 @@
+.wrapper {
+    overflow: hidden;
+}
+
 .nav {
     width: 100%;
     display: flex;
@@ -33,16 +37,17 @@
     color: var(--white);
     position: relative;
     display: inline-block;
+    padding: 10px;
 }
 
 .nav-a:after {
     content: '';
     position: absolute;
-    width: 100%;
+    width: calc(100% - 20px);
     transform: scaleX(0);
     height: 2px;
-    bottom: 0;
-    left: 0;
+    bottom: 10px;
+    left: 10px;
     background-color: var(--dreams);
     transform-origin: bottom right;
     transition: transform 0.25s ease-out;
@@ -150,29 +155,42 @@
     gap: 75px;
 }
 
-.hk-img {
-    position: relative;
+.hk-cards {
+    cursor: pointer;
 }
 
-.figure-hk:not(.reverse) .hk-cards .hk-img:nth-child(1) {
+.hk-img {
+    position: relative;
+    transition: all .25s ease-in-out;
+}
+
+.figure-hk:not(.reverse) .hk-img:nth-child(1) {
     position: absolute;
     z-index: 1;
 }
 
-.figure-hk:not(.reverse) .hk-cards .hk-img:nth-child(2) {
+.figure-hk:not(.reverse) .hk-img:nth-child(2) {
     z-index: 0;
     transform: translate(25px, 25px);
 }
 
-.figure-hk.reverse .hk-cards .hk-img:nth-child(1) {
+.figure-hk.reverse .hk-img:nth-child(1) {
     position: absolute;
     z-index: 1;
     transform: translate(-25px, -25px);
 }
 
-.figure-hk.reverse .hk-cards .hk-img:nth-child(2) {
+.figure-hk.reverse .hk-img:nth-child(2) {
     z-index: 0;
     transform: none;
+}
+
+.figure-hk.reverse .hk-cards:hover .hk-img:nth-child(1) {
+    transform: translate(-55px, -25px);
+}
+
+.figure-hk:not(.reverse) .hk-cards:hover .hk-img:nth-child(1) {
+    transform: translate(-35px);
 }
 
 .figure-hk {
@@ -318,4 +336,45 @@
 .footer p {
     font-family: 'Lexend';
     color: var(--light-gray);
+}
+
+.passar {
+    position: relative;
+    z-index: 3;
+}
+
+.div-teste {
+    height: 100vh;
+    overflow: hidden;
+    background: #000;
+}
+
+.section-teste {
+    height: 100%;
+}
+
+.img-teste {
+    margin-top: 150vh;
+    z-index: 2;
+    position: absolute;
+    pointer-events: none;
+    background: #FFF;
+    animation: animate 10s linear infinite;
+}
+
+@keyframes animate {
+    0% {
+        transform: scale(0) translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) translateY(-800px) rotate(360deg);
+        opacity: 0;
+    }
 }

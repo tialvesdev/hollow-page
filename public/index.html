@@ -18,173 +18,190 @@
 
 <body>
 
-    <nav class="nav" id="nav">
+    <div class="wrapper">
 
-        <a class="nav-logo" href="./index.html">
-            <img class="nav-img" src="./assets/img/icon/hollow-icon.ico" alt="Hollow Page">
-        </a>
+        <nav class="nav" id="nav">
 
-        <ul class="nav-ul">
-            <li>
-                <a class="nav-a text" href="#">Início</a>
-            </li>
-            <li>
-                <a class="nav-a text" href="#main">Hollow Knight</a>
-            </li>
-            <li>
-                <a class="nav-a text" href="#community">Projeto</a>
-            </li>
-            <li>
-                <a href="./login/login.html">
-                    <button class="btn nav-btn">Entrar</button>
-                </a>
-            </li>
-            <li>
-                <button id="nav_btn_tema" class="nav-btn-tema" onclick="dropdownCores()">
-                    <img src="./assets/img/icon/colors-icon.png" alt="Tema de Cores">
-                </button>
-            </li>
-            <li class="nav-li-cores" id="nav_li_cores">
-                <div class="nav-cores" id="nav_cores">
-                    <button class="nav-btn-cor" onclick="trocaCorTema()">
-                        <div class="nav-sel-cor bg-grimm1"></div>
+            <a class="nav-logo" href="./index.html">
+                <img class="nav-img" src="./assets/img/icon/hollow-icon.ico" alt="Hollow Page">
+            </a>
+
+            <ul class="nav-ul">
+                <li>
+                    <a class="nav-a text" href="#">Início</a>
+                </li>
+                <li>
+                    <a class="nav-a text" href="#main">Hollow Knight</a>
+                </li>
+                <li>
+                    <a class="nav-a text" href="#community">Projeto</a>
+                </li>
+                <li>
+                    <a href="./login/login.html">
+                        <button class="btn nav-btn">Entrar</button>
+                    </a>
+                </li>
+                <li>
+                    <button id="nav_btn_tema" class="nav-btn-tema" onclick="dropdownCores()">
+                        <img src="./assets/img/icon/colors-icon.png" alt="Tema de Cores">
                     </button>
+                </li>
+                <li class="nav-li-cores" id="nav_li_cores">
+                    <div class="nav-cores" id="nav_cores">
+                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                            <div class="nav-sel-cor bg-grimm1"></div>
+                        </button>
 
-                    <button class="nav-btn-cor" onclick="trocaCorTema()">
-                        <div class="nav-sel-cor bg-grimm2"></div>
-                    </button>
+                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                            <div class="nav-sel-cor bg-grimm2"></div>
+                        </button>
 
-                    <button class="nav-btn-cor" onclick="trocaCorTema()">
-                        <div class="nav-sel-cor bg-crystal"></div>
-                    </button>
+                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                            <div class="nav-sel-cor bg-crystal"></div>
+                        </button>
 
-                    <button class="nav-btn-cor" onclick="trocaCorTema()">
-                        <div class="nav-sel-cor bg-dreams"></div>
-                    </button>
+                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                            <div class="nav-sel-cor bg-dreams"></div>
+                        </button>
 
-                    <button class="nav-btn-cor" onclick="trocaCorTema()">
-                        <div class="nav-sel-cor bg-lifeblood"></div>
-                    </button>
+                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                            <div class="nav-sel-cor bg-lifeblood"></div>
+                        </button>
 
-                    <button class="nav-btn-cor" onclick="trocaCorTema()">
-                        <div class="nav-sel-cor bg-godmaster"></div>
-                    </button>
+                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                            <div class="nav-sel-cor bg-godmaster"></div>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+
+        </nav>
+
+        <header class="header" id="header">
+
+            <div class="embed-wrapper">
+
+                <img id="embed_img" class="embed-img" src="./assets/img/bg/background-embed.png" alt="Hollow Page">
+
+                <div id="embed_front" class="embed-front">
+                    <img class="embed-logo" src="./assets/img/hp-logo.png" alt="Hollow Page">
+                    <p class="embed-text big-text">Uma complexidade capaz de
+                        <br>
+                        <b class="lifeblood">mudar o mundo</b>
+                    </p>
                 </div>
-            </li>
-        </ul>
 
-    </nav>
+                <div id="player" class="embed-iframe"></div>
 
-    <header class="header" id="header">
-
-        <div class="embed-wrapper">
-
-            <img id="embed_img" class="embed-img" src="./assets/img/bg/background-embed.png" alt="Hollow Page">
-
-            <div id="embed_front" class="embed-front">
-                <img class="embed-logo" src="./assets/img/hp-logo.png" alt="Hollow Page">
-                <p class="embed-text big-text">Uma complexidade capaz de
-                    <br>
-                    <b class="lifeblood">mudar o mundo</b>
-                </p>
             </div>
 
-            <div id="player" class="embed-iframe"></div>
+        </header>
 
-        </div>
+        <main class="main" id="main">
+            
+            <section class="hk" id="hollow_knight">
 
-    </header>
-
-    <main class="main" id="main">
-
-        <section class="hk" id="hollow_knight">
-            <figure class="figure-hk reverse">
-                <div class="hk-cards">
-                    <img class="hk-img" src="./assets/img/hk-print/dirtmouth-well.png" alt="Poço de Dirtmouth">
-                    <img class="hk-img" src="./assets/img/hk-print/dirtmouth-bench.png" alt="Banco de Dirtmouth">
-                </div>
-                <figcaption class="hk-text">
-                    <h2 class="subtitle">
-                        Explore o reino esquecido de <span class="lifeblood">Hallownest</span>
-                    </h2>
-                    <p class="text">
-                        Embaixo da cidade desbotada de Dirtmouth descansa um vasto reino antigo. Muitos são atraídos sob
-                        a superfície, a procura por riqueza, ou glória, ou respostas para velhos segredos.
-                        <br>
-                        Como o enigmático Cavaleiro, você irá cruzar as profundezas, desvendar seus mistérios e
-                        conquistar seus males.
-                    </p>
-                </figcaption>
-            </figure>
-
-            <figure class="figure-hk">
-                <div class="hk-cards">
-                    <img class="hk-img" src="./assets/img/hk-print/colosseum-of-fools.png" alt="Coliseu dos Tolos">
-                    <img class="hk-img" src="./assets/img/hk-print/the-hive.png" alt="A Colmeia">
-                </div>
-                <figcaption class="hk-text">
-                    <h2 class="subtitle">
-                        Sobreviva com o <span class="godmaster">reflexo mais afiado</span> que tiver
-                    </h2>
-                    <p class="text">
-                        Jogabilidade é importante e é entregue com Hollow Knight, indo de mapas com ótimos <i>level
-                            design</i> e curva de aprendizado até o Coliseu dos Tolos para testar suas habilidades.
-                    </p>
-                </figcaption>
-            </figure>
-
-            <figure class="figure-hk reverse">
-                <div class="hk-cards">
-                    <img class="hk-img" src="./assets/img/hk-print/gods-and-nightmares.png" alt="Gods & Nightmares">
-                    <img class="hk-img" src="./assets/img/hk-print/grimm-nightmare.png" alt="Pesadelo do Grimm">
-                </div>
-                <figcaption class="hk-text">
-                    <h2 class="subtitle">
-                        Uma pontuação <span class="grimm2">assombrada</span> e <span class="grimm2">orchestral</span>
-                    </h2>
-                    <p class="text">
-                        Com uma ambientalização assustadora, ele consegue expressar cada sentimento para a história e o
-                        lugar com seu visual e principalmente com suas músicas, como por exemplo:
-                        <br> <br>
-                    <ul class="hk-ul text">
-                        <li><span class="grimm1">Vazio:</span> Uma cidadezinha deserta com ventos uivantes;</li>
-                        <li><span class="grimm1">Melancolia:</span> A metropole devastada com sons de chuva;</li>
-                        <li><span class="grimm1">Intensidade:</span> Uma batalha em outro plano com um mestre de um
-                            culto.</li>
-                    </ul>
-                    </p>
-                </figcaption>
-            </figure>
-
-            <figure class="figure-hk">
-                <div class="hk-cards">
-                    <img class="hk-img" src="./assets/img/hk-print/crystal-bench.png" alt="Banco no Pico de Crystal">
-                    <img class="hk-img" src="./assets/img/hk-print/crystal-peak.png" alt="Caverna no Pico de Cristal">
-                </div>
-                <figcaption class="hk-text">
-                    <h2 class="subtitle">
-                        O jogo de insetos <span class="dreams">mais lindo</span> de todos
-                    </h2>
-                    <p class="text">
-                        Justamente o inverso quando é imaginado um jogo de insetos, Hollow Knight tem áreas repletas de
-                        detalhes e uma ambientalização impressionante, com luzes e efeitos gráficos que acentuam toda a
-                        sua essência.
-                    </p>
-                </figcaption>
-            </figure>
-        </section>
-
-        <section class="community" id="community">
-            <article class="article-community">
-                <h1 class="title h1-community">Uma cominudade unida e retroativa</h1>
-                <figure class="figure-community">
-                    <img src="./assets/img/char/red-grimm.png" alt="Grimm">
-                    <p class="big-text p-community">
-                        Um feed usado de fãs para fãs, para a procura de imagens de Hollow Knight, sinta-se livre para
-                        explorar e contribuir
-                    </p>
+                <figure class="figure-hk passar reverse">
+                    <div class="hk-cards">
+                        <img class="hk-img" src="./assets/img/hk-print/dirtmouth-well.png" alt="Poço de Dirtmouth">
+                        <img class="hk-img" src="./assets/img/hk-print/dirtmouth-bench.png" alt="Banco de Dirtmouth">
+                    </div>
+                    <figcaption class="hk-text">
+                        <h2 class="subtitle">
+                            Explore o reino esquecido de <span class="lifeblood">Hallownest</span>
+                        </h2>
+                        <p class="text">
+                            Embaixo da cidade desbotada de Dirtmouth descansa um vasto reino antigo. Muitos são atraídos
+                            sob
+                            a superfície, a procura por riqueza, ou glória, ou respostas para velhos segredos.
+                            <br>
+                            Como o enigmático Cavaleiro, você irá cruzar as profundezas, desvendar seus mistérios e
+                            conquistar seus males.
+                        </p>
+                    </figcaption>
                 </figure>
-                <!-- <article class="examples">
+                
+                <figure class="figure-hk passar">
+                    <div class="hk-cards">
+                        <img class="hk-img" src="./assets/img/hk-print/colosseum-of-fools.png" alt="Coliseu dos Tolos">
+                        <img class="hk-img" src="./assets/img/hk-print/the-hive.png" alt="A Colmeia">
+                    </div>
+                    <figcaption class="hk-text">
+                        <h2 class="subtitle">
+                            Sobreviva com o <span class="godmaster">reflexo mais afiado</span> que tiver
+                        </h2>
+                        <p class="text">
+                            Jogabilidade é importante e é entregue com Hollow Knight, indo de mapas com ótimos <i>level
+                                design</i> e curva de aprendizado até o Coliseu dos Tolos para testar suas habilidades.
+                            </p>
+                    </figcaption>
+                </figure>
+
+                <figure class="figure-hk passar reverse">
+                    <div class="hk-cards">
+                        <img class="hk-img" src="./assets/img/hk-print/gods-and-nightmares.png" alt="Gods & Nightmares">
+                        <img class="hk-img" src="./assets/img/hk-print/grimm-nightmare.png" alt="Pesadelo do Grimm">
+                    </div>
+                    <figcaption class="hk-text">
+                        <h2 class="subtitle">
+                            Uma pontuação <span class="grimm2">assombrada</span> e <span
+                                class="grimm2">orchestral</span>
+                        </h2>
+                        <p class="text">
+                            Com uma ambientalização assustadora, ele consegue expressar cada sentimento para a história
+                            e o
+                            lugar com seu visual e principalmente com suas músicas, como por exemplo:
+                            <br> <br>
+                        <ul class="hk-ul text">
+                            <li><span class="grimm1">Vazio:</span> Uma cidadezinha deserta com ventos uivantes;</li>
+                            <li><span class="grimm1">Melancolia:</span> A metropole devastada com sons de chuva;</li>
+                            <li><span class="grimm1">Intensidade:</span> Uma batalha em outro plano com um mestre de um
+                                culto.</li>
+                        </ul>
+                        </p>
+                    </figcaption>
+                </figure>
+
+                <figure class="figure-hk passar">
+                    <div class="hk-cards">
+                        <img class="hk-img" src="./assets/img/hk-print/crystal-bench.png"
+                            alt="Banco no Pico de Crystal">
+                        <img class="hk-img" src="./assets/img/hk-print/crystal-peak.png"
+                        alt="Caverna no Pico de Cristal">
+                    </div>
+                    <figcaption class="hk-text">
+                        <h2 class="subtitle">
+                            O jogo de insetos <span class="dreams">mais lindo</span> de todos
+                        </h2>
+                        <p class="text">
+                            Justamente o inverso quando é imaginado um jogo de insetos, Hollow Knight tem áreas repletas
+                            de
+                            detalhes e uma ambientalização impressionante, com luzes e efeitos gráficos que acentuam
+                            toda a
+                            sua essência.
+                        </p>
+                    </figcaption>
+                </figure>
+                <!-- 
+                <div class="div-teste">
+                    <section class="section-teste" id="teste">
+
+                    </section>
+                </div> -->
+            </section>
+            
+            <section class="community" id="community">
+                <article class="article-community">
+                    <h1 class="title h1-community">Uma cominudade unida e retroativa</h1>
+                    <figure class="figure-community">
+                        <img src="./assets/img/char/red-grimm.png" alt="Grimm">
+                        <p class="big-text p-community">
+                            Um feed usado de fãs para fãs, para a procura de imagens de Hollow Knight, sinta-se livre
+                            para
+                            explorar e contribuir
+                        </p>
+                    </figure>
+                    <!-- <article class="examples">
                     <img src="./assets/img/temp/example1.png" alt="example">
                     <img src="./assets/img/temp/example2.png" alt="example">
                     <img src="./assets/img/temp/example3.png" alt="example">
@@ -192,53 +209,55 @@
                     <img src="./assets/img/temp/example5.png" alt="example">
                     <img src="./assets/img/temp/example6.png" alt="example">
                 </article> -->
-            </article>
+                </article>
 
-        </section>
+            </section>
 
-        <section class="hp">
-            <figure class="hp-figure">
-                <img class="hp-img" src="./assets/img/hp-logo.png" alt="Hollow Page">
-                <figcaption>
-                    <p class="big-text hp-text">
-                        Uma complexidade capaz <br> de <b class="lifeblood">mudar o mundo</b>
-                    </p>
-                </figcaption>
-                <button class="btn">Fazer Parte</button>
-            </figure>
+            <section class="hp">
+                <figure class="hp-figure">
+                    <img class="hp-img" src="./assets/img/hp-logo.png" alt="Hollow Page">
+                    <figcaption>
+                        <p class="big-text hp-text">
+                            Uma complexidade capaz <br> de <b class="lifeblood">mudar o mundo</b>
+                        </p>
+                    </figcaption>
+                    <button class="btn">Fazer Parte</button>
+                </figure>
 
-        </section>
+            </section>
 
-    </main>
+        </main>
 
-    <footer class="footer">
+        <footer class="footer">
 
-        <hr class="footer-hr">
+            <hr class="footer-hr">
 
-        <section class="section-footer">
-            <div class="rules-footer">
-                <p>Termos de Uso</p>
-                <p>Política de Privacidade</p>
-            </div>
+            <section class="section-footer">
+                <div class="rules-footer">
+                    <p>Termos de Uso</p>
+                    <p>Política de Privacidade</p>
+                </div>
 
-            <div class="socials-footer">
-                <a class="socials-a" href="">
-                    <img class="socials-img" src="./assets/img/icon/github-icon.png" alt="GitHub">
-                </a>
-                <a class="socials-a" href="">
-                    <img class="socials-img" src="./assets/img/icon/linkedin-icon.png" alt="LinkedIn">
-                </a>
-                <a class="socials-a" href="">
-                    <img class="socials-img" src="./assets/img/icon/email-icon.png" alt="E-mail">
-                </a>
-            </div>
+                <div class="socials-footer">
+                    <a class="socials-a" href="">
+                        <img class="socials-img" src="./assets/img/icon/github-icon.png" alt="GitHub">
+                    </a>
+                    <a class="socials-a" href="">
+                        <img class="socials-img" src="./assets/img/icon/linkedin-icon.png" alt="LinkedIn">
+                    </a>
+                    <a class="socials-a" href="">
+                        <img class="socials-img" src="./assets/img/icon/email-icon.png" alt="E-mail">
+                    </a>
+                </div>
 
-            <p class="copyright-footer">
-                © Hollow Page 2023
-            </p>
-        </section>
+                <p class="copyright-footer">
+                    © Hollow Page 2023
+                </p>
+            </section>
 
-    </footer>
+        </footer>
+
+    </div>
 
 </body>
 
@@ -286,5 +305,38 @@
         }
         console.log('Apareceu');
     }
+
+    const colors = [
+        '#550000',
+        '#005500',
+        '#000055',
+        '#000000'
+    ];
+
+    function createSquare() {
+        var section = document.getElementById('hollow_knight');
+        var square = document.createElement('img');
+        square.classList.add('img-teste');
+        square.src = './assets/img/dream-particle.png';
+
+        var size = Math.random() * 100;
+
+        square.style.width = 50 + size + 'px';
+        square.style.height = 50 + size + 'px';
+
+        square.style.top = Math.random() * innerHeight + 'px';
+        square.style.left = Math.random() * innerWidth + 'px';
+
+        const bg = colors[Math.floor(Math.random() * colors.length)];
+        square.style.background = bg;
+
+        section.appendChild(square);
+
+        setTimeout(() => {
+            square.remove();
+        }, 10000);
+    }
+
+    setInterval(createSquare, 1000);
 
 </script>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+        }
+
+        section {
+            height: 100%;
+        }
+
+        span {
+            position: absolute;
+            pointer-events: none;
+            background: #FFF;
+            animation: animate 5s linear infinite;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: scale(0) translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) translateY(-500px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <section>
+
+    </section>
+</body>
+
+</html>
+
+<script>
+
+    const colors = [
+        '#FF0000',
+        '#00FF00',
+        '#0000FF',
+        '#FFFFFF'
+    ];
+
+    function createSquare() {
+        var section = document.querySelector('section');
+        var square = document.createElement('span');
+
+        var size = Math.random() * 50;
+
+        square.style.width = 20 + size + 'px';
+        square.style.height = 20 + size + 'px';
+
+        square.style.top = Math.random() * innerHeight + 'px';
+        square.style.left = Math.random() * innerWidth + 'px';
+
+        const bg = colors[Math.floor(Math.random() * colors.length )];
+        square.style.background = bg;
+
+        section.appendChild(square);
+
+        setTimeout(() => {
+            square.remove();
+        }, 5000);
+    }
+
+    setInterval(createSquare, 150);
+</script>
