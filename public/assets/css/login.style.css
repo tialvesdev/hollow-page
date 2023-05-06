@@ -1,0 +1,36 @@
+.wrapper-login {
+    overflow-x: hidden;
+    background-color: #020204;
+}
+
+.login-section, .cadastrar-section {
+    width: 100%;
+    height: 100vh;
+}
+
+.login-section {
+    background-image: url('../img/bg/bg-login.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding: 75px;
+}
+
+.form-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 35vw;
+}
+
+.cadastrar-section {
+    background-image: url('../img/bg/bg-cadastro.png');
+    background-repeat: no-repeat;
+    background-position: right;
+    display: flex;
+    align-items: center;
+    padding: 75px;
+}
+

@@ -132,9 +132,40 @@
     backdrop-filter: blur(8px);
 }
 
+.ipt-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.ipt {
+    background: none;
+    border: none;
+    border-bottom: 3px solid #FFF;
+    height: 40px;
+    width: 100%;
+    color: #FFF;
+    font-family: 'Poppins';
+    font-weight: 600;
+    font-size: 20px;
+    transition: all .25s ease-in-out;
+}
+
+.ipt::placeholder {
+    color: #5A5A5A;
+}
+
+.ipt:focus {
+    outline: none;
+    border-bottom: 3px solid var(--lifeblood);
+}
+
+.ipt-angle {
+
+}
+
 .swal2-popup {
     font-family: 'Poppins';
-  }
+}
 
 @keyframes rotation {
     0% {
