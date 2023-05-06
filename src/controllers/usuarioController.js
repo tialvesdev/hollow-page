@@ -32,6 +32,10 @@ function entrar(req, res) {
         res.status(400).send("Seu email está undefined!");
     } else if (senha == undefined) {
         res.status(400).send("Sua senha está indefinida!");
+    } else if (!email.includes('@')) {
+        res.status(400).send("Seu email não tem @!");
+    } else if (email.substring(email.indexOf('@') + 1) == "") {
+        res.status(400).send("Seu email não tem provedor!");
     } else {
         
         usuarioModel.entrar(email, senha)

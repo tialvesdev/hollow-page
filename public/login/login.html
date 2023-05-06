@@ -37,20 +37,20 @@
 
         <br><br>
 
-        <section class="entrar-section">
-            <h1>Entrar</h1>
+        <section class="cadastrar-section">
+            <h1>Cadastrar</h1>
 
-            <input id="ipt_entrar_nome" placeholder="Jão">
+            <input id="ipt_cadastrar_nome" placeholder="Jão">
             <br>
-            <input type="email" id="ipt_entrar_email" placeholder="fulano@email.com">
+            <input type="email" id="ipt_cadastrar_email" placeholder="fulano@email.com">
             <br>
-            <input type="password" id="ipt_entrar_password" placeholder="bananinha123">
+            <input type="password" id="ipt_cadastrar_password" placeholder="bananinha123">
             <br>
-            <input type="password" id="ipt_entrar_confirm_password" placeholder="bananinha123">
+            <input type="password" id="ipt_cadastrar_confirm_password" placeholder="bananinha123">
             <br>
-            <input type="date" id="ipt_entrar_dt_birth" placeholder="01/01/2001">
+            <input type="date" id="ipt_cadastrar_dt_birth" placeholder="01/01/2001">
             <br>
-            <button onclick="entrar()">Entrar</button>
+            <button onclick="cadastrar()">Cadastrar</button>
         </section>
 
     </main>
@@ -65,20 +65,22 @@
 
     function validarEmail(email) {
         if (email == "" || email == undefined) {
-            console.log('Email nulo');
-
             dadosAlerta = [
                 'error',
                 'Email inválido',
                 'Digite um email...'
             ];
-        } else if (email.includes('@') || email.substring(email.indexOf('@') + 1) != "") {
-            console.log('Email com @ inválido');
-
+        } else if (!email.includes('@')) {
             dadosAlerta = [
                 'error',
                 'Email inválido',
-                'Digite um email que contenha @ e o provedor de email logo após ...'
+                'Digite um email que contenha @...'
+            ];
+        } else if (email.substring(email.indexOf('@') + 1) == "") {
+            dadosAlerta = [
+                'error',
+                'Email inválido',
+                'Digite um email que contenha um provedor após o @...'
             ];
         } else {
             return true;
@@ -91,16 +93,12 @@
 
     function validarSenha(senha) {
         if (senha == "" || senha == undefined) {
-            console.log('Senha nula');
-
             dadosAlerta = [
                 'error',
                 'Senha inválida',
                 'Digite uma senha...'
             ];
         } else if (senha.length < 5) {
-            console.log('Senha pequena');
-
             dadosAlerta = [
                 'error',
                 'Senha inválida',
@@ -141,11 +139,57 @@
             })
         }
 
+       fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: dadosLogin[0],
+                senhaServer: dadosLogin[1]
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+                alert('Login Certo');
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+
+                    sessionStorage.EMAIL_USUARIO = json.email;
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.ID_USUARIO = json.id;
+
+                    setTimeout(function () {
+                        window.location = "../private/feito.html";
+                    }, 1000); // apenas para exibir o loading
+
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar realizar o login!");
+                
+                resposta.text().then(texto => {
+                    console.error(texto);
+                    // finalizarAguardar(texto);
+                });
+                alert('Login Errado');
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+            alert('Erro no Login');
+        })
+
         console.log(dadosAlerta);
 
     }
 
-    function entrar() {
+    function cadastrar() {
 
     }
 
