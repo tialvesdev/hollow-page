@@ -18,6 +18,8 @@
     --dreams: #BF78CE;
     --lifeblood: #69E2EE;
     --godmaster: #DDC890;
+    
+    --font: 'Poppins';
 }
 
 .grimm1 {
@@ -110,8 +112,8 @@
     cursor: pointer;
     transition: all .3s ease-in-out;
     width: min-content;
-    margin: 0 auto;
     white-space: nowrap;
+    margin: 0 auto;
 }
 
 .btn:hover{
