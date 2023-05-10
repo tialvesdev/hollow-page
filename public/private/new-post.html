@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Document</title>
+
+    <script src="../assets/js/validation.js"></script>
+  </head>
+  <body>
+    <div class="new-post-wrapper">
+      <main class="np-main">
+        <aside>
+          <h1 class="title">Nova publicação:</h1>
+          <input type="text" id="ipt_titulo" placeholder="Título" />
+          <input type="text" id="ipt_desc" placeholder="Descrição" />
+        </aside>
+        <aside>
+            <img src="#" alt="" id="img-volatil" style="display: none;">
+          <input type="file" id="file-upload" accept="image/*" onchange="previewImage(event)"/>
+        </aside>
+        <button onclick="post()">Publicar</button>
+      </main>
+    </div>
+  </body>
+</html>
+
+<script>
+  function post() {
+    if (validarTexto("Título", ipt_titulo.value, 100)) {
+      console.log("Título certo");
+      if (validarTexto("Descrição", ipt_desc.value, 300)) {
+        console.log("Descrição Certa");
+      }
+    }
+  }
+
+  /**
+   * Create an arrow function that will be called when an image is selected.
+   */
+  const previewImage = (event) => {
+    /*** Get the selected files.*/
+    const imageFiles = event.target.files;
+
+    var img = document.getElementById('img-volatil');
+    img.src = URL.createObjectURL(imageFiles[0]);
+    img.style.display = 'block';
+
+    console.log(URL.createObjectURL(imageFiles[0]));
+  };
+</script>
