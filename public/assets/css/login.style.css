@@ -6,31 +6,51 @@
 .login-section, .cadastrar-section {
     width: 100%;
     height: 100vh;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    padding: 75px;
 }
 
 .login-section {
     background-image: url('../img/bg/bg-login.png');
-    background-repeat: no-repeat;
     background-position: left;
-    display: flex;
-    align-items: center;
     justify-content: end;
-    padding: 75px;
+}
+
+.cadastrar-section {
+    background-image: url('../img/bg/bg-cadastro.png');
+    background-position: right;
+    display: none;
 }
 
 .form-aside {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 15px;
     width: 35vw;
 }
 
-.cadastrar-section {
-    background-image: url('../img/bg/bg-cadastro.png');
-    background-repeat: no-repeat;
-    background-position: right;
-    display: flex;
-    align-items: center;
-    padding: 75px;
+.cadastrar-section .form-aside {
+    /* gap: 0; */
 }
 
+.form-aside .text {
+    text-align: center;
+}
+
+.form-a {
+    text-decoration: none;
+    transition: all .25s ease-in-out;
+    cursor: pointer;
+}
+
+.form-a.lifeblood:hover {
+    color: var(--grimm2);
+    text-decoration: underline;
+}
+
+.form-a.grimm2:hover {
+    color: var(--lifeblood);
+    text-decoration: underline;
+}
