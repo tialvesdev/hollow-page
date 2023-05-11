@@ -172,6 +172,23 @@
 .swal2-popup {
     font-family: 'Poppins';
 }
+.swal2-actions .swal2-confirm {
+    background-color: var(--godmaster);
+    color: var(--black);
+    font-weight: 800;
+    transition: all .1s ease-in-out;
+}
+
+.swal2-actions .swal2-confirm:focus {
+    box-shadow: none;
+    outline: 2px solid var(--godmaster);
+    outline-offset: 2px;
+}
+
+.swal2-actions .swal2-confirm:hover {
+    outline: 2px solid var(--godmaster);
+    outline-offset: 5px;
+}
 
 @keyframes rotation {
     0% {

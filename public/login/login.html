@@ -15,11 +15,6 @@
     <link rel="stylesheet" href="../assets/css/global.style.css">
     <link rel="stylesheet" href="../assets/css/login.style.css">
 
-    <!-- <script src="../assets/js/login.js" type="module"></script>
-
-    <script src="../../node_modules/sweetalert2/src/sweetalert2.min.js"></script>
-    <link rel="stylesheet" href="../../node_modules/sweetalert2/dist/sweetalert2.css"> -->
-
 </head>
 
 <body>
@@ -167,13 +162,73 @@
 
         if (validarEmail(dadosLogin[0]) && validarSenha(dadosLogin[1])) {
             console.log('Login válido');
-            Swal.fire({
-                icon: 'success',
-                title: 'LogIn válido!',
-                text: 'Entrando em segundos...',
-                background: '#000',
-                color: '#FFF',
-            });
+
+            fetch("/usuarios/autenticar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    emailServer: dadosLogin[0],
+                    senhaServer: dadosLogin[1]
+                })
+            }).then(function (resposta) {
+                console.log("ESTOU NO THEN DO entrar()!")
+
+                if (resposta.ok) {
+                    console.log(resposta);
+                    alert('Login Certo');
+
+                    resposta.json().then(json => {
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+
+                        sessionStorage.EMAIL_USUARIO = json.email;
+                        sessionStorage.NOME_USUARIO = json.nome;
+                        sessionStorage.ID_USUARIO = json.id;
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'LogIn válido!',
+                            text: 'Entrando em segundos...',
+                            background: '#000',
+                            color: '#FFF',
+                            confirmButtonText: 'Beleza!',
+                        }).then((result) => {
+                            setTimeout(function () {
+                                window.location = "../private/new-post.html";
+                            }, 1000); // apenas para exibir o loading
+                        });
+
+                    });
+
+                } else {
+
+                    console.log("Houve um erro ao tentar realizar o login!");
+
+                    resposta.text().then(texto => {
+                        console.error(texto);
+                        // finalizarAguardar(texto);
+                    });
+                    alert('Login Errado');
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login inválido',
+                        text: 'Usuário não existente...',
+                        background: '#000',
+                        color: '#FFF',
+                    });
+
+                }
+
+            }).catch(function (erro) {
+                console.log(erro);
+                alert('Erro no Login');
+            })
+
+            console.log(dadosAlerta);
+
         } else {
             console.log('Login inválido');
             Swal.fire({
@@ -182,56 +237,8 @@
                 text: dadosAlerta[2],
                 background: '#000',
                 color: '#FFF',
-            })
+            });
         }
-
-        fetch("/usuarios/autenticar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                emailServer: dadosLogin[0],
-                senhaServer: dadosLogin[1]
-            })
-        }).then(function (resposta) {
-            console.log("ESTOU NO THEN DO entrar()!")
-
-            if (resposta.ok) {
-                console.log(resposta);
-                alert('Login Certo');
-
-                resposta.json().then(json => {
-                    console.log(json);
-                    console.log(JSON.stringify(json));
-
-                    sessionStorage.EMAIL_USUARIO = json.email;
-                    sessionStorage.NOME_USUARIO = json.nome;
-                    sessionStorage.ID_USUARIO = json.id;
-
-                    setTimeout(function () {
-                        window.location = "../private/new-post.html";
-                    }, 1000); // apenas para exibir o loading
-
-                });
-
-            } else {
-
-                console.log("Houve um erro ao tentar realizar o login!");
-
-                resposta.text().then(texto => {
-                    console.error(texto);
-                    // finalizarAguardar(texto);
-                });
-                alert('Login Errado');
-            }
-
-        }).catch(function (erro) {
-            console.log(erro);
-            alert('Erro no Login');
-        })
-
-        console.log(dadosAlerta);
 
     }
 
