@@ -14,6 +14,9 @@
 
     <script type='text/javascript' src='http://www.youtube.com/player_api'></script>
 
+    <script src="./assets/js/colors.js"></script>
+    <script src="./assets/js/global.js"></script>
+
 </head>
 
 <body>
@@ -42,33 +45,39 @@
                     </a>
                 </li>
                 <li>
-                    <button id="nav_btn_tema" class="nav-btn-tema" onclick="dropdownCores()">
+                    <button id="nav_btn_tema" class="nav-btn-tema" onclick="abrirCores()">
                         <img src="./assets/img/icon/colors-icon.png" alt="Tema de Cores">
                     </button>
                 </li>
                 <li class="nav-li-cores" id="nav_li_cores">
                     <div class="nav-cores" id="nav_cores">
-                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <button class="nav-btn-cor" onclick="trocaCorTema(0)">
+                            <div class="nav-sel-cor bg-reset">
+                                <img src="./assets/img/icon/none.png" alt="None">
+                            </div>
+                        </button>
+
+                        <button class="nav-btn-cor" onclick="trocaCorTema(1)">
                             <div class="nav-sel-cor bg-grimm1"></div>
                         </button>
 
-                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <button class="nav-btn-cor" onclick="trocaCorTema(2)">
                             <div class="nav-sel-cor bg-grimm2"></div>
                         </button>
 
-                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <button class="nav-btn-cor" onclick="trocaCorTema(3)">
                             <div class="nav-sel-cor bg-crystal"></div>
                         </button>
 
-                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <button class="nav-btn-cor" onclick="trocaCorTema(4)">
                             <div class="nav-sel-cor bg-dreams"></div>
                         </button>
 
-                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <button class="nav-btn-cor" onclick="trocaCorTema(5)">
                             <div class="nav-sel-cor bg-lifeblood"></div>
                         </button>
 
-                        <button class="nav-btn-cor" onclick="trocaCorTema()">
+                        <button class="nav-btn-cor" onclick="trocaCorTema(6)">
                             <div class="nav-sel-cor bg-godmaster"></div>
                         </button>
                     </div>
@@ -182,12 +191,6 @@
                         </p>
                     </figcaption>
                 </figure>
-                <!-- 
-                <div class="div-teste">
-                    <section class="section-teste" id="teste">
-
-                    </section>
-                </div> -->
             </section>
             
             <section class="community" id="community">
@@ -273,63 +276,59 @@
         });
     }
 
-    function setHidden(id) {
-        document.getElementById(id).classList.add('hidden');
-    }
 
-    window.onload = function () {
+
+    window.onload = () => {
         setInterval(
             setHidden('embed_img'), 3000
         );
     }
 
-    const navbar = document.getElementById('nav');
-    window.onscroll = () => {
-        if (window.scrollY > 0) {
-            navbar.classList.add('blur');
-        } else {
-            navbar.classList.remove('blur');
-        }
-    };
+    window.onscroll = () => addBlur('nav');
 
-    function dropdownCores() {
+    function abrirCores() {
         var paleta = document.getElementById('nav_btn_tema');
-        paleta.classList.toggle('rotate');
-        console.log('rodou');
-
         var drop = document.getElementById('nav_li_cores');
+        
+        paleta.classList.toggle('rotate');
+
         if (drop.classList.toggle('aparecer')) {
             drop.style.display = 'flex';
         } else {
             drop.style.display = 'none';
         }
-        console.log('Apareceu');
     }
 
-    function createSquare() {
+    function createDreams() {
         var section = document.getElementById('hollow_knight');
-        var square = document.createElement('img');
-        square.classList.add('dream-efx-img');
-        square.src = './assets/img/dream-particle.png';
+        var dream = document.createElement('img');
+        dream.classList.add('dream-efx-img');
+        dream.src = './assets/img/dream-particle.png';
 
         var size = Math.random() * 500;
 
-        square.style.width = 50 + size + 'px';
-        square.style.height = 50 + size + 'px';
+        dream.style.width = 50 + size + 'px';
+        dream.style.height = 50 + size + 'px';
 
-        square.style.top = Math.random() * innerHeight + 'px';
-        square.style.left = Math.random() * innerWidth + 'px';
+        dream.style.top = Math.random() * innerHeight + 'px';
+        dream.style.left = Math.random() * innerWidth + 'px';
 
-        square.style.filter = `invert(97%) sepia(97%) saturate(4%) hue-rotate(77deg) brightness(104%) contrast(100%) 
-        drop-shadow(0 0 5px #c13bff) drop-shadow(0 0 10px #c13bff) drop-shadow(0 0 15px #c13bff) blur(${Math.floor(Math.random() * 10)}px) `;
+        if (selectedColor == '') {
+            dream.style.filter = `invert(97%) sepia(97%) saturate(4%) hue-rotate(77deg) brightness(104%) contrast(100%) 
+            drop-shadow(0 0 5px #c13bff) drop-shadow(0 0 10px #c13bff) drop-shadow(0 0 15px #c13bff) blur(${Math.floor(Math.random() * 10)}px) `;
+        } else {
+            dream.style.filter = `invert(97%) sepia(97%) saturate(4%) hue-rotate(77deg) brightness(104%) contrast(100%) 
+            drop-shadow(0 0 5px ${selectedColor}) drop-shadow(0 0 10px ${selectedColor}) drop-shadow(0 0 15px ${selectedColor}) blur(${Math.floor(Math.random() * 10)}px) `;
+        }
 
-        section.appendChild(square);
+
+        section.appendChild(dream);
 
         setTimeout(() => {
-            square.remove();
+            dream.remove();
         }, 10000);
     }
 
-    setInterval(createSquare, 1000);
+    setInterval(createDreams, 1000);
 
 </script>

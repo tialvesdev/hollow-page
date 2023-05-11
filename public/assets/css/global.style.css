@@ -70,10 +70,6 @@
     background-color: var(--godmaster);
 }
 
-.hidden {
-    display: none;
-}
-
 .title {
     color: var(--white);
     font-family: 'Poppins';
@@ -126,22 +122,6 @@
     padding: 10px 50px;
 }
 
-.reverse {
-    flex-direction: row-reverse;
-}
-
-.aparecer {
-    display: flex;
-}
-
-.rotate {
-    animation: 1s rotation;
-}
-
-.blur {
-    backdrop-filter: blur(8px);
-}
-
 .ipt-wrapper {
     display: flex;
     align-items: center;
@@ -167,6 +147,26 @@
 .ipt:focus {
     outline: none;
     border-bottom: 3px solid var(--lifeblood);
+}
+
+.reverse {
+    flex-direction: row-reverse;
+}
+
+.hidden {
+    display: none;
+}
+
+.aparecer {
+    display: flex;
+}
+
+.rotate {
+    animation: 1s rotation;
+}
+
+.blur {
+    backdrop-filter: blur(8px);
 }
 
 .swal2-popup {
