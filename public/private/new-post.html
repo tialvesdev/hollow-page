@@ -1,42 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Nova Publicação</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="../assets/css/global.style.css">
-    <link rel="stylesheet" href="../assets/css/new-post.css">
+  <title>Nova Publicação</title>
 
-    <script src="../assets/js/validation.js"></script>
-  </head>
-  <body>
-    <div class="new-post-wrapper">
-      <main class="np-main">
-        <section class="np-sect">
-            <!-- <article>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="../assets/css/global.style.css">
+  <link rel="stylesheet" href="../assets/css/new-post.css">
+
+  <script src="../assets/js/validation.js"></script>
+</head>
+
+<body>
+  <div class="new-post-wrapper">
+    <main class="np-main">
+      <section class="np-sect">
+        <!-- <article>
                 <img class="border-angle" src="../assets/img/border-angle.png" alt="">
                 <img class="border-angle" src="../assets/img/border-angle.png" alt="">
                 <img class="border-angle" src="../assets/img/border-angle.png" alt="">
                 <img class="border-angle" src="../assets/img/border-angle.png" alt="">
             </article> -->
-            <aside class="np-aside">
-              <h1 class="title">Nova publicação:</h1>
-              <input type="text" class="ipt" id="ipt_titulo" placeholder="Título" />
-              <input type="text" class="ipt" id="ipt_desc" placeholder="Descrição" />
-            </aside>
+        <aside class="np-aside">
+          <h1 class="title">Nova publicação:</h1>
+          <input type="text" class="ipt" id="ipt_titulo" placeholder="Título" />
+          <textarea onkeypress="textAreaAdjust(this)" style="overflow:hidden" class="ipt" id="ipt_desc" placeholder="Descrição"></textarea>
+          <img src="../assets/img/char/chars-on-bench.png" alt="">
+        </aside>
 
-            <aside class="np-aside">
-                <img src="#" alt="" id="img-volatil" style="display: none;">
-              <input class="ipt-file" type="file" id="file-upload" accept="image/*" onchange="previewImage(event)"/>
-            </aside>
-        </section>
-        <button onclick="post()" class="btn">Publicar</button>
-      </main>
-    </div>
-  </body>
+        <aside class="np-aside">
+          <img src="#" alt="" id="img-volatil" style="display: none;">
+          <input class="ipt-file" type="file" id="ipt_file" accept="image/*" onchange="previewImage(event)" />
+        </aside>
+      </section>
+      <button onclick="post()" class="btn">Publicar</button>
+    </main>
+  </div>
+</body>
+
 </html>
 
 <script>
@@ -47,6 +54,38 @@
         console.log("Descrição Certa");
       }
     }
+
+    var dadosNewPost = [
+      ipt_titulo.value,
+      ipt_desc.value,
+      ipt_file.value
+    ];
+
+    if (validarTexto('Título', dadosNewPost[0], 100) && validarTexto('Descrição', dadosNewPost[1], 300)) {
+      console.log('Publicação adicionada com sucesso');
+      Swal.fire({
+        icon: 'success',
+        title: 'Publicação criada!',
+        text: 'Redirecionando em instantes...',
+        background: '#000',
+        color: '#FFF',
+      });
+    } else {
+      console.log('Publicação inválida');
+      Swal.fire({
+        icon: dadosAlerta[0],
+        title: dadosAlerta[1],
+        text: dadosAlerta[2],
+        background: '#000',
+        color: '#FFF',
+      })
+    }
+  }
+
+  function textAreaAdjust(element) {
+    // element.style.height = "1px";
+    console.log(`(scrollHeight: ${element.scrollHeight} > clientHeight: ${element.clientHeight}) ? (scrollHeight: ${element.scrollHeight}px) : "40px"`);
+    element.style.height = (element.scrollHeight > element.clientHeight) ? (element.scrollHeight)+"px" : "40px";
   }
 
   /**
