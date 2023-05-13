@@ -19,7 +19,7 @@
 
 <body>
   <div class="new-post-wrapper">
-    <main class="np-main">
+    <form  action="/upload" method="POST" enctype="multipart/form-data" class="np-main">
       <section class="np-sect">
         <!-- <article>
                 <img class="border-angle" src="../assets/img/border-angle.png" alt="">
@@ -36,11 +36,11 @@
 
         <aside class="np-aside">
           <img src="#" alt="" id="img-volatil" style="display: none;">
-          <input class="ipt-file" type="file" id="ipt_file" accept="image/*" onchange="previewImage(event)" />
+          <input name="imagem" class="ipt-file" type="file" id="ipt_file" accept="image/*" onchange="previewImage(event)" />
         </aside>
       </section>
-      <button onclick="post()" class="btn">Publicar</button>
-    </main>
+      <button type="submit" class="btn">Publicar</button>
+    </form>
   </div>
 </body>
 
@@ -48,38 +48,39 @@
 
 <script>
   function post() {
-    if (validarTexto("Título", ipt_titulo.value, 100)) {
-      console.log("Título certo");
-      if (validarTexto("Descrição", ipt_desc.value, 300)) {
-        console.log("Descrição Certa");
-      }
-    }
-
+    
     var dadosNewPost = [
       ipt_titulo.value,
       ipt_desc.value,
-      ipt_file.value
+      ipt_file.files[0]
     ];
+        
+    // if (validarTexto("Título", ipt_titulo.value, 100)) {
+    //   console.log("Título certo");
+    //   if (validarTexto("Descrição", ipt_desc.value, 300)) {
+    //     console.log("Descrição Certa");
+    //   }
+    // }
 
-    if (validarTexto('Título', dadosNewPost[0], 100) && validarTexto('Descrição', dadosNewPost[1], 300)) {
-      console.log('Publicação adicionada com sucesso');
-      Swal.fire({
-        icon: 'success',
-        title: 'Publicação criada!',
-        text: 'Redirecionando em instantes...',
-        background: '#000',
-        color: '#FFF',
-      });
-    } else {
-      console.log('Publicação inválida');
-      Swal.fire({
-        icon: dadosAlerta[0],
-        title: dadosAlerta[1],
-        text: dadosAlerta[2],
-        background: '#000',
-        color: '#FFF',
-      })
-    }
+    // if (validarTexto('Título', dadosNewPost[0], 100) && validarTexto('Descrição', dadosNewPost[1], 300)) {
+    //   console.log('Publicação adicionada com sucesso');
+    //   Swal.fire({
+    //     icon: 'success',
+    //     title: 'Publicação criada!',
+    //     text: 'Redirecionando em instantes...',
+    //     background: '#000',
+    //     color: '#FFF',
+    //   });
+    // } else {
+    //   console.log('Publicação inválida');
+    //   Swal.fire({
+    //     icon: dadosAlerta[0],
+    //     title: dadosAlerta[1],
+    //     text: dadosAlerta[2],
+    //     background: '#000',
+    //     color: '#FFF',
+    //   })
+    // }
   }
 
   function textAreaAdjust(element) {
