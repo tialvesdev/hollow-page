@@ -141,10 +141,11 @@
     width: 100%;
     background-color: var(--gray-bg);
     z-index: 1;
+    box-shadow: inset 0 15px 10px 0 rgba(2, 2, 3, 0.8);
 }
 
 .hk {
-    padding: 50px;
+    padding: 65px 50px 50px 50px;
     display: flex;
     flex-direction: column;
     gap: 75px;
@@ -156,7 +157,7 @@
 
 .hk-img {
     position: relative;
-    transition: all .25s ease-in-out;
+    transition: all .4s ease-in-out;
 }
 
 .figure-hk:not(.reverse) .hk-img:nth-child(1) {
@@ -173,6 +174,7 @@
     position: absolute;
     z-index: 1;
     transform: translate(-25px, -25px);
+    /* animation: cardsAnimation 1s; */
 }
 
 .figure-hk.reverse .hk-img:nth-child(2) {
@@ -343,10 +345,10 @@
     z-index: 2;
     position: absolute;
     pointer-events: none;
-    animation: animate 10s linear infinite;
+    animation: dreamsAnimation 10s linear infinite;
 }
 
-@keyframes animate {
+@keyframes dreamsAnimation {
     0% {
         transform: scale(0) translateY(0) rotate(0deg);
         opacity: 0;
@@ -360,5 +362,22 @@
     100% {
         transform: scale(1) translateY(-800px) rotate(360deg);
         opacity: 0;
+    }
+}
+
+@keyframes cardsAnimation {
+    0% {
+        z-index: 1;
+        transition: all .5s ease-in-out;
+    }
+    10% {
+        transform: translate(-300px, -300px) rotate(-15deg)
+    }
+    60% {
+        z-index: 0;
+    }
+    100% {
+        transform: none;
+        transition: all .25s ease-in-out
     }
 }

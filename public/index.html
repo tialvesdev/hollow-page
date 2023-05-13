@@ -111,9 +111,9 @@
             <section class="hk" id="hollow_knight">
 
                 <figure class="figure-hk front reverse">
-                    <div class="hk-cards">
-                        <img class="hk-img" src="./assets/img/hk-print/dirtmouth-well.png" alt="Poço de Dirtmouth">
-                        <img class="hk-img" src="./assets/img/hk-print/dirtmouth-bench.png" alt="Banco de Dirtmouth">
+                    <div class="hk-cards" onclick="cardsAnimation(document.querySelectorAll('.hk-img')[0], document.querySelectorAll('.hk-img')[1], 0)">
+                        <img id="img1" class="hk-img" src="./assets/img/hk-print/dirtmouth-well.png" alt="Poço de Dirtmouth">
+                        <img id="img2" class="hk-img" src="./assets/img/hk-print/dirtmouth-bench.png" alt="Banco de Dirtmouth">
                     </div>
                     <figcaption class="hk-text">
                         <h2 class="subtitle">
@@ -131,7 +131,7 @@
                 </figure>
                 
                 <figure class="figure-hk front">
-                    <div class="hk-cards">
+                    <div class="hk-cards" onclick="cardsAnimation(document.querySelectorAll('.hk-img')[2], document.querySelectorAll('.hk-img')[3], 1)">
                         <img class="hk-img" src="./assets/img/hk-print/colosseum-of-fools.png" alt="Coliseu dos Tolos">
                         <img class="hk-img" src="./assets/img/hk-print/the-hive.png" alt="A Colmeia">
                     </div>
@@ -147,7 +147,7 @@
                 </figure>
 
                 <figure class="figure-hk front reverse">
-                    <div class="hk-cards">
+                    <div class="hk-cards" onclick="cardsAnimation(document.querySelectorAll('.hk-img')[4], document.querySelectorAll('.hk-img')[5], 2)">
                         <img class="hk-img" src="./assets/img/hk-print/gods-and-nightmares.png" alt="Gods & Nightmares">
                         <img class="hk-img" src="./assets/img/hk-print/grimm-nightmare.png" alt="Pesadelo do Grimm">
                     </div>
@@ -172,7 +172,7 @@
                 </figure>
 
                 <figure class="figure-hk front">
-                    <div class="hk-cards">
+                    <div class="hk-cards" onclick="cardsAnimation(document.querySelectorAll('.hk-img')[6], document.querySelectorAll('.hk-img')[7], 3)">
                         <img class="hk-img" src="./assets/img/hk-print/crystal-bench.png"
                             alt="Banco no Pico de Crystal">
                         <img class="hk-img" src="./assets/img/hk-print/crystal-peak.png"
@@ -331,5 +331,35 @@
     }
 
     setInterval(createDreams, 1000);
+
+    
+    var doneCards = [
+        false,
+        false,
+        false,
+        false,
+    ]
+
+    function cardsAnimation(img1, img2, c) {
+        img1.style.transition = 'all .4s ease-in-out'
+
+        img1.style.transform = 'translate(-300px, -300px) rotate(-15deg)';
+
+        setTimeout(() => {
+            if (doneCards[c] == false || img1.style.zIndex == 1) {
+                img1.style.zIndex = 0;
+                img2.style.zIndex = 1;
+                doneCards[c] = true
+            } else {
+                img1.style.zIndex = 1;
+                img2.style.zIndex = 0;
+            }
+            setTimeout(img1.style.transform = '', 500);
+
+        }, 400);
+
+        // img1.style.animation = 'cardsAnimation';
+
+    }
 
 </script>
