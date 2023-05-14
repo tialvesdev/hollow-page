@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hollow Page</title>
+    <link rel="shortcut icon" href="../assets/img/icon/hollow-icon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="../assets/css/global.style.css">
+    <link rel="stylesheet" href="../assets/css/feed.style.css">
+</head>
+<body>
+    <div class="feed-wrapper">
+        <aside class="sidebar">
+            <div class="side-up">
+                <a class="side-opt" href="">
+                    <img src="../assets/img/icon/github-icon.png" alt="">
+                    <b>Home</b>
+                </a>
+                <a class="side-opt" href="">
+                    <img src="../assets/img/icon/github-icon.png" alt="">
+                    <b>Filtro</b>
+                </a>
+                <a class="side-opt" href="">
+                    <img src="../assets/img/icon/github-icon.png" alt="">
+                    <b>Pesquisar</b>
+                </a>
+            </div>
+            <div class="side-down">
+                <a class="side-opt" href="">
+                    <img src="../assets/img/icon/github-icon.png" alt="">
+                    <b>Perfil</b>
+                </a>
+                <a class="side-opt" href="">
+                    <img src="../assets/img/icon/github-icon.png" alt="">
+                    <b>Sair</b>
+                </a>
+            </div>
+        </aside>
+        <div class="feed-content">
+            <header class="greetings">
+                <p id="p_greetings" class="big-text">Aventure-se, Fulano</p>
+            </header>
+            <main class="feed">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+            </main>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+
+    var greetingsTexts = [
+        'Aventure-se, Fulano',
+        'Descenda até as profundezas, Fulano',
+        'Aproveite o entretenimento, Fulano',
+        'Não tenha medo, Fulano',
+        'Eu sou Zote, o Poderoso',
+        'Hm hm hm hm hm hm hm hm hm - Cornifer, 2017'
+    ];
+
+    window.onload = () => {
+
+        document.getElementById('p_greetings').innerHTML = greetingsTexts[Math.floor(Math.random() * (greetingsTexts.length - 1))]
+    }
+
+</script>

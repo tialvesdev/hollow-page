@@ -40,7 +40,7 @@
                     <a class="nav-a text" href="#community">Projeto</a>
                 </li>
                 <li>
-                    <a href="./login/login.html">
+                    <a href="./login.html">
                         <button class="btn small-btn">Entrar</button>
                     </a>
                 </li>
@@ -107,13 +107,16 @@
         </header>
 
         <main class="main" id="main">
-            
+
             <section class="hk" id="hollow_knight">
 
                 <figure class="figure-hk front reverse">
-                    <div class="hk-cards" onclick="cardsAnimation(document.querySelectorAll('.hk-img')[0], document.querySelectorAll('.hk-img')[1], 0)">
-                        <img id="img1" class="hk-img" src="./assets/img/hk-print/dirtmouth-well.png" alt="Poço de Dirtmouth">
-                        <img id="img2" class="hk-img" src="./assets/img/hk-print/dirtmouth-bench.png" alt="Banco de Dirtmouth">
+                    <div class="hk-cards"
+                        onclick="cardsAnimation(document.querySelectorAll('.hk-img')[0], document.querySelectorAll('.hk-img')[1], 0)">
+                        <img id="img1" class="hk-img" src="./assets/img/hk-print/dirtmouth-well.png"
+                            alt="Poço de Dirtmouth">
+                        <img id="img2" class="hk-img" src="./assets/img/hk-print/dirtmouth-bench.png"
+                            alt="Banco de Dirtmouth">
                     </div>
                     <figcaption class="hk-text">
                         <h2 class="subtitle">
@@ -129,9 +132,10 @@
                         </p>
                     </figcaption>
                 </figure>
-                
+
                 <figure class="figure-hk front">
-                    <div class="hk-cards" onclick="cardsAnimation(document.querySelectorAll('.hk-img')[2], document.querySelectorAll('.hk-img')[3], 1)">
+                    <div class="hk-cards"
+                        onclick="cardsAnimation(document.querySelectorAll('.hk-img')[2], document.querySelectorAll('.hk-img')[3], 1)">
                         <img class="hk-img" src="./assets/img/hk-print/colosseum-of-fools.png" alt="Coliseu dos Tolos">
                         <img class="hk-img" src="./assets/img/hk-print/the-hive.png" alt="A Colmeia">
                     </div>
@@ -142,12 +146,13 @@
                         <p class="text">
                             Jogabilidade é importante e é entregue com Hollow Knight, indo de mapas com ótimos <i>level
                                 design</i> e curva de aprendizado até o Coliseu dos Tolos para testar suas habilidades.
-                            </p>
+                        </p>
                     </figcaption>
                 </figure>
 
                 <figure class="figure-hk front reverse">
-                    <div class="hk-cards" onclick="cardsAnimation(document.querySelectorAll('.hk-img')[4], document.querySelectorAll('.hk-img')[5], 2)">
+                    <div class="hk-cards"
+                        onclick="cardsAnimation(document.querySelectorAll('.hk-img')[4], document.querySelectorAll('.hk-img')[5], 2)">
                         <img class="hk-img" src="./assets/img/hk-print/gods-and-nightmares.png" alt="Gods & Nightmares">
                         <img class="hk-img" src="./assets/img/hk-print/grimm-nightmare.png" alt="Pesadelo do Grimm">
                     </div>
@@ -172,11 +177,12 @@
                 </figure>
 
                 <figure class="figure-hk front">
-                    <div class="hk-cards" onclick="cardsAnimation(document.querySelectorAll('.hk-img')[6], document.querySelectorAll('.hk-img')[7], 3)">
+                    <div class="hk-cards"
+                        onclick="cardsAnimation(document.querySelectorAll('.hk-img')[6], document.querySelectorAll('.hk-img')[7], 3)">
                         <img class="hk-img" src="./assets/img/hk-print/crystal-bench.png"
                             alt="Banco no Pico de Crystal">
                         <img class="hk-img" src="./assets/img/hk-print/crystal-peak.png"
-                        alt="Caverna no Pico de Cristal">
+                            alt="Caverna no Pico de Cristal">
                     </div>
                     <figcaption class="hk-text">
                         <h2 class="subtitle">
@@ -192,7 +198,7 @@
                     </figcaption>
                 </figure>
             </section>
-            
+
             <section class="community" id="community">
                 <article class="article-community">
                     <h1 class="title h1-community">Uma cominudade unida e retroativa</h1>
@@ -224,7 +230,9 @@
                             Uma complexidade capaz <br> de <b class="lifeblood">mudar o mundo</b>
                         </p>
                     </figcaption>
-                    <button class="btn">Fazer Parte</button>
+                    <a href="./login.html">
+                        <button class="btn">Fazer Parte</button>
+                    </a>
                 </figure>
 
             </section>
@@ -289,7 +297,7 @@
     function abrirCores() {
         var paleta = document.getElementById('nav_btn_tema');
         var drop = document.getElementById('nav_li_cores');
-        
+
         paleta.classList.toggle('rotate');
 
         if (drop.classList.toggle('aparecer')) {
@@ -315,11 +323,14 @@
         dream.style.left = Math.random() * innerWidth + 'px';
 
         if (selectedColor == '') {
+
             dream.style.filter = `invert(97%) sepia(97%) saturate(4%) hue-rotate(77deg) brightness(104%) contrast(100%) 
-            drop-shadow(0 0 5px ${randomColor}) drop-shadow(0 0 10px ${randomColor}) drop-shadow(0 0 15px ${randomColor}) blur(${Math.floor(Math.random() * 10)}px) `;
+            drop-shadow(0 0 5px ${randomColor}) drop-shadow(0 0 10px ${randomColor}) drop-shadow(0 0 15px ${randomColor}) blur(${Math.floor(Math.random() * 10)}px)`;
+
         } else {
+
             dream.style.filter = `invert(97%) sepia(97%) saturate(4%) hue-rotate(77deg) brightness(104%) contrast(100%) 
-            drop-shadow(0 0 5px ${selectedColor}) drop-shadow(0 0 10px ${selectedColor}) drop-shadow(0 0 15px ${selectedColor}) blur(${Math.floor(Math.random() * 10)}px) `;
+            drop-shadow(0 0 5px ${selectedColor}) drop-shadow(0 0 10px ${selectedColor}) drop-shadow(0 0 15px ${selectedColor}) blur(${Math.floor(Math.random() * 10)}px)`;
         }
 
 
@@ -332,7 +343,7 @@
 
     setInterval(createDreams, 1000);
 
-    
+
     var doneCards = [
         false,
         false,
