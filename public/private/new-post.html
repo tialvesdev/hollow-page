@@ -30,8 +30,12 @@
         </aside>
 
         <aside class="np-aside">
-          <img src="#" alt="" id="img-volatil" style="display: none;">
-          <input name="imagem" class="ipt-file" type="file" id="ipt_file" accept="image/*" onchange="previewImage(event)" />
+          <img src="../assets/img/char/knight-crying.png" alt="Nenhuma foto selecionada" class="ipt-file-img" id="ipt_file_img" >
+          <p class="text ipt-file-name" id="ipt_ile_name" >Nenhuma foto selecionada</p>
+          <label for="ipt_file" class="ipt-file-label">
+            <input name="imagem" class="ipt-file sumir" type="file" id="ipt_file" accept="image/*" onchange="previewImage(event)" />
+            <a class="ipt-file-a big-text"><b> Escolher foto </b></a>
+          </label>
         </aside>
       </section>
       <button type="submit" class="btn">Publicar</button>
@@ -57,25 +61,25 @@
     //   }
     // }
 
-    // if (validarTexto('Título', dadosNewPost[0], 100) && validarTexto('Descrição', dadosNewPost[1], 300)) {
-    //   console.log('Publicação adicionada com sucesso');
-    //   Swal.fire({
-    //     icon: 'success',
-    //     title: 'Publicação criada!',
-    //     text: 'Redirecionando em instantes...',
-    //     background: '#000',
-    //     color: '#FFF',
-    //   });
-    // } else {
-    //   console.log('Publicação inválida');
-    //   Swal.fire({
-    //     icon: dadosAlerta[0],
-    //     title: dadosAlerta[1],
-    //     text: dadosAlerta[2],
-    //     background: '#000',
-    //     color: '#FFF',
-    //   })
-    // }
+    if (validarTexto('Título', dadosNewPost[0], 100) && validarTexto('Descrição', dadosNewPost[1], 300)) {
+      console.log('Publicação adicionada com sucesso');
+      Swal.fire({
+        icon: 'success',
+        title: 'Publicação criada!',
+        text: 'Redirecionando em instantes...',
+        background: '#000',
+        color: '#FFF',
+      });
+    } else {
+      console.log('Publicação inválida');
+      Swal.fire({
+        icon: dadosAlerta[0],
+        title: dadosAlerta[1],
+        text: dadosAlerta[2],
+        background: '#000',
+        color: '#FFF',
+      })
+    }
   }
 
   function textAreaAdjust(element) {
@@ -91,9 +95,15 @@
     /*** Get the selected files.*/
     const imageFiles = event.target.files;
 
-    var img = document.getElementById('img-volatil');
+    console.log(imageFiles, imageFiles[0], imageFiles[0].name)
+
+    var img = document.getElementById('ipt_file_img');
+    var name = document.getElementById('ipt_ile_name');
+
     img.src = URL.createObjectURL(imageFiles[0]);
     img.style.display = 'block';
+    name.innerHTML = imageFiles[0].name;
+    name.style.display = 'block';
 
     console.log(URL.createObjectURL(imageFiles[0]));
   };

@@ -32,9 +32,26 @@
     flex-direction: column;
 }
 
-.border-angle {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 75px;
+.ipt-file {
+
+}
+
+.ipt-file-label {
+   display: flex;
+   justify-content: center;
+}
+
+.ipt-file-a {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.ipt-file-img {
+    height: 350px;
+    object-fit: contain;
+}
+
+.ipt-file-name, .ipt-file-a {
+    width: 100%;
+    text-align: center;
 }

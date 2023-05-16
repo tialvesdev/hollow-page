@@ -1,20 +1,27 @@
 .feed-wrapper {
     min-height: 100vh;
 }
+* {
+    transition: all .2s ease-in-out;
+}
 
 .sidebar {
     height: 100vh;
-    width: min-content;
+    width: 125px;
     background-color: var(--black2);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* align-items: center; */
     padding: 50px 35px;
     border-radius: 0 25% 25% 0;
     position: fixed;
     left: 0;
     z-index: 1;
+    transition: all .3s ease-in-out;
+}
+
+.sidebar:hover {
+    width: 200px;
 }
 
 .side-up, .side-down {
@@ -37,12 +44,12 @@
 }
 
 .side-opt b {
-    display: none;
-    /* transition: all .25s ease-in-out; */
+    transform: scaleY(0);
+    transition: all .1s ease-in-out;
 }
 
 .sidebar:hover .side-opt b {
-    display: block;
+    transform: scaleY(1);
 }
 
 /* .side-opt:after {
