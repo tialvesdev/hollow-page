@@ -20,7 +20,8 @@
 
 <body>
   <div class="new-post-wrapper">
-    <form  action="/upload" method="POST" enctype="multipart/form-data" class="np-main">
+    <!-- form action="/upload" method="POST" enctype="multipart/form-data" -->
+    <main class="np-main">
       <section class="np-sect">
         <aside class="np-aside">
           <h1 class="title">Nova publicação:</h1>
@@ -38,8 +39,8 @@
           </label>
         </aside>
       </section>
-      <button type="submit" class="btn">Publicar</button>
-    </form>
+      <button onclick="post()" class="btn">Publicar</button>
+    </main>
   </div>
 </body>
 
@@ -53,33 +54,73 @@
       ipt_desc.value,
       ipt_file.files[0]
     ];
-        
-    // if (validarTexto("Título", ipt_titulo.value, 100)) {
-    //   console.log("Título certo");
-    //   if (validarTexto("Descrição", ipt_desc.value, 300)) {
-    //     console.log("Descrição Certa");
-    //   }
+
+    var foto = `../assets/bucket/${dadosNewPost[2].name}`;
+
+    console.log(dadosNewPost[0], dadosNewPost[1], sessionStorage.ID_USUARIO)
+
+    // if (validarTexto('Título', dadosNewPost[0], 100) && validarTexto('Descrição', dadosNewPost[1], 300)) {
+    //   console.log('Publicação adicionada com sucesso');
+    //   Swal.fire({
+    //     icon: 'success',
+    //     title: 'Publicação criada!',
+    //     text: 'Redirecionando em instantes...',
+    //     background: '#000',
+    //     color: '#FFF',
+    //   });
+    // } else {
+    //   console.log('Publicação inválida');
+    //   Swal.fire({
+    //     icon: dadosAlerta[0],
+    //     title: dadosAlerta[1],
+    //     text: dadosAlerta[2],
+    //     background: '#000',
+    //     color: '#FFF',
+    //   })
     // }
 
-    if (validarTexto('Título', dadosNewPost[0], 100) && validarTexto('Descrição', dadosNewPost[1], 300)) {
-      console.log('Publicação adicionada com sucesso');
-      Swal.fire({
-        icon: 'success',
-        title: 'Publicação criada!',
-        text: 'Redirecionando em instantes...',
-        background: '#000',
-        color: '#FFF',
-      });
-    } else {
-      console.log('Publicação inválida');
-      Swal.fire({
-        icon: dadosAlerta[0],
-        title: dadosAlerta[1],
-        text: dadosAlerta[2],
-        background: '#000',
-        color: '#FFF',
-      })
-    }
+    // Enviando o valor da nova input
+    fetch("/posts/post", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                tituloServer: dadosNewPost[0],
+                descricaoServer: dadosNewPost[1],
+                fotoServer: foto,
+                idUsuarioServer: sessionStorage.ID_USUARIO
+            })
+        }).then(function (resposta) {
+
+            console.log("resposta: ", resposta);
+
+            if (resposta.ok) {
+                // cardErro.style.display = "block";
+
+                // mensagem_erro.innerHTML = "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+
+                alert('postou certinho');
+
+                setTimeout(() => {
+                    window.location = "./feed.html";
+                }, "2000")
+
+                // limparFormulario();
+                // finalizarAguardar();
+            } else {
+                throw ("Houve um erro ao tentar realizar o post!");
+                alert('ish deu erro, to no else');
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+            alert('aiai viu, to no catch do erro');
+            // finalizarAguardar();
+        });
+
+        return false;
   }
 
   function textAreaAdjust(element) {
