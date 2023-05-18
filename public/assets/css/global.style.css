@@ -149,8 +149,37 @@
     border-bottom: 3px solid var(--lifeblood);
 }
 
+.divider {
+    width: 80%;
+    height: 1px;
+    border: none;
+    /* margin: 0 auto; */
+    background-color: var(--light-gray);
+    margin: 10px;
+}
+
+.seta-voltar {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.seta-voltar:hover {
+    filter: invert(0%) sepia(94%) saturate(26%) hue-rotate(21deg) brightness(99%) contrast(105%);
+}
+
+.seta-voltar img {
+    width: 35px;
+    height: 35px;
+}
+
 .reverse {
     flex-direction: row-reverse;
+}
+
+.center {
+    align-items: center;
 }
 
 .hidden {

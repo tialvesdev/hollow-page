@@ -24,14 +24,21 @@
     <main class="np-main">
       <section class="np-sect">
         <aside class="np-aside">
-          <h1 class="title">Nova publicação:</h1>
+          <div class="np-header">
+            <a href="./feed.html" class="seta-voltar">
+              <img src="../assets/img/icon/arrow-icon.png" alt="">
+            </a>
+            <h1 class="title">
+              Nova publicação:
+            </h1>
+          </div>
           <input type="text" class="ipt" id="ipt_titulo" name="ipt_titulo" placeholder="Título" />
           <textarea onkeypress="textAreaAdjust(this)" style="overflow:hidden" class="ipt" id="ipt_desc" name="ipt_desc"
             placeholder="Descrição"></textarea>
           <img src="../assets/img/char/chars-on-bench.png" alt="">
         </aside>
 
-        <aside class="np-aside">
+        <aside class="np-aside center">
           <img src="../assets/img/char/knight-crying.png" alt="Nenhuma foto selecionada" class="ipt-file-img"
             id="ipt_file_img">
           <p class="text ipt-file-name" id="ipt_ile_name">Nenhuma foto selecionada</p>

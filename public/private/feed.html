@@ -17,36 +17,41 @@
     <div class="feed-wrapper">
         <aside class="sidebar">
             <div class="side-up">
-                <a class="side-opt" href="">
-                    <img src="../assets/img/icon/github-icon.png" alt="">
+                <a class="side-opt" href="./feed.html">
+                    <img class="side-opt-img" src="../assets/img/icon/home-icon.png" alt="">
                     <b>Home</b>
                 </a>
                 <a class="side-opt" href="">
-                    <img src="../assets/img/icon/github-icon.png" alt="">
+                    <img class="side-opt-img" src="../assets/img/icon/filter-icon.png" alt="">
                     <b>Filtro</b>
                 </a>
                 <a class="side-opt" href="">
-                    <img src="../assets/img/icon/github-icon.png" alt="">
+                    <img class="side-opt-img" src="../assets/img/icon/search-icon.png" alt="">
                     <b>Pesquisar</b>
                 </a>
             </div>
             <div class="side-down">
-                <a class="side-opt" href="">
-                    <img src="../assets/img/icon/github-icon.png" alt="">
+                <a class="side-opt" href="./new-post.html">
+                    <img class="side-opt-img" src="../assets/img/icon/plus-icon.png" alt="">
+                    <b>Postar</b>
+                </a>
+                <a class="side-opt" href="./profile.html">
+                    <img class="side-opt-img" src="../assets/img/icon/profile-icon.png" alt="">
                     <b>Perfil</b>
                 </a>
-                <a class="side-opt" href="">
-                    <img src="../assets/img/icon/github-icon.png" alt="">
+                <a class="side-opt logout" href="">
+                    <img class="side-opt-img" src="../assets/img/icon/logout-icon.png" alt="">
                     <b>Sair</b>
                 </a>
             </div>
         </aside>
+        <header class="greetings">
+            <p id="p_greetings" class="big-text">Aventure-se, Fulano</p>
+            <hr class="divider feed-divider">
+        </header>
         <div class="feed-content">
-            <header class="greetings">
-                <p id="p_greetings" class="big-text">Aventure-se, Fulano</p>
-            </header>
             <main class="feed" id="feed">
-                
+
             </main>
         </div>
     </div>
@@ -56,13 +61,15 @@
 
 <script>
 
+    var usuarioNome = sessionStorage.NOME_USUARIO
+
     var greetingsTexts = [
-        'Aventure-se, Fulano',
-        'Descenda até as profundezas, Fulano',
-        'Aproveite o entretenimento, Fulano',
-        'Não tenha medo, Fulano',
-        'Eu sou Zote, o Poderoso',
-        'Hm hm hm hm hm hm hm hm hm - Cornifer, 2017'
+        `Aventure-se, ${usuarioNome}`,
+        `Descenda até as profundezas, ${usuarioNome}`,
+        `Aproveite o entretenimento, ${usuarioNome}`,
+        `Não tenha medo, ${usuarioNome}`,
+        `Eu sou Zote, o Poderoso. Trema diante de mim, ${usuarioNome}`,
+        `Hm hm hm hm hm hm hm hm hm - Cornifer, 2017`
     ];
 
     window.onload = () => {

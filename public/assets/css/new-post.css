@@ -32,13 +32,30 @@
     flex-direction: column;
 }
 
+.np-header {
+    display: flex;
+    align-items: start;
+    gap: 100px;
+    padding: 0 0 50px 0;
+}
+
+.np-header .title {
+    align-self: center;
+}
+
 .ipt-file {
 
 }
 
 .ipt-file-label {
    display: flex;
+   width: min-content;
    justify-content: center;
+   transition: all .25s ease-in-out;
+}
+
+.ipt-file-label:hover {
+    transform: scale(1.25);
 }
 
 .ipt-file-a {
@@ -52,6 +69,7 @@
 }
 
 .ipt-file-name, .ipt-file-a {
-    width: 100%;
+    /* width: 100%; */
+    white-space: nowrap;
     text-align: center;
 }
