@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../assets/css/global.style.css">
     <link rel="stylesheet" href="../assets/css/login.style.css">
 
+    <script src="./assets/js/validation.js"></script>
 </head>
 
 <body>
@@ -104,63 +105,13 @@
         document.getElementById(nextSection).style.display = 'flex';
     }
 
-    function validarEmail(email) {
-        if (email == "" || email == undefined) {
-            dadosAlerta = [
-                'error',
-                'Email inválido',
-                'Digite um email...'
-            ];
-        } else if (!email.includes('@')) {
-            dadosAlerta = [
-                'error',
-                'Email inválido',
-                'Digite um email que contenha @...'
-            ];
-        } else if (email.substring(email.indexOf('@') + 1) == "") {
-            dadosAlerta = [
-                'error',
-                'Email inválido',
-                'Digite um email que contenha um provedor após o @...'
-            ];
-        } else {
-            return true;
-        }
-
-        console.log('Email: ' + email);
-
-        return false;
-    }
-
-    function validarSenha(senha) {
-        if (senha == "" || senha == undefined) {
-            dadosAlerta = [
-                'error',
-                'Senha inválida',
-                'Digite uma senha...'
-            ];
-        } else if (senha.length < 5) {
-            dadosAlerta = [
-                'error',
-                'Senha inválida',
-                'Digite uma senha com no mínimo 5 caracteres...'
-            ];
-        } else {
-            return true;
-        }
-
-        console.log('Senha: ' + senha);
-
-        return false;
-    }
-
     function login() {
         var dadosLogin = [
             ipt_login_email.value,
             ipt_login_password.value
         ];
 
-        if (validarEmail(dadosLogin[0]) && validarSenha(dadosLogin[1])) {
+        if (validarTexto('Email', dadosLogin[0], 50) && validarTexto('Senha', dadosLogin[1], 30)) {
             console.log('Login válido');
 
             fetch("/usuarios/autenticar", {
@@ -177,7 +128,6 @@
 
                 if (resposta.ok) {
                     console.log(resposta);
-                    alert('Login Certo');
 
                     resposta.json().then(json => {
                         console.log(json);
@@ -197,7 +147,7 @@
                         }).then((result) => {
                             setTimeout(function () {
                                 window.location = "../private/new-post.html";
-                            }, 1000); // apenas para exibir o loading
+                            }, 1000);
                         });
 
                     });
@@ -253,48 +203,65 @@
         var confirmacaoSenhaVar = ipt_cadastrar_confirm_password.value;
         var dtNascVar = ipt_cadastrar_dt_birth.value;
 
-        if (nomeVar == "" || emailVar == "" || senhaVar == "" || confirmacaoSenhaVar == "") {
-            // cardErro.style.display = "block"
-            // mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
+        if (validarTexto('Nome', nomeVar, 100) &&
+            validarTexto('Email', emailVar, 50) &&
+            validarTexto('Senha', senhaVar, 50) &&
+            validarTexto('Data de nascimento', dtNascVar)) {
+                
+            fetch("/usuarios/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nomeServer: nomeVar,
+                    emailServer: emailVar,
+                    senhaServer: senhaVar,
+                    confirmacaoSenhaServer: confirmacaoSenhaVar,
+                    dtNascServer: dtNascVar
+                })
+            }).then(function (resposta) {
 
-            // finalizarAguardar();
-            alert('Campo(s) vazio(s)');
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+
+                    Swal.fire({
+                            icon: 'success',
+                            title: 'Cadastro realizado!',
+                            text: 'Redirecionando ao LogIn...',
+                            background: '#000',
+                            color: '#FFF',
+                            confirmButtonText: 'Beleza!',
+                        }).then((result) => {
+                            setTimeout(() => {
+                        changeLogin('cadastrar_sect', 'login_sect');
+                    }, "1000");
+                        });
+
+                    
+
+                } else {
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
             return false;
         }
         else {
-            
+            console.log('Cadastro inválido');
+            Swal.fire({
+                icon: dadosAlerta[0],
+                title: dadosAlerta[1],
+                text: dadosAlerta[2],
+                background: '#000',
+                color: '#FFF',
+            });
         }
+        
 
-        // Enviando o valor da nova input
-        fetch("/usuarios/cadastrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-                nomeServer: nomeVar,
-                emailServer: emailVar,
-                senhaServer: senhaVar,
-                confirmacaoSenhaServer: confirmacaoSenhaVar,
-                dtNascServer: dtNascVar
-            })
-        }).then(function (resposta) {
-
-            console.log("resposta: ", resposta);
-
-            if (resposta.ok) {
-                setTimeout(() => {
-                    changeLogin('cadastrar_sect', 'login_sect');
-                }, "1000");
-
-            } else {
-                throw ("Houve um erro ao tentar realizar o cadastro!");
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`);
-        });
 
         return false;
     }

@@ -25,16 +25,19 @@
       <section class="np-sect">
         <aside class="np-aside">
           <h1 class="title">Nova publicação:</h1>
-          <input type="text" class="ipt" id="ipt_titulo" placeholder="Título" />
-          <textarea onkeypress="textAreaAdjust(this)" style="overflow:hidden" class="ipt" id="ipt_desc" placeholder="Descrição"></textarea>
+          <input type="text" class="ipt" id="ipt_titulo" name="ipt_titulo" placeholder="Título" />
+          <textarea onkeypress="textAreaAdjust(this)" style="overflow:hidden" class="ipt" id="ipt_desc" name="ipt_desc"
+            placeholder="Descrição"></textarea>
           <img src="../assets/img/char/chars-on-bench.png" alt="">
         </aside>
 
         <aside class="np-aside">
-          <img src="../assets/img/char/knight-crying.png" alt="Nenhuma foto selecionada" class="ipt-file-img" id="ipt_file_img" >
-          <p class="text ipt-file-name" id="ipt_ile_name" >Nenhuma foto selecionada</p>
+          <img src="../assets/img/char/knight-crying.png" alt="Nenhuma foto selecionada" class="ipt-file-img"
+            id="ipt_file_img">
+          <p class="text ipt-file-name" id="ipt_ile_name">Nenhuma foto selecionada</p>
           <label for="ipt_file" class="ipt-file-label">
-            <input name="imagem" class="ipt-file sumir" type="file" id="ipt_file" accept="image/*" onchange="previewImage(event)" />
+            <input class="ipt-file sumir" type="file" id="ipt_file" name="ipt_file" accept="image/*"
+              onchange="previewImage(event)" />
             <a class="ipt-file-a big-text"><b> Escolher foto </b></a>
           </label>
         </aside>
@@ -48,95 +51,61 @@
 
 <script>
   function post() {
-    
-    var dadosNewPost = [
-      ipt_titulo.value,
-      ipt_desc.value,
-      ipt_file.files[0]
-    ];
 
-    var foto = `../assets/bucket/${dadosNewPost[2].name}`;
+    const formData = new FormData();
+    formData.append('foto', ipt_file.files[0])
+    formData.append('titulo', ipt_titulo.value)
+    formData.append('descricao', ipt_desc.value)
+    formData.append('idUsuario', sessionStorage.ID_USUARIO)
 
-    console.log(dadosNewPost[0], dadosNewPost[1], sessionStorage.ID_USUARIO)
+    console.log(formData.get('foto'))
 
-    // if (validarTexto('Título', dadosNewPost[0], 100) && validarTexto('Descrição', dadosNewPost[1], 300)) {
-    //   console.log('Publicação adicionada com sucesso');
-    //   Swal.fire({
-    //     icon: 'success',
-    //     title: 'Publicação criada!',
-    //     text: 'Redirecionando em instantes...',
-    //     background: '#000',
-    //     color: '#FFF',
-    //   });
-    // } else {
-    //   console.log('Publicação inválida');
-    //   Swal.fire({
-    //     icon: dadosAlerta[0],
-    //     title: dadosAlerta[1],
-    //     text: dadosAlerta[2],
-    //     background: '#000',
-    //     color: '#FFF',
-    //   })
-    // }
+    if (validarTexto('Título', formData.get('titulo'), 100) && validarTexto('Descrição', formData.get('descricao'), 300) && validarTexto('Foto', formData.get('foto'), 0)) {
 
-    // Enviando o valor da nova input
-    fetch("/posts/post", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-                tituloServer: dadosNewPost[0],
-                descricaoServer: dadosNewPost[1],
-                fotoServer: foto,
-                idUsuarioServer: sessionStorage.ID_USUARIO
-            })
-        }).then(function (resposta) {
+      fetch("/posts/post", {
+        method: "POST",
+        body: formData
+      })
+        .then(res => {
+          alert('voltou do then');
 
-            console.log("resposta: ", resposta);
+          console.log('Publicação adicionada com sucesso');
+          Swal.fire({
+            icon: 'success',
+            title: 'Publicação criada!',
+            text: 'Redirecionando em instantes...',
+            background: '#000',
+            color: '#FFF',
+          });
 
-            if (resposta.ok) {
-                // cardErro.style.display = "block";
+          window.location = "./feed.html"
+        })
+        .catch(err => {
+          console.log(err);
+        })
 
-                // mensagem_erro.innerHTML = "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+    } else {
+      console.log('Publicação inválida');
+      Swal.fire({
+        icon: dadosAlerta[0],
+        title: dadosAlerta[1],
+        text: dadosAlerta[2],
+        background: '#000',
+        color: '#FFF',
+      })
+    }
 
-                alert('postou certinho');
-
-                setTimeout(() => {
-                    window.location = "./feed.html";
-                }, "2000")
-
-                // limparFormulario();
-                // finalizarAguardar();
-            } else {
-                throw ("Houve um erro ao tentar realizar o post!");
-                alert('ish deu erro, to no else');
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`);
-            alert('aiai viu, to no catch do erro');
-            // finalizarAguardar();
-        });
-
-        return false;
+    return false;
   }
 
   function textAreaAdjust(element) {
     // element.style.height = "1px";
     console.log(`(scrollHeight: ${element.scrollHeight} > clientHeight: ${element.clientHeight}) ? (scrollHeight: ${element.scrollHeight}px) : "40px"`);
-    element.style.height = (element.scrollHeight > element.clientHeight) ? (element.scrollHeight)+"px" : "40px";
+    element.style.height = (element.scrollHeight > element.clientHeight) ? (element.scrollHeight) + "px" : "40px";
   }
 
-  /**
-   * Create an arrow function that will be called when an image is selected.
-   */
   const previewImage = (event) => {
-    /*** Get the selected files.*/
     const imageFiles = event.target.files;
-
-    console.log(imageFiles, imageFiles[0], imageFiles[0].name)
 
     var img = document.getElementById('ipt_file_img');
     var name = document.getElementById('ipt_ile_name');

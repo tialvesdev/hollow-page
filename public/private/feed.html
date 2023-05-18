@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,6 +12,7 @@
     <link rel="stylesheet" href="../assets/css/global.style.css">
     <link rel="stylesheet" href="../assets/css/feed.style.css">
 </head>
+
 <body>
     <div class="feed-wrapper">
         <aside class="sidebar">
@@ -43,26 +45,13 @@
             <header class="greetings">
                 <p id="p_greetings" class="big-text">Aventure-se, Fulano</p>
             </header>
-            <main class="feed">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
-                <img class="feed-post" src="../assets/img/border-angle.png" alt="Nome do Post">
+            <main class="feed" id="feed">
+                
             </main>
         </div>
     </div>
 </body>
+
 </html>
 
 <script>
@@ -79,38 +68,25 @@
     window.onload = () => {
         document.getElementById('p_greetings').innerHTML = greetingsTexts[Math.floor(Math.random() * (greetingsTexts.length - 1))];
 
-        fetch("/posts/feed").then(function (resposta) {
-                console.log("ESTOU NO THEN DO feed()!")
+        var feed = document.getElementById('feed')
 
-                if (resposta.ok) {
-                    console.log(resposta);
-                    alert('Feed Certo');
+        fetch(`/posts/feed/`, {
+            method: "GET"
+        })
+            .then(res => {
+                res.json().then(json => {
+                    const usuario = json[0];
+                    console.log(json)
 
-                    resposta.json().then(json => {
-                        console.log(json);
-                        console.log(JSON.stringify(json));
-
-                        sessionStorage.EMAIL_USUARIO = json.email;
-                        sessionStorage.NOME_USUARIO = json.nome;
-                        sessionStorage.ID_USUARIO = json.id;
-
-                        // AQUI VAI O FOR PARA COLOCAR AS FOTOS NO FEED
-
+                    json.forEach(post => {
+                        feed.innerHTML += `
+                            <img class="feed-post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
+                        `
                     });
-
-                } else {
-
-                    console.log("Houve um erro ao tentar puxar o feed!");
-
-                    resposta.text().then(texto => {
-                        console.error(texto);
-                    });
-
-                }
-
-            }).catch(function (erro) {
-                console.log(erro);
-                alert('Erro no Feed');
+                })
+            })
+            .catch(err => {
+                console.log(err);
             })
     }
 

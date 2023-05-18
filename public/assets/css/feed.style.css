@@ -92,6 +92,8 @@
     border: 2px solid white;
     border-radius: 15px;
     transition: all .2s ease-in-out;
+    object-fit: cover;
+    object-position: left;
 }
 
 .feed-post:hover {
