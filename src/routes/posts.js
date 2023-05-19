@@ -10,10 +10,14 @@ router.get("/", function (req, res) {
 
 router.get('/feed', upload.single('foto'), (req, res) => {
     postController.feed(req, res);
-  });
+});
 
 router.post("/post", upload.single('foto'), function (req, res) {
     postController.post(req, res);
 });
+
+router.get('/profile/:idUsuario', upload.single('foto'), (req, res) => {
+    postController.profile(req, res);
+  });
 
 module.exports = router;

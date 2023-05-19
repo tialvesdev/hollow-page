@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Perfil</title>
+
+    <link rel="stylesheet" href="../assets/css/global.style.css">
+    <link rel="stylesheet" href="../assets/css/profile.style.css">
+</head>
+<body>
+    
+    <div class="profile-wrapper">
+        <header class="prof-header">
+            <div class="prof-info">
+                <img class="prof-pic" src="" alt="">
+                <p class="big-text prof-name">Fulano</p>
+            </div>
+        </header>
+
+        <main class="prof-main">
+            <div class="prof-opts">
+                <a class="text prof-opts-a" onclick="mostrar('prof_posts')" >
+                    Posts
+                </a>
+                <a class="text prof-opts-a" href="./edit-profile.html">
+                    Editar
+                </a>
+                <a class="text prof-opts-a" onclick="mostrar('prof_advanced')">
+                    Avançado
+                </a>
+            </div>
+            <hr class="divider">
+            <div id="prof_posts" class="prof-posts">
+                profposts
+            </div>
+            <div id="prof_advanced" class="prof-advanced">
+                profadvanced
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
+
+<script>
+
+    function mostrar(vaiMostar) {
+        
+    }
+
+    window.onload = () => {
+
+        var profPosts = document.getElementById('prof_posts')
+
+        fetch(`/posts/profile/${sessionStorage.ID_USUARIO}`, {
+            method: "GET"
+        })
+            .then(res => {
+                res.json().then(json => {
+                    const usuario = json[0];
+                    console.log(json)
+
+                    json.forEach(post => {
+                        feed.innerHTML += `
+                            <img class="feed-post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
+                        `
+                    });
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+    }
+
+</script>
