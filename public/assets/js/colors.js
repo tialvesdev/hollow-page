@@ -37,5 +37,6 @@ function trocaCorTema(color) {
         });
 
         selectedColor = colors[color];
+        sessionStorage.selectedColor = selectedColor;
     }
 }

@@ -16,11 +16,18 @@
     <link rel="stylesheet" href="../assets/css/login.style.css">
 
     <script src="./assets/js/validation.js"></script>
+    <script src="./assets/js/visuals.js"></script>
 </head>
 
 <body>
 
     <main class="wrapper-login">
+
+        <button class="btn-voltar-float">
+            <a href="./index.html">
+                ◀
+            </a>
+        </button>
 
         <section class="login-section" id="login_sect">
             <aside class="form-aside">
@@ -30,16 +37,16 @@
                 </div>
 
                 <div class="ipt-wrapper">
-                    <img src="../assets/img/border-angle.png" alt="Angle" class="ipt-angle">
+                    <img src="../assets/img/icon/border-angle.png" alt="Angle" class="ipt-angle">
                     <input class="ipt" type="email" id="ipt_login_email" placeholder="fulano@email.com">
                 </div>
 
                 <div class="ipt-wrapper">
-                    <img src="../assets/img/border-angle.png" alt="Angle" class="ipt-angle">
+                    <img src="../assets/img/icon/border-angle.png" alt="Angle" class="ipt-angle">
                     <input class="ipt" type="password" id="ipt_login_password" placeholder="bananinha123">
                 </div>
 
-                <p class="text">Não tem cadastro ainda? <a onclick="changeLogin('login_sect', 'cadastrar_sect')"
+                <p class="text">Não tem cadastro ainda? <a onclick="changeSection('login_sect', 'cadastrar_sect')"
                         class="form-a grimm2">Se cadastre aqui</a></p>
 
                 <button class="btn" onclick="login()">Entrar</button>
@@ -56,32 +63,32 @@
                 <div>
 
                     <div class="ipt-wrapper">
-                        <img src="../assets/img/border-angle.png" alt="Angle" class="ipt-angle">
+                        <img src="../assets/icon/border-angle.png" alt="Angle" class="ipt-angle">
                         <input class="ipt" id="ipt_cadastrar_nome" placeholder="Jão">
                     </div>
 
                     <div class="ipt-wrapper">
-                        <img src="../assets/img/border-angle.png" alt="Angle" class="ipt-angle">
+                        <img src="../assets/img/icon/border-angle.png" alt="Angle" class="ipt-angle">
                         <input class="ipt" type="email" id="ipt_cadastrar_email" placeholder="fulano@email.com">
                     </div>
 
                     <div class="ipt-wrapper">
-                        <img src="../assets/img/border-angle.png" alt="Angle" class="ipt-angle">
+                        <img src="../assets/img/icon/border-angle.png" alt="Angle" class="ipt-angle">
                         <input class="ipt" type="password" id="ipt_cadastrar_password" placeholder="bananinha123">
                     </div>
 
                     <div class="ipt-wrapper">
-                        <img src="../assets/img/border-angle.png" alt="Angle" class="ipt-angle">
+                        <img src="../assets/img/icon/border-angle.png" alt="Angle" class="ipt-angle">
                         <input class="ipt" type="password" id="ipt_cadastrar_confirm_password"
                             placeholder="bananinha123">
                     </div>
 
                     <div class="ipt-wrapper">
-                        <img src="../assets/img/border-angle.png" alt="Angle" class="ipt-angle">
+                        <img src="../assets/img/icon/border-angle.png" alt="Angle" class="ipt-angle">
                         <input class="ipt" type="date" id="ipt_cadastrar_dt_birth" placeholder="01/01/2001">
                     </div>
 
-                    <p class="text">Já tem um cadastro? <a onclick="changeLogin('cadastrar_sect', 'login_sect')"
+                    <p class="text">Já tem um cadastro? <a onclick="changeSection('cadastrar_sect', 'login_sect')"
                             class="form-a lifeblood">Entre por aqui</a></p>
 
                 </div>
@@ -98,12 +105,6 @@
 <script>
 
     var dadosAlerta = [];
-
-    function changeLogin(previousSection, nextSection) {
-        console.log(document.getElementById(previousSection))
-        document.getElementById(previousSection).style.display = 'none';
-        document.getElementById(nextSection).style.display = 'flex';
-    }
 
     function login() {
         var dadosLogin = [
@@ -235,7 +236,7 @@
                             confirmButtonText: 'Beleza!',
                         }).then((result) => {
                             setTimeout(() => {
-                        changeLogin('cadastrar_sect', 'login_sect');
+                        changeSection('cadastrar_sect', 'login_sect');
                     }, "1000");
                         });
 

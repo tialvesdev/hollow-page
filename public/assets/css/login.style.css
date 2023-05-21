@@ -1,6 +1,13 @@
+body {
+    background-color: #020204;
+}
+
 .wrapper-login {
     overflow-x: hidden;
     background-color: #020204;
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
 }
 
 .login-section, .cadastrar-section {
@@ -10,6 +17,7 @@
     display: flex;
     align-items: center;
     padding: 75px;
+    transition: all .5s ease-in-out;
 }
 
 .login-section {
@@ -21,7 +29,11 @@
 .cadastrar-section {
     background-image: url('../img/bg/bg-cadastro.png');
     background-position: right;
-    display: none;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    min-height: 0;
+    padding: 0;
 }
 
 .form-aside {

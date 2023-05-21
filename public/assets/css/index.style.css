@@ -38,24 +38,11 @@
     position: relative;
     display: inline-block;
     padding: 10px;
+    transition: all .25s ease-in-out;
 }
-
-.nav-a:after {
-    content: '';
-    position: absolute;
-    width: calc(100% - 20px);
-    transform: scaleX(0);
-    height: 2px;
-    bottom: 10px;
-    left: 10px;
-    background-color: var(--dreams);
-    transform-origin: bottom right;
-    transition: transform 0.25s ease-out;
-  }
   
-.nav-a:hover:after {
-    transform: scaleX(1);
-    transform-origin: bottom left;
+.nav-a:hover {
+    transform: scale(1.2);
 }
 
 .nav-btn-tema, .nav-btn-cor {
