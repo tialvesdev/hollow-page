@@ -65,29 +65,55 @@ CREATE TABLE salvo (
 INSERT INTO usuario (nome, email, senha, dtNasc) VALUES
 	('Tiago', 'ti@gmail.com', '12345', '2005-09-23');
     
+INSERT INTO fundoPerfil (nome, fundoSrc) VALUES
+	('Cidade das Lágrimas', 'bg-profile1.png'),
+	('Lago Azul', 'bg-profile2.png'),
+	('Poder das Almas', 'bg-profile3.png'),
+	('O Cavaleiro', 'bg-profile4.png'),
+	('O Vazio', 'bg-profile5.png'),
+	('Pico de Cristal', 'bg-profile6.png');
+    
+UPDATE usuario SET fotoPerfilSrc = 'b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png' WHERE idUsuario = 1;
+    
+UPDATE usuario SET fkFundoPerfil = 2 WHERE idUsuario = 1;
+    
 SELECT * FROM usuario;
 
 SELECT * FROM postagem;
 
-INSERT INTO postagem (postSrc, dtPostagem, dtLastEdit, titulo, descricao) VALUES
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc'),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc');
+SELECT usuario.*,
+        postagem.*,
+		fundoPerfil.*
+			FROM usuario
+				JOIN postagem ON idUsuario = fkUsuario
+                JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil;
+                
+SELECT * FROM usuario
+UNION
+SELECT * FROM postagem
+	WHERE fkUsuario = 1;
+
+truncate table postagem;
+
+INSERT INTO postagem (postSrc, dtPostagem, dtLastEdit, titulo, descricao, fkUsuario) VALUES
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
+	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1);
