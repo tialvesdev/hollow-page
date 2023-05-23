@@ -31,7 +31,8 @@ function mostrarPerfil() {
         fundoPerfil.*
             FROM usuario
                 JOIN postagem ON idUsuario = fkUsuario
-                JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil;
+                JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                    ORDER BY dtPostagem DESC;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);

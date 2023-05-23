@@ -268,6 +268,43 @@
     gap: 15px;
 }
 
+.footer-title {
+    margin: 0 auto;
+}
+
+.footer-about {
+    display: flex;
+    gap: 50px;
+    padding: 20px;
+}
+
+.footer-about-img {
+    width: 300px;
+    border-radius: 100%;
+}
+
+.footer-about-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 40%;
+}
+
+.footer-about-disertation {
+    display: flex;
+    flex-direction: column;
+    padding-top: 40px;
+    gap: 35px;
+    color: var(--white);
+    width: 60%;
+}
+
+.footer .footer-about p {
+    color: var(--white);
+    font-size: 20px;
+}
+
 .footer-hr {
     width: 70%;
     height: 3px;

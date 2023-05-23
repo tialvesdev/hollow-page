@@ -83,9 +83,13 @@
             text: 'Redirecionando em instantes...',
             background: '#000',
             color: '#FFF',
+            confirmButtonText: 'Beleza!',
+          }).then((result) => {
+            setTimeout(function () {
+              window.location = "./feed.html";
+            }, 1000);
           });
 
-          window.location = "./feed.html"
         })
         .catch(err => {
           console.log(err);

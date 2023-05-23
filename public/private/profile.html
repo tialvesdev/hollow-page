@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,10 +14,14 @@
 
     <script src="../assets/js/visuals.js"></script>
 </head>
+
 <body>
-    
+
     <div class="profile-wrapper" id="prof_wrapper">
         <header id="prof_header" class="prof-header">
+            <a href="./feed.html" class="seta-voltar seta-float">
+                <img src="../assets/img/icon/arrow-icon.png" alt="">
+            </a>
             <div class="prof-info">
                 <img id="prof_pic" class="prof-pic" src="" alt="">
                 <p id="prof_name" class="big-text prof-name">Fulano</p>
@@ -25,7 +30,7 @@
 
         <main class="prof-main">
             <div class="prof-opts">
-                <a class="text prof-opts-a" onclick="" >
+                <a class="text prof-opts-a" onclick="">
                     Posts
                 </a>
                 <a class="text prof-opts-a" href="./edit-profile.html">
@@ -57,7 +62,7 @@
         <div class="modal-content">
             <div class="modal-aside">
                 <img class="modal-post" id="modal_post" src="" alt="Post">
-                <p class="text" id="modal_date">Data marota</p>
+                <p class="modal-date text" id="modal_date">Data marota</p>
             </div>
             <div class="modal-aside">
                 <p class="title" id="modal_title">Titulo do post</p>
@@ -66,13 +71,14 @@
         </div>
 
         <div class="modal-footer">
-            <button>Baixar</button>
-            <button>Salvar</button>
+            <button class="btn">Baixar</button>
+            <button class="btn">Salvar</button>
         </div>
         <!-- <button class="btn" onclick="closePostModal('prof_wrapper')">Fechar</button> -->
     </div>
 
 </body>
+
 </html>
 
 <script>
@@ -110,7 +116,7 @@
     }
 
     function mostrar(vaiMostar) {
-        
+
     }
 
     var usuario;
