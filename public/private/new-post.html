@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="../assets/css/new-post.css">
 
   <script src="../assets/js/validation.js"></script>
+  <script src="../assets/js/funcoes.js"></script>
 </head>
 
 <body>
@@ -26,7 +27,7 @@
         <aside class="np-aside">
           <div class="np-header">
             <a href="./feed.html" class="seta-voltar">
-              <img src="../assets/img/icon/arrow-icon.png" alt="">
+              <img src="../assets/img/icon/arrow-icon.png" alt="Voltar">
             </a>
             <h1 class="title">
               Nova publicação:
@@ -57,6 +58,11 @@
 </html>
 
 <script>
+
+  window.onload = () => {
+    validarSessao();
+  }
+ 
   function post() {
 
     const formData = new FormData();

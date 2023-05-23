@@ -79,27 +79,16 @@ function post(req, res) {
 
 function profile(req, res) {
 
-    postModel.mostrarPerfil()
+    var idUsuario = req.params.idUsuario;
+    // console.log(`var idUsuario = ${idUsuario}`);
+
+    postModel.mostrarPerfil(idUsuario)
         .then(resultado => {
             res.json(resultado);
         }).catch(err => {
             res.status(500).send(err);
         });
-
-    // postModel.listarFeed()
-    //     .then(function (resultado) {
-    //         if (resultado.length > 0) {
-    //             res.status(200).json(resultado);
-    //         } else {
-    //             res.status(204).send("Nenhum post encontrado!")
-    //         }
-    //     }).catch(
-    //         function (erro) {
-    //             console.log(erro);
-    //             console.log("Houve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
-    //             res.status(500).json(erro.sqlMessage);
-    //         }
-    //     );
+        
 }
 
 module.exports = {

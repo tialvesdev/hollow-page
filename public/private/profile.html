@@ -13,11 +13,44 @@
     <link rel="stylesheet" href="../assets/css/profile.style.css">
 
     <script src="../assets/js/visuals.js"></script>
+    <script src="../assets/js/funcoes.js"></script>
 </head>
 
 <body>
 
     <div class="profile-wrapper" id="prof_wrapper">
+
+        <aside class="sidebar">
+            <div class="side-up">
+                <a class="side-opt" href="./feed.html">
+                    <img class="side-opt-img" src="../assets/img/icon/home-icon.png" alt="">
+                    <b>Home</b>
+                </a>
+                <a class="side-opt" href="">
+                    <img class="side-opt-img" src="../assets/img/icon/filter-icon.png" alt="">
+                    <b>Filtro</b>
+                </a>
+                <a class="side-opt" href="">
+                    <img class="side-opt-img" src="../assets/img/icon/search-icon.png" alt="">
+                    <b>Pesquisar</b>
+                </a>
+            </div>
+            <div class="side-down">
+                <a class="side-opt" href="./new-post.html">
+                    <img class="side-opt-img" src="../assets/img/icon/plus-icon.png" alt="">
+                    <b>Postar</b>
+                </a>
+                <a class="side-opt" href="./profile.html">
+                    <img class="side-opt-img" src="../assets/img/icon/profile-icon.png" alt="">
+                    <b>Perfil</b>
+                </a>
+                <a class="side-opt logout" onclick="limparSessao()">
+                    <img class="side-opt-img" src="../assets/img/icon/logout-icon.png" alt="">
+                    <b>Sair</b>
+                </a>
+            </div>
+        </aside>
+        
         <header id="prof_header" class="prof-header">
             <a href="./feed.html" class="seta-voltar seta-float">
                 <img src="../assets/img/icon/arrow-icon.png" alt="">
@@ -52,7 +85,9 @@
     </div>
     <div id="post_modal" class="post-modal">
         <div class="modal-header">
-            <button onclick="closePostModal('prof_wrapper')">Voltar</button>
+            <a onclick="closePostModal('prof_wrapper')" class="seta-voltar seta-float">
+                <img src="../assets/img/icon/arrow-icon.png" alt="">
+            </a>
             <div class="modal-prof-info">
                 <img class="modal-prof-pic" id="modal_prof_pic" src="" alt="Foto de Perfil">
                 <p class="text"> <b id="modal_prof_name"> Nome de Fulano </b> </p>
@@ -71,7 +106,7 @@
         </div>
 
         <div class="modal-footer">
-            <button class="btn">Baixar</button>
+            <button class="btn dark-btn">Baixar</button>
             <button class="btn">Salvar</button>
         </div>
         <!-- <button class="btn" onclick="closePostModal('prof_wrapper')">Fechar</button> -->
@@ -86,6 +121,13 @@
     function openPostModal(wrapper, idPost) {
         var wrapperTag = document.getElementById(wrapper);
         var postModal = document.getElementById('post_modal');
+        var postSelected;
+
+        usuario.forEach(post => {
+            if(post.idPostagem == idPost) {
+                postSelected = post;
+            }
+        });
 
         wrapperTag.style.filter = 'brightness(50%)';
 
@@ -94,12 +136,14 @@
         postModal.style.padding = '25px';
         postModal.style.opacity = '1';
 
-        document.getElementById('modal_prof_pic').src = `../assets/bucket/${usuario[0].fotoPerfilSrc}`;
-        document.getElementById('modal_prof_name').innerHTML = usuario[0].nome;
-        document.getElementById('modal_post').src = `../assets/bucket/${usuario[idPost].postSrc}`;
-        document.getElementById('modal_date').innerHTML = usuario[idPost].dtPostagem;
-        document.getElementById('modal_title').innerHTML = usuario[idPost].titulo;
-        document.getElementById('modal_desc').innerHTML = usuario[idPost].descricao;
+        console.log(usuario[idPost]);
+
+        document.getElementById('modal_prof_pic').src = `../assets/bucket/${postSelected.fotoPerfilSrc}`;
+        document.getElementById('modal_prof_name').innerHTML = postSelected.nome;
+        document.getElementById('modal_post').src = `../assets/bucket/${postSelected.postSrc}`;
+        document.getElementById('modal_date').innerHTML = postSelected.dtPostagem;
+        document.getElementById('modal_title').innerHTML = postSelected.titulo;
+        document.getElementById('modal_desc').innerHTML = postSelected.descricao;
 
     }
 
@@ -122,6 +166,8 @@
     var usuario;
 
     window.onload = () => {
+
+        validarSessao();
 
         var profPosts = document.getElementById('prof_posts')
 

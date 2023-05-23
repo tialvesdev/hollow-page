@@ -123,6 +123,12 @@
     padding: 10px 50px;
 }
 
+.dark-btn {
+    background-color: var(--black2);
+    color: var(--dreams);
+    border: 1px solid var(--dreams);
+}
+
 .ipt-wrapper {
     display: flex;
     align-items: center;
@@ -164,6 +170,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 .seta-voltar:hover {
@@ -283,7 +290,7 @@
     padding: 0;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 25px;
     background-color: var(--gray-bg);
     border-radius: 25px;
     position: fixed;
@@ -317,7 +324,13 @@
 .modal-content {
     width: 100%;
     display: flex;
-    gap: 20px;
+    gap: 50px;
+}
+
+.modal-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .modal-post {
@@ -327,7 +340,8 @@
 }
 
 .modal-date {
-    width: min-content;
+    /* width: min-content; */
+    margin: 0 auto;
 }
 
 .modal-footer {

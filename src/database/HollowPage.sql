@@ -1,5 +1,9 @@
 CREATE DATABASE HollowPage;
 USE HollowPage;
+SELECT * FROM sys.syslanguages;
+SET NAMES 'utf8mb4';
+SELECT @@lc_time_names;
+SET lc_time_names = 'pt_BR';
 DROP DATABASE HollowPage;
 
 CREATE TABLE tipoUsuario (
@@ -9,7 +13,7 @@ CREATE TABLE tipoUsuario (
 
 CREATE TABLE fundoPerfil (
 	idFundoPerfil INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(50) NOT NULL,
+    nomeFundoPerfil VARCHAR(50) NOT NULL,
     fundoSrc VARCHAR(500) UNIQUE NOT NULL
 );
 
@@ -65,7 +69,7 @@ CREATE TABLE salvo (
 INSERT INTO usuario (nome, email, senha, dtNasc) VALUES
 	('Tiago', 'ti@gmail.com', '12345', '2005-09-23');
     
-INSERT INTO fundoPerfil (nome, fundoSrc) VALUES
+INSERT INTO fundoPerfil (nomeFundoPerfil, fundoSrc) VALUES
 	('Cidade das Lágrimas', 'bg-profile1.png'),
 	('Lago Azul', 'bg-profile2.png'),
 	('Poder das Almas', 'bg-profile3.png'),
@@ -77,6 +81,19 @@ UPDATE usuario SET fotoPerfilSrc = 'b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d183
     
 UPDATE usuario SET fkFundoPerfil = 2 WHERE idUsuario = 1;
     
+SELECT usuario.*,
+        postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y'),
+        fundoPerfil.fundoSrc,
+        fundoPerfil.nomeFundoPerfil
+            FROM usuario
+                JOIN postagem ON idUsuario = fkUsuario
+                JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                    ORDER BY dtPostagem DESC;
+
 SELECT * FROM usuario;
 
 SELECT * FROM postagem;
@@ -94,6 +111,14 @@ SELECT * FROM postagem
 	WHERE fkUsuario = 1;
 
 truncate table postagem;
+
+SELECT usuario.*,
+        postagem.*,
+        fundoPerfil.*
+            FROM usuario
+                JOIN postagem ON idUsuario = fkUsuario
+                JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                    ORDER BY dtPostagem DESC;
 
 INSERT INTO postagem (postSrc, dtPostagem, dtLastEdit, titulo, descricao, fkUsuario) VALUES
 	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),

@@ -84,6 +84,9 @@
     ];
 
     window.onload = () => {
+
+        validarSessao();
+
         document.getElementById('p_greetings').innerHTML = greetingsTexts[Math.floor(Math.random() * (greetingsTexts.length - 1))];
 
         var feed = document.getElementById('feed');

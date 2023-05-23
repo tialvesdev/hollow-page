@@ -23,16 +23,22 @@ function postar(post) {
     return database.executar(instrucao);
 }
 
-function mostrarPerfil() {
+function mostrarPerfil(idUsuario) {
     // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
     var instrucao = `
-        SELECT usuario.*,
-        postagem.*,
-        fundoPerfil.*
+    SELECT *,
+        postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        fundoPerfil.fundoSrc,
+        fundoPerfil.nomeFundoPerfil
             FROM usuario
                 JOIN postagem ON idUsuario = fkUsuario
                 JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
-                    ORDER BY dtPostagem DESC;
+                    WHERE idUsuario = ${idUsuario}
+                        ORDER BY dtPostagem DESC;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);

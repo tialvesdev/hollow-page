@@ -8,8 +8,52 @@
     <title>Editar Perfil</title>
     <link rel="shortcut icon" href="../assets/img/icon/hollow-icon.ico" type="image/x-icon">
 
+    <link rel="stylesheet" href="../assets/css/global.style.css">
+    <link rel="stylesheet" href="../assets/css/edit-style.css">
+
 </head>
 <body>
     
+    <div class="edit-wrapper">
+        <div class="edit-content">
+            <div class="edit-header">
+                <a href="./profile.html" class="seta-voltar">
+                    <img src="../assets/img/icon/arrow-icon.png" alt="Voltar">
+                  </a>
+                  <h1 class="title">Editar Perfil</h1>
+            </div>
+            <div class="edit-main">
+                <div class="edit-sect">
+                    <div class="edit-aside">
+                        <p class="text">Dados Pessoais:</p>
+                        <input type="text" id="ipt_edit_nome" class="ipt">
+                        <input type="text" id="ipt_edit_email" class="ipt">
+                        <input type="text" id="ipt_edit_date" class="ipt">
+                    </div>
+                    <div class="edit-aside">
+                        <img src="" alt="Foto de Perfil" class="edit_prof_img">
+                        <p class="text">Nenhuma foto selecionada</p>
+                        <a class="text" href="">
+                            Importar Foto
+                        </a>
+                    </div>
+                </div>
+                <div class="edit-sect">
+                    <div class="edit-aside">
+                        <p class="title">Dados Adicionais</p>
+                        <input type="text" id="ipt_edit_genero" class="ipt">
+                        <input type="text" id="ipt_edit_telefone" class="ipt">
+                    </div>
+                    <div class="edit-aside">
+                        <img src="" alt="Foto de Capa" class="edit_prof_bg">
+                        <p class="text">Nenhuma foto selecionada</p>
+                        <select name="" id="sel_prof_bg"></select>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" onclick="">Editar</button>
+        </div>
+    </div>
+
 </body>
 </html>

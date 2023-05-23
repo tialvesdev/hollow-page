@@ -34,7 +34,7 @@ function cadastrar(nome, email, senha, dtNasc) {
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucao = `
-        INSERT INTO usuario (nome, email, senha, dtNasc) VALUES ('${nome}', '${email}', '${senha}', '${dtNasc}');
+        INSERT INTO usuario (nome, email, senha, dtNasc, fkfFundoPerfil) VALUES ('${nome}', '${email}', '${senha}', '${dtNasc}', 1);
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
