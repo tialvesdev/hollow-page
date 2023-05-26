@@ -303,6 +303,7 @@
     display: none;
     max-height: 90vh;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .modal-header {
@@ -331,6 +332,7 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+
 }
 
 .modal-post {
@@ -355,6 +357,12 @@
 
 .center {
     align-items: center;
+}
+
+.text-wrap {
+    width: fit-content;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .hidden {

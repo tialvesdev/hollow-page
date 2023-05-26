@@ -8,6 +8,9 @@
 
     <title>Perfil</title>
     <link rel="shortcut icon" href="../assets/img/icon/hollow-icon.ico" type="image/x-icon">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="../assets/css/global.style.css">
     <link rel="stylesheet" href="../assets/css/profile.style.css">
@@ -50,7 +53,7 @@
                 </a>
             </div>
         </aside>
-        
+
         <header id="prof_header" class="prof-header">
             <a href="./feed.html" class="seta-voltar seta-float">
                 <img src="../assets/img/icon/arrow-icon.png" alt="">
@@ -100,14 +103,16 @@
                 <p class="modal-date text" id="modal_date">Data marota</p>
             </div>
             <div class="modal-aside">
-                <p class="title" id="modal_title">Titulo do post</p>
-                <p class="text" id="modal_desc">Descrição do post</p>
+                <p class="text-wrap title" id="modal_title">Titulo do post</p>
+                <p class="text-wrap text" id="modal_desc">Descrição do post</p>
             </div>
         </div>
 
         <div class="modal-footer">
-            <button class="btn dark-btn">Baixar</button>
-            <button class="btn">Salvar</button>
+            <a download="" href="" id="modal_download_a">
+                <button class="btn dark-btn">Baixar</button>
+            </a>
+            <button id="modal_save" class="btn">Salvar</button>
         </div>
         <!-- <button class="btn" onclick="closePostModal('prof_wrapper')">Fechar</button> -->
     </div>
@@ -117,53 +122,6 @@
 </html>
 
 <script>
-
-    function openPostModal(wrapper, idPost) {
-        var wrapperTag = document.getElementById(wrapper);
-        var postModal = document.getElementById('post_modal');
-        var postSelected;
-
-        usuario.forEach(post => {
-            if(post.idPostagem == idPost) {
-                postSelected = post;
-            }
-        });
-
-        wrapperTag.style.filter = 'brightness(50%)';
-
-        postModal.style.display = 'flex';
-        postModal.style.width = '70%';
-        postModal.style.padding = '25px';
-        postModal.style.opacity = '1';
-
-        console.log(usuario[idPost]);
-
-        document.getElementById('modal_prof_pic').src = `../assets/bucket/${postSelected.fotoPerfilSrc}`;
-        document.getElementById('modal_prof_name').innerHTML = postSelected.nome;
-        document.getElementById('modal_post').src = `../assets/bucket/${postSelected.postSrc}`;
-        document.getElementById('modal_date').innerHTML = postSelected.dtPostagem;
-        document.getElementById('modal_title').innerHTML = postSelected.titulo;
-        document.getElementById('modal_desc').innerHTML = postSelected.descricao;
-
-    }
-
-    function closePostModal(wrapper) {
-        var wrapperTag = document.getElementById(wrapper);
-        var postModal = document.getElementById('post_modal');
-
-        wrapperTag.style.filter = 'none';
-
-        postModal.style.display = 'none';
-        postModal.style.width = '0';
-        postModal.style.padding = '0';
-        postModal.style.opacity = '0';
-    }
-
-    function mostrar(vaiMostar) {
-
-    }
-
-    var usuario;
 
     window.onload = () => {
 
@@ -176,8 +134,8 @@
         })
             .then(res => {
                 res.json().then(json => {
-                    usuario = json;
                     console.log(json);
+                    usuario = json;
 
                     document.getElementById('prof_pic').src = `../assets/bucket/${json[0].fotoPerfilSrc}`;
                     document.getElementById('prof_name').innerHTML = json[0].nome;
@@ -195,5 +153,97 @@
             })
 
     }
+
+    function openPostModal(wrapper, idPost) {
+        var wrapperTag = document.getElementById(wrapper);
+        var postModal = document.getElementById('post_modal');
+        var postSelected;
+
+        usuario.forEach(post => {
+            if (post.idPostagem == idPost) {
+                postSelected = post;
+            }
+        });
+
+        wrapperTag.style.filter = 'brightness(50%)';
+
+        postModal.style.display = 'flex';
+        postModal.style.width = '70%';
+        postModal.style.padding = '25px';
+        postModal.style.opacity = '1';
+
+        // console.log(usuario[idPost]);
+
+        document.getElementById('modal_prof_pic').src = `../assets/bucket/${postSelected.fotoPerfilSrc}`;
+        document.getElementById('modal_prof_name').innerHTML = postSelected.nome;
+        document.getElementById('modal_post').src = `../assets/bucket/${postSelected.postSrc}`;
+        document.getElementById('modal_date').innerHTML = postSelected.dtPostagem;
+        document.getElementById('modal_title').innerHTML = postSelected.titulo;
+        document.getElementById('modal_desc').innerHTML = postSelected.descricao;
+        document.getElementById('modal_download_a').setAttribute('download', `${postSelected.titulo}-${postSelected.nome}`);
+        document.getElementById('modal_download_a').setAttribute('href', `../assets/bucket/${postSelected.fotoPerfilSrc}`);
+        document.getElementById('modal_save').addEventListener('click', () => {
+            salvarPost(postSelected.idPostagem)
+        });
+
+    }
+
+    function closePostModal(wrapper) {
+        var wrapperTag = document.getElementById(wrapper);
+        var postModal = document.getElementById('post_modal');
+
+        wrapperTag.style.filter = 'none';
+
+        postModal.style.display = 'none';
+        postModal.style.width = '0';
+        postModal.style.padding = '0';
+        postModal.style.opacity = '0';
+    }
+
+    function salvarPost(idPostagem) {
+        fetch(`/posts/save/${idPostagem}/${sessionStorage.ID_USUARIO}`, {
+            method: "POST"
+        })
+            .then(res => {
+                if (res.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Postagem salva!',
+                        background: '#000',
+                        color: '#FFF',
+                        confirmButtonText: 'Beleza!',
+                    });
+                } else {
+                    throw ("Houve um erro ao tentar salvar a postagem!");
+                }
+
+
+                // Swal.fire({
+                //         icon: 'success',
+                //         title: 'Postagem salva!',
+                //         text: 'Essa postagem foi salva com sucesso...',
+                //         background: '#000',
+                //         color: '#FFF',
+                //         confirmButtonText: 'Beleza!',
+                //     });
+                // usuario = json;
+
+                // document.getElementById('prof_pic').src = `../assets/bucket/${json[0].fotoPerfilSrc}`;
+                // document.getElementById('prof_name').innerHTML = json[0].nome;
+                // document.getElementById('prof_header').style.backgroundImage = `url('../assets/img/profile/${json[0].fundoSrc}')`;
+
+                // json.forEach(post => {
+                //     profPosts.innerHTML += `
+                //         <img onclick="openPostModal('prof_wrapper', ${post.idPostagem})" class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
+                //     `
+                // });
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    var usuario;
+
 
 </script>
