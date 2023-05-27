@@ -81,7 +81,31 @@ function profile(req, res) {
 
     postModel.mostrarPerfil(idUsuario)
         .then(resultado => {
-            res.json(resultado);
+            if (resultado.length >= 1 ) {
+
+                res.json(resultado);
+            } else {
+                // res.status(403).send('')
+            }
+        }).catch(err => {
+            res.status(500).send(err);
+        });
+        
+}
+
+function profilePosts(req, res) {
+
+    const idUsuario = req.params.idUsuario;
+    // console.log(`var idUsuario = ${idUsuario}`);
+
+    postModel.mostrarPerfilPosts(idUsuario)
+        .then(resultado => {
+            if (resultado.length >= 1 ) {
+
+                res.json(resultado);
+            } else {
+                // res.status(403).send('')
+            }
         }).catch(err => {
             res.status(500).send(err);
         });
@@ -132,5 +156,6 @@ module.exports = {
     feed,
     post,
     profile,
+    profilePosts,
     save
 }

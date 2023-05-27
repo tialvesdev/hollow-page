@@ -218,6 +218,9 @@
                     <img src="./assets/img/temp/example5.png" alt="example">
                     <img src="./assets/img/temp/example6.png" alt="example">
                 </article> -->
+                <div id="samples">
+
+                </div>
                 </article>
 
             </section>
@@ -306,12 +309,14 @@
             referrerpolicy: 'no-referrer'
         });
     }
+    
+    var samples = document.getElementById('samples');
 
-
+    window.onscroll = () => addBlur('nav');
 
     window.onload = () => {
 
-        fetch(`/posts/feed/`, {
+        fetch(`/posts/samples/`, {
             method: "GET"
         })
             .then(res => {
@@ -321,16 +326,18 @@
 
 
                     json.forEach(post => {
-                        feed.innerHTML += `
-                        <img onclick="postModal(${post.idPostagem})" class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
+                        samples.innerHTML += `
+                            <img class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
                         `;
 
-                        posts.push(post);
+                        // posts.push(post);
                     });
+
+                    samplesAnimation();
                 })
             })
             .catch(err => {
-                feed.innerHTML = '';
+                samples.innerHTML = '';
                 console.log(err);
             })
 
@@ -338,8 +345,6 @@
             setHidden('embed_img'), 3000
         );
     }
-
-    window.onscroll = () => addBlur('nav');
 
     function abrirCores() {
         var paleta = document.getElementById('nav_btn_tema');
@@ -418,6 +423,21 @@
 
         // img1.style.animation = 'cardsAnimation';
 
+    }
+
+    // window.onload = samplesAnimation();
+
+    function samplesAnimation() {
+        // const flavoursContainer = document.getElementById('samples');
+        var samplesScrollWidth = samples.scrollWidth;
+
+        window.addEventListener('load', () => {
+        self.setInterval(() => {
+            if (samples.scrollLeft !== samplesScrollWidth) {
+                samples.scrollTo(samples.scrollLeft + 1);
+            }
+        }, 15);
+        });
     }
 
 </script>

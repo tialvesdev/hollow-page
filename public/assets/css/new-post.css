@@ -30,6 +30,7 @@
     gap: 25px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 .np-header {
@@ -64,7 +65,8 @@
 }
 
 .ipt-file-img {
-    height: 350px;
+    max-width: 500px;
+    max-height: 350px;
     object-fit: contain;
 }
 

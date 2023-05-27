@@ -57,7 +57,7 @@ CREATE TABLE filtro (
 );
 
 CREATE TABLE salvo (
-	idSalvo INT,
+	idSalvo INT AUTO_INCREMENT,
     dtSalvo DATETIME NOT NULL,
     fkPostagem INT,
     fkUsuario INT,
@@ -65,6 +65,9 @@ CREATE TABLE salvo (
         CONSTRAINT salvoFkPostagem FOREIGN KEY (fkPostagem) REFERENCES postagem(idPostagem),
         CONSTRAINT salvoFkUsuario FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
 );
+
+DROP TABLE salvo;
+SELECT * FROM salvo;
 
 INSERT INTO usuario (nome, email, senha, dtNasc) VALUES
 	('Tiago', 'ti@gmail.com', '12345', '2005-09-23');
@@ -80,6 +83,34 @@ INSERT INTO fundoPerfil (nomeFundoPerfil, fundoSrc) VALUES
 UPDATE usuario SET fotoPerfilSrc = 'b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png' WHERE idUsuario = 1;
     
 UPDATE usuario SET fkFundoPerfil = 2 WHERE idUsuario = 1;
+
+SELECT * FROM postagem
+	ORDER BY RAND()
+		LIMIT 10;
+        
+SELECT postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        fundoPerfil.fundoSrc,
+        fundoPerfil.nomeFundoPerfil
+            FROM postagem
+                JOIN usuario ON idUsuario = fkUsuario
+                JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                    WHERE idUsuario = 1;
+                    
+SELECT nome,
+        email,
+        DATE_FORMAT(dtNasc, '%Y-%m-%d') AS dtNasc,
+        fotoPerfilSrc,
+        genero,
+        tel,
+        fundoSrc,
+        nomeFundoPerfil
+            FROM usuario
+                JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                    WHERE idUsuario = 1;
     
 SELECT usuario.*,
         postagem.idPostagem,
@@ -93,6 +124,20 @@ SELECT usuario.*,
                 JOIN postagem ON idUsuario = fkUsuario
                 JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
                     ORDER BY dtPostagem DESC;
+                    
+SELECT *,
+        postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        fundoPerfil.fundoSrc,
+        fundoPerfil.nomeFundoPerfil
+            FROM usuario
+                LEFT JOIN postagem ON idUsuario = fkUsuario
+                JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                    WHERE idUsuario = 2
+                        ORDER BY dtPostagem DESC;
 
 SELECT * FROM usuario;
 
@@ -119,6 +164,16 @@ SELECT usuario.*,
                 JOIN postagem ON idUsuario = fkUsuario
                 JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
                     ORDER BY dtPostagem DESC;
+                    
+SELECT postagem.idPostagem,
+            postagem.titulo,
+            postagem.descricao,
+            postagem.postSrc,
+            DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+            postagem.fkUsuario
+				FROM postagem
+					JOIN usuario ON idUsuario = fkUsuario
+						ORDER BY dtPostagem;
 
 INSERT INTO postagem (postSrc, dtPostagem, dtLastEdit, titulo, descricao, fkUsuario) VALUES
 	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),

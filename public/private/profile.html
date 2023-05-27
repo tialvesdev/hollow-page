@@ -17,84 +17,88 @@
 
     <script src="../assets/js/visuals.js"></script>
     <script src="../assets/js/funcoes.js"></script>
+    <script src="../assets/js/postModal.js"></script>
 </head>
 
 <body>
 
-    <div class="profile-wrapper" id="prof_wrapper">
+    <aside class="sidebar">
+        <div class="side-up">
+            <a class="side-opt" href="./feed.html">
+                <img class="side-opt-img" src="../assets/img/icon/home-icon.png" alt="">
+                <b>Home</b>
+            </a>
+            <a class="side-opt" href="">
+                <img class="side-opt-img" src="../assets/img/icon/filter-icon.png" alt="">
+                <b>Filtro</b>
+            </a>
+            <a class="side-opt" href="">
+                <img class="side-opt-img" src="../assets/img/icon/search-icon.png" alt="">
+                <b>Pesquisar</b>
+            </a>
+        </div>
+        <div class="side-down">
+            <a class="side-opt" href="./new-post.html">
+                <img class="side-opt-img" src="../assets/img/icon/plus-icon.png" alt="">
+                <b>Postar</b>
+            </a>
+            <a class="side-opt" href="./profile.html">
+                <img class="side-opt-img" src="../assets/img/icon/profile-icon.png" alt="">
+                <b>Perfil</b>
+            </a>
+            <a class="side-opt logout" onclick="limparSessao()">
+                <img class="side-opt-img" src="../assets/img/icon/logout-icon.png" alt="">
+                <b>Sair</b>
+            </a>
+        </div>
+    </aside>
 
-        <aside class="sidebar">
-            <div class="side-up">
-                <a class="side-opt" href="./feed.html">
-                    <img class="side-opt-img" src="../assets/img/icon/home-icon.png" alt="">
-                    <b>Home</b>
-                </a>
-                <a class="side-opt" href="">
-                    <img class="side-opt-img" src="../assets/img/icon/filter-icon.png" alt="">
-                    <b>Filtro</b>
-                </a>
-                <a class="side-opt" href="">
-                    <img class="side-opt-img" src="../assets/img/icon/search-icon.png" alt="">
-                    <b>Pesquisar</b>
-                </a>
-            </div>
-            <div class="side-down">
-                <a class="side-opt" href="./new-post.html">
-                    <img class="side-opt-img" src="../assets/img/icon/plus-icon.png" alt="">
-                    <b>Postar</b>
-                </a>
-                <a class="side-opt" href="./profile.html">
-                    <img class="side-opt-img" src="../assets/img/icon/profile-icon.png" alt="">
-                    <b>Perfil</b>
-                </a>
-                <a class="side-opt logout" onclick="limparSessao()">
-                    <img class="side-opt-img" src="../assets/img/icon/logout-icon.png" alt="">
-                    <b>Sair</b>
-                </a>
-            </div>
-        </aside>
+    <div class="profile-wrapper" id="prof_wrapper">
 
         <header id="prof_header" class="prof-header">
             <a href="./feed.html" class="seta-voltar seta-float">
                 <img src="../assets/img/icon/arrow-icon.png" alt="">
             </a>
             <div class="prof-info">
-                <img id="prof_pic" class="prof-pic" src="" alt="">
+                <div id="prof_pic_div">
+                    <img id="prof_pic_img" class="prof-pic" src="" alt="">
+                </div>
                 <p id="prof_name" class="big-text prof-name">Fulano</p>
             </div>
         </header>
 
         <main class="prof-main">
             <div class="prof-opts">
-                <a class="text prof-opts-a" onclick="">
+                <a onclick="changeSectionSmooth('prof_main_wrapper', 'prof_advanced', 'prof_posts')" class="text prof-opts-a" onclick="">
                     Posts
                 </a>
                 <a class="text prof-opts-a" href="./edit-profile.html">
                     Editar
                 </a>
-                <a class="text prof-opts-a" onclick="">
+                <a onclick="changeSectionSmooth('prof_main_wrapper', 'prof_posts', 'prof_advanced')" class="text prof-opts-a" onclick="">
                     Avançado
                 </a>
             </div>
             <hr class="divider">
-            <div id="prof_posts" class="prof-posts">
-
-            </div>
-            <div id="prof_advanced" class="prof-advanced">
-                profadvanced
+            <div class="prof-main-wrapper" id="prof_main_wrapper">
+                <div id="prof_posts" class="prof-posts">
+                </div>
+                <div id="prof_advanced" class="prof-advanced">
+                    <div class="testesla"></div>
+                </div>
             </div>
         </main>
 
     </div>
     <div id="post_modal" class="post-modal">
         <div class="modal-header">
-            <a onclick="closePostModal('prof_wrapper')" class="seta-voltar seta-float">
+            <a onclick="closePostModal('prof_wrapper')" class="seta-voltar seta-modal">
                 <img src="../assets/img/icon/arrow-icon.png" alt="">
             </a>
-            <div class="modal-prof-info">
+            <a href="" id="modal_prof_info" class="modal-prof-info">
                 <img class="modal-prof-pic" id="modal_prof_pic" src="" alt="Foto de Perfil">
                 <p class="text"> <b id="modal_prof_name"> Nome de Fulano </b> </p>
-            </div>
+            </a>
         </div>
 
         <div class="modal-content">
@@ -114,7 +118,6 @@
             </a>
             <button id="modal_save" class="btn">Salvar</button>
         </div>
-        <!-- <button class="btn" onclick="closePostModal('prof_wrapper')">Fechar</button> -->
     </div>
 
 </body>
@@ -123,29 +126,52 @@
 
 <script>
 
-    window.onload = () => {
+    window.onload = loadProfile()
+    
+    function loadProfile() {
 
         validarSessao();
 
         var profPosts = document.getElementById('prof_posts')
 
-        fetch(`/posts/profile/${sessionStorage.ID_USUARIO}`, {
+        fetch(`/posts/profilePosts/${sessionStorage.ID_USUARIO}`, {
             method: "GET"
         })
             .then(res => {
+                console.log(res);
                 res.json().then(json => {
                     console.log(json);
                     usuario = json;
 
-                    document.getElementById('prof_pic').src = `../assets/bucket/${json[0].fotoPerfilSrc}`;
+                    if (json[0].fotoPerfilSrc == null) {
+                        document.getElementById('prof_pic_div').innerHTML = `
+                            <a class="prof-pic" href="./edit-profile.html">
+                                <img src="../assets/img/icon/user-icon.png" alt="Foto de Perfil">
+                            </a>
+                        `;                       
+                    } else {
+                        document.getElementById('prof_pic_img').src = `../assets/bucket/${json[0].fotoPerfilSrc}`;
+                    }
+
                     document.getElementById('prof_name').innerHTML = json[0].nome;
                     document.getElementById('prof_header').style.backgroundImage = `url('../assets/img/profile/${json[0].fundoSrc}')`;
 
-                    json.forEach(post => {
+                    if (json[0].idPostagem != null) {
+                        json.forEach(post => {
+                            profPosts.innerHTML += `
+                                <img onclick="openPostModal('prof_wrapper', ${post.idPostagem})" class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
+                            `
+                        })
+                    } else {
                         profPosts.innerHTML += `
-                            <img onclick="openPostModal('prof_wrapper', ${post.idPostagem})" class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
-                        `
-                    });
+                            <div>
+                                <img class="no-posts" src="../assets/img/char/knight-crying.png" alt="">
+                                <p class="text"> Nenhuma postagem foi feita ainda </p>
+                            </div>
+                        `;
+                    }
+
+                    
                 })
             })
             .catch(err => {
@@ -165,16 +191,25 @@
             }
         });
 
+        if (postSelected.fotoPerfilSrc == null) {
+            document.getElementById('modal_prof_pic').src = `../assets/img/icon/user-icon.png`;                      
+        } else {
+            document.getElementById('modal_prof_pic').src = `../assets/bucket/${postSelected.fotoPerfilSrc}`;
+        }
+
+        // document.getElementById('modal_prof_pic').src = `../assets/bucket/${postSelected.fotoPerfilSrc}`;
+
+
         wrapperTag.style.filter = 'brightness(50%)';
 
         postModal.style.display = 'flex';
         postModal.style.width = '70%';
-        postModal.style.padding = '25px';
+        postModal.style.padding = '0 25px 25px 25px';
         postModal.style.opacity = '1';
 
         // console.log(usuario[idPost]);
 
-        document.getElementById('modal_prof_pic').src = `../assets/bucket/${postSelected.fotoPerfilSrc}`;
+        document.getElementById('modal_prof_info').setAttribute('href', `./profile.html`);
         document.getElementById('modal_prof_name').innerHTML = postSelected.nome;
         document.getElementById('modal_post').src = `../assets/bucket/${postSelected.postSrc}`;
         document.getElementById('modal_date').innerHTML = postSelected.dtPostagem;
@@ -217,26 +252,6 @@
                     throw ("Houve um erro ao tentar salvar a postagem!");
                 }
 
-
-                // Swal.fire({
-                //         icon: 'success',
-                //         title: 'Postagem salva!',
-                //         text: 'Essa postagem foi salva com sucesso...',
-                //         background: '#000',
-                //         color: '#FFF',
-                //         confirmButtonText: 'Beleza!',
-                //     });
-                // usuario = json;
-
-                // document.getElementById('prof_pic').src = `../assets/bucket/${json[0].fotoPerfilSrc}`;
-                // document.getElementById('prof_name').innerHTML = json[0].nome;
-                // document.getElementById('prof_header').style.backgroundImage = `url('../assets/img/profile/${json[0].fundoSrc}')`;
-
-                // json.forEach(post => {
-                //     profPosts.innerHTML += `
-                //         <img onclick="openPostModal('prof_wrapper', ${post.idPostagem})" class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
-                //     `
-                // });
             })
             .catch(err => {
                 console.log(err);

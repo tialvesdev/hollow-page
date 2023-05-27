@@ -13,45 +13,46 @@
     <link rel="stylesheet" href="../assets/css/feed.style.css">
 
     <script src="../assets/js/funcoes.js"></script>
+    <script src="../assets/js/postModal.js"></script>
 </head>
 
 <body>
+    <aside class="sidebar">
+        <div class="side-up">
+            <a class="side-opt" href="./feed.html">
+                <img class="side-opt-img" src="../assets/img/icon/home-icon.png" alt="">
+                <b>Home</b>
+            </a>
+            <a class="side-opt" href="">
+                <img class="side-opt-img" src="../assets/img/icon/filter-icon.png" alt="">
+                <b>Filtro</b>
+            </a>
+            <a class="side-opt" href="">
+                <img class="side-opt-img" src="../assets/img/icon/search-icon.png" alt="">
+                <b>Pesquisar</b>
+            </a>
+        </div>
+        <div class="side-down">
+            <a class="side-opt" href="./new-post.html">
+                <img class="side-opt-img" src="../assets/img/icon/plus-icon.png" alt="Postar">
+                <b>Postar</b>
+            </a>
+            <a class="side-opt" href="./profile.html">
+                <img class="side-opt-img" src="../assets/img/icon/profile-icon.png" alt="Perfil">
+                <b>Perfil</b>
+            </a>
+            <a class="side-opt logout" onclick="limparSessao()">
+                <img class="side-opt-img" src="../assets/img/icon/logout-icon.png" alt="Sair">
+                <b>Sair</b>
+            </a>
+        </div>
+    </aside>
     <div class="feed-wrapper">
-        <aside class="sidebar">
-            <div class="side-up">
-                <a class="side-opt" href="./feed.html">
-                    <img class="side-opt-img" src="../assets/img/icon/home-icon.png" alt="">
-                    <b>Home</b>
-                </a>
-                <a class="side-opt" href="">
-                    <img class="side-opt-img" src="../assets/img/icon/filter-icon.png" alt="">
-                    <b>Filtro</b>
-                </a>
-                <a class="side-opt" href="">
-                    <img class="side-opt-img" src="../assets/img/icon/search-icon.png" alt="">
-                    <b>Pesquisar</b>
-                </a>
-            </div>
-            <div class="side-down">
-                <a class="side-opt" href="./new-post.html">
-                    <img class="side-opt-img" src="../assets/img/icon/plus-icon.png" alt="">
-                    <b>Postar</b>
-                </a>
-                <a class="side-opt" href="./profile.html">
-                    <img class="side-opt-img" src="../assets/img/icon/profile-icon.png" alt="">
-                    <b>Perfil</b>
-                </a>
-                <a class="side-opt logout" onclick="limparSessao()">
-                    <img class="side-opt-img" src="../assets/img/icon/logout-icon.png" alt="">
-                    <b>Sair</b>
-                </a>
-            </div>
-        </aside>
         <header class="greetings">
             <p id="p_greetings" class="big-text">Aventure-se, Fulano</p>
             <hr class="divider feed-divider">
         </header>
-        <div class="feed-content">
+        <div class="feed-content" id="feed_content">
             <main class="feed" id="feed">
                 <!-- <div class="feed-no-posts">
                     <img src="../assets/img/char/knight-crying.png" alt="Nenhum Post Encontrado">
@@ -60,8 +61,35 @@
                 <!-- <img onclick="postModal()" class="post" src="../assets/bucket/b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png" alt="Título do Post Mocado"> -->
             </main>
         </div>
-        <div class="post-modal">
-            
+        <div id="post_modal" class="post-modal">
+            <div class="modal-header">
+                <a onclick="closePostModal('feed_content')" class="seta-voltar seta-modal">
+                    <img src="../assets/img/icon/arrow-icon.png" alt="">
+                </a>
+                <a href="" id="modal_prof_info" class="modal-prof-info">
+                    <img class="modal-prof-pic" id="modal_prof_pic" src="" alt="Foto de Perfil">
+                    <p class="text"> <b id="modal_prof_name"> Nome de Fulano </b> </p>
+                </a>
+            </div>
+    
+            <div class="modal-content">
+                <div class="modal-aside">
+                    <img class="modal-post" id="modal_post" src="" alt="Post">
+                    <p class="modal-date text" id="modal_date">Data marota</p>
+                </div>
+                <div class="modal-aside">
+                    <p class="text-wrap title" id="modal_title">Titulo do post</p>
+                    <p class="text-wrap text" id="modal_desc">Descrição do post</p>
+                </div>
+            </div>
+    
+            <div class="modal-footer">
+                <a download="" href="" id="modal_download_a">
+                    <button class="btn dark-btn">Baixar</button>
+                </a>
+                <button id="modal_save" class="btn">Salvar</button>
+            </div>
+            <!-- <button class="btn" onclick="closePostModal('prof_wrapper')">Fechar</button> -->
         </div>
     </div>
 </body>
@@ -80,8 +108,12 @@
         `Aproveite o entretenimento, ${usuarioNome}`,
         `Não tenha medo, ${usuarioNome}`,
         `Eu sou Zote, o Poderoso. Trema diante de mim, ${usuarioNome}`,
+        `You are the Vessel, ${usuarioNome}`,
+        `O ar sussurra com emoção, ${usuarioNome}`,
         `Hm hm hm hm hm hm hm hm hm - Cornifer, 2017`
     ];
+
+    var usuario = [];
 
     window.onload = () => {
 
@@ -96,16 +128,18 @@
         })
             .then(res => {
                 res.json().then(json => {
-                    const usuario = json[0];
-                    console.log(json);
-
+                    usuario = json;
                     
                     json.forEach(post => {
+                        console.log(post);
+                        var postSelected = post;
+
+                        posts.push(post);
+
                         feed.innerHTML += `
-                        <img onclick="postModal(${post.idPostagem})" class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
+                        <img onclick="openPostModal('feed_content', ${post.idPostagem})" class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
                         `;
                         
-                        posts.push(post);
                     });
                 })
             })
@@ -115,8 +149,86 @@
             })
     }
 
-    function postModal(idPost) {
+    function openPostModal(wrapper, idPost) {
+        var wrapperTag = document.getElementById(wrapper);
+        var postModal = document.getElementById('post_modal');
+        var postSelected;
+
+        usuario.forEach(post => {
+            if (post.idPostagem == idPost) {
+                postSelected = post;
+            }
+        });
+        console.log(postSelected)
+
+        wrapperTag.style.filter = 'brightness(50%)';
+
+        postModal.style.display = 'flex';
+        postModal.style.width = '70%';
+        postModal.style.padding = '0 25px 25px 25px';
+        postModal.style.opacity = '1';
+
+        if (postSelected.fotoPerfilSrc == null) {
+            document.getElementById('modal_prof_pic').src = `../assets/img/icon/user-icon.png`;                      
+        } else {
+            document.getElementById('modal_prof_pic').src = `../assets/bucket/${postSelected.fotoPerfilSrc}`;
+        }
+
+        console.log(postSelected.nome);
+
+        document.getElementById('modal_prof_info').setAttribute('href', `./profile.html`)
+        // document.getElementById('modal_prof_pic').src = `../assets/bucket/${postSelected.fotoPerfilSrc}`;
+        document.getElementById('modal_prof_name').innerHTML = postSelected.nome;
+
+        document.getElementById('modal_post').src = `../assets/bucket/${postSelected.postSrc}`;
+        document.getElementById('modal_date').innerHTML = postSelected.dtPostagem;
+        console.log(postSelected.dtPostagem);
+        document.getElementById('modal_title').innerHTML = postSelected.titulo;
+        document.getElementById('modal_desc').innerHTML = postSelected.descricao;
+        document.getElementById('modal_download_a').setAttribute('download', `${postSelected.titulo}-${postSelected.nome}`);
+        document.getElementById('modal_download_a').setAttribute('href', `../assets/bucket/${postSelected.fotoPerfilSrc}`);
+        document.getElementById('modal_save').addEventListener('click', () => {
+            salvarPost(postSelected.idPostagem)
+        });
 
     }
+
+    function closePostModal(wrapper) {
+        var wrapperTag = document.getElementById(wrapper);
+        var postModal = document.getElementById('post_modal');
+
+        wrapperTag.style.filter = 'none';
+
+        postModal.style.display = 'none';
+        postModal.style.width = '0';
+        postModal.style.padding = '0';
+        postModal.style.opacity = '0';
+    }
+
+    function salvarPost(idPostagem) {
+        fetch(`/posts/save/${idPostagem}/${sessionStorage.ID_USUARIO}`, {
+            method: "POST"
+        })
+            .then(res => {
+                if (res.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Postagem salva!',
+                        background: '#000',
+                        color: '#FFF',
+                        confirmButtonText: 'Beleza!',
+                    });
+                } else {
+                    throw ("Houve um erro ao tentar salvar a postagem!");
+                }
+
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+   
+
 
 </script>

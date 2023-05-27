@@ -11,13 +11,15 @@
     <link rel="stylesheet" href="../assets/css/global.style.css">
     <link rel="stylesheet" href="../assets/css/edit-style.css">
 
+    <script src="../assets/js/funcoes.js"></script>
+
 </head>
 <body>
     
     <div class="edit-wrapper">
         <div class="edit-content">
             <div class="edit-header">
-                <a href="./profile.html" class="seta-voltar">
+                <a href="./profile.html" class="seta-voltar seta-float">
                     <img src="../assets/img/icon/arrow-icon.png" alt="Voltar">
                   </a>
                   <h1 class="title">Editar Perfil</h1>
@@ -25,28 +27,29 @@
             <div class="edit-main">
                 <div class="edit-sect">
                     <div class="edit-aside">
-                        <p class="text">Dados Pessoais:</p>
-                        <input type="text" id="ipt_edit_nome" class="ipt">
-                        <input type="text" id="ipt_edit_email" class="ipt">
-                        <input type="text" id="ipt_edit_date" class="ipt">
+                        <p class="text edit-subtitle">Dados Pessoais: </p>
+                        <input type="text" id="ipt_edit_nome" class="ipt" placeholder="Jão">
+                        <input type="text" id="ipt_edit_email" class="ipt" placeholder="fulano@gmail.com">
+                        <input type="date" id="ipt_edit_date" class="ipt">
                     </div>
                     <div class="edit-aside">
-                        <img src="" alt="Foto de Perfil" class="edit_prof_img">
-                        <p class="text">Nenhuma foto selecionada</p>
-                        <a class="text" href="">
-                            Importar Foto
+                        <img id="edit_prof_img" src="" alt="Foto de Perfil" class="edit-prof-img">
+                        <p id="edit_prof_img_name" class="text edit-text"> <b> Nenhuma foto selecionada </b> </p>
+                        <a class="big-text" href="">
+                            <b> Importar Foto </b>
                         </a>
                     </div>
                 </div>
+                <hr class="divider">
                 <div class="edit-sect">
                     <div class="edit-aside">
-                        <p class="title">Dados Adicionais</p>
-                        <input type="text" id="ipt_edit_genero" class="ipt">
-                        <input type="text" id="ipt_edit_telefone" class="ipt">
+                        <p class="text edit-subtitle">Dados Adicionais: </p>
+                        <input type="text" id="ipt_edit_genero" class="ipt" placeholder="Gênero">
+                        <input type="text" id="ipt_edit_telefone" class="ipt" placeholder="Telefone">
                     </div>
                     <div class="edit-aside">
-                        <img src="" alt="Foto de Capa" class="edit_prof_bg">
-                        <p class="text">Nenhuma foto selecionada</p>
+                        <img id="edit_prof_bg" src="" alt="Foto de Capa" class="edit-prof-bg">
+                        <p id="edit_prof_bg_name" class="text edit-text"> <b> Nenhuma foto selecionada </b> </p>
                         <select name="" id="sel_prof_bg"></select>
                     </div>
                 </div>
@@ -57,3 +60,51 @@
 
 </body>
 </html>
+
+<script>
+
+window.onload = loadProfile()
+    
+    function loadProfile() {
+
+        validarSessao();
+
+        var profPosts = document.getElementById('prof_posts')
+
+        fetch(`/posts/profile/${sessionStorage.ID_USUARIO}`, {
+            method: "GET"
+        })
+            .then(res => {
+                console.log(res);
+                res.json().then(json => {
+                    console.log(json);
+                    usuario = json;
+
+                    if (json[0].fotoPerfilSrc == null) {
+                        document.getElementById('edit_prof_img').src = `../assets/img/icon/user-icon.png"`;                 
+                    } else {
+                        document.getElementById('edit_prof_img').src = `../assets/bucket/${json[0].fotoPerfilSrc}`;
+                        document.getElementById('edit_prof_img_name').innerHTML = '<b> Foto de Perfil </b>';
+                    }
+
+                    document.getElementById('ipt_edit_nome').value = json[0].nome;
+                    document.getElementById('ipt_edit_email').value = json[0].email;
+                    document.getElementById('ipt_edit_date').value = json[0].dtNasc;
+
+                    if (json[0].tel != null) {
+                        document.getElementById('ipt_edit_telefone').value = json[0].tel;
+                    }
+
+                    document.getElementById('edit_prof_bg').src = `../assets/img/profile/${json[0].fundoSrc}`;
+                    document.getElementById('edit_prof_bg_name').innerHTML = `<b> Fundo de perfil: ${json[0].nomeFundoPerfil} </b>`;
+
+                    
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+    }
+
+</script>

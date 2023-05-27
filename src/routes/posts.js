@@ -20,6 +20,10 @@ router.post("/post", upload.single('foto'), function (req, res) {
     postController.post(req, res);
 });
 
+router.get('/profilePosts/:idUsuario', upload.single('foto'), (req, res) => {
+    postController.profilePosts(req, res);
+});
+
 router.get('/profile/:idUsuario', upload.single('foto'), (req, res) => {
     postController.profile(req, res);
 });

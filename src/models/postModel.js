@@ -1,9 +1,11 @@
 var database = require("../database/config");
 
-function criarFeed() {
+function amostras() {
     // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
     var instrucao = `
-        SELECT * FROM postagem;
+        SELECT * FROM postagem
+            ORDER BY RAND()
+                LIMIT 10;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
@@ -12,9 +14,17 @@ function criarFeed() {
 function criarFeed() {
     // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
     var instrucao = `
-        SELECT * FROM postagem
-            ORDER BY RAND()
-                LIMIT 10;
+    SELECT postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        postagem.fkUsuario,
+        usuario.nome,
+        usuario.fotoPerfilSrc
+            FROM postagem
+                JOIN usuario ON idUsuario = fkUsuario
+                    ORDER BY dtPostagem;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
@@ -37,19 +47,38 @@ function postar(post) {
 function mostrarPerfil(idUsuario) {
     // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
     var instrucao = `
-    SELECT *,
-        postagem.idPostagem,
-        postagem.titulo,
-        postagem.descricao,
-        postagem.postSrc,
-        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
-        fundoPerfil.fundoSrc,
-        fundoPerfil.nomeFundoPerfil
+    SELECT nome,
+        email,
+        DATE_FORMAT(dtNasc, '%Y-%m-%d') AS dtNasc,
+        fotoPerfilSrc,
+        genero,
+        tel,
+        fundoSrc,
+        nomeFundoPerfil
             FROM usuario
-                JOIN postagem ON idUsuario = fkUsuario
                 JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
-                    WHERE idUsuario = ${idUsuario}
-                        ORDER BY dtPostagem DESC;
+                    WHERE idUsuario = 1;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function mostrarPerfilPosts(idUsuario) {
+    // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
+    var instrucao = `
+        SELECT *,
+            postagem.idPostagem,
+            postagem.titulo,
+            postagem.descricao,
+            postagem.postSrc,
+            DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+            fundoPerfil.fundoSrc,
+            fundoPerfil.nomeFundoPerfil
+                FROM usuario
+                    LEFT JOIN postagem ON idUsuario = fkUsuario
+                    JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                        WHERE idUsuario = ${idUsuario}
+                            ORDER BY dtPostagem DESC;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
@@ -69,8 +98,10 @@ function salvarPost(idPostagem, idUsuario) {
 }
 
 module.exports = {
+    amostras,
     criarFeed,
     postar,
     mostrarPerfil,
+    mostrarPerfilPosts,
     salvarPost
 }

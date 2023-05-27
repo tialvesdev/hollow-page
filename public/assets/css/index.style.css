@@ -1,3 +1,19 @@
+body::-webkit-scrollbar {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: var(--gray-bg);
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 .wrapper-index {
     overflow: hidden;
 }
@@ -202,6 +218,7 @@
     justify-content: center;
     position: relative;
     z-index: 3;
+    padding: 0 0 15px 0;
 }
 
 .article-community {
@@ -216,7 +233,7 @@
     align-items: center;
     justify-content: center;
     gap: 50px;
-    padding: 50px;
+    padding: 50px 50px 0 50px;
 }
 
 .h1-community {
@@ -227,9 +244,15 @@
     width: 50%;
 }
 
-.examples {
-    /* overflow-x: scroll; */
-    width: 100%;
+#samples {
+    transform: rotate(-8deg);
+    display: flex;
+    gap: 10px;
+    width: 100vw;
+    /* z-index: 1; */
+    /* position: relative;
+    left: 200px; */
+    overflow-x: scroll;
 }
 
 .hp {
@@ -240,6 +263,7 @@
     background-position: center;
     display: flex;
     align-items: center;
+    
 }
 
 .hp-figure {

@@ -211,16 +211,16 @@
 
 .sidebar {
     height: 100vh;
-    width: 125px;
+    width: 100px;
     background-color: var(--black2);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 50px 35px;
+    padding: 50px 30px;
     border-radius: 0 25% 25% 0;
     position: fixed;
     left: 0;
-    z-index: 1;
+    z-index: 2;
     transition: all .3s ease-in-out;
 }
 
@@ -232,7 +232,7 @@
 .side-down {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 25px;
 }
 
 .side-down {}
@@ -262,7 +262,6 @@
 
 .side-opt.logout:hover {
     color: var(--grimm2);
-    /* filter: invert(50%) sepia(40%) saturate(7188%) hue-rotate(344deg) brightness(75%) contrast(131%); */
 }
 
 .side-opt-img {
@@ -271,18 +270,19 @@
 }
 
 .post {
-    width: 200px;
-    height: 200px;
-    border: 2px solid white;
+    width: 300px;
+    height: 300px;
+    /* border: 2px solid white; */
     border-radius: 15px;
     transition: all .2s ease-in-out;
     object-fit: cover;
     object-position: left;
+    cursor: pointer;
 }
 
 .post:hover {
-    transform: scale(1.2);
-    cursor: pointer;
+    /* transform: scale(1.2); */
+    filter: brightness(40%);
 }
 
 .post-modal {
@@ -290,7 +290,7 @@
     padding: 0;
     flex-direction: column;
     align-items: center;
-    gap: 25px;
+    gap: 15px;
     background-color: var(--gray-bg);
     border-radius: 25px;
     position: fixed;
@@ -307,22 +307,42 @@
 }
 
 .modal-header {
+    width: 100%;
     display: flex;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    background-color: var(--gray-bg);
+    padding: 15px 0;
+}
+
+.seta-modal {
+    position: absolute;
+    top: 25px;
+    left: 25px;
 }
 
 .modal-prof-info {
     display: flex;
     align-items: center;
     gap: 20px;
+    text-decoration: none;
+}
+
+.modal-prof-info:hover p {
+    transition: all .25s ease-in-out;
+    color: #69E2EE;
 }
 
 .modal-prof-pic {
     width: 40px;
     height: 40px; 
     border-radius: 100%;
+    background-color: var(--light-gray);
 }
 
 .modal-content {
+    /* padding: 50px 0 0 0; */
     width: 100%;
     display: flex;
     gap: 50px;
@@ -351,6 +371,10 @@
     gap: 50px;
 }
 
+.no-posts {
+    max-height: 250px;
+}
+
 .reverse {
     flex-direction: row-reverse;
 }
@@ -375,6 +399,16 @@
 
 .sumir {
     display: none;
+}
+
+.oculto {
+    transition: all .4s ease-in-out;
+    opacity: 0;
+}
+
+.amostra {
+    transition: all .4s ease-in-out;
+    opacity: 1;
 }
 
 .rotate {
