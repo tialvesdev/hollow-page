@@ -111,7 +111,7 @@
         ];
 
         if (validarTexto('Email', dadosLogin[0], 50) && validarTexto('Senha', dadosLogin[1], 30)) {
-            console.log('Login válido');
+            // console.log('Login válido');
 
             fetch("/usuarios/autenticar", {
                 method: "POST",
@@ -123,14 +123,14 @@
                     senhaServer: dadosLogin[1]
                 })
             }).then(function (resposta) {
-                console.log("ESTOU NO THEN DO entrar()!")
+                // console.log("ESTOU NO THEN DO entrar()!")
 
                 if (resposta.ok) {
-                    console.log(resposta);
+                    // console.log(resposta);
 
                     resposta.json().then(json => {
-                        console.log(json);
-                        console.log(JSON.stringify(json));
+                        // console.log(json);
+                        // console.log(JSON.stringify(json));
 
                         sessionStorage.EMAIL_USUARIO = json.email;
                         sessionStorage.NOME_USUARIO = json.nome;
@@ -153,7 +153,7 @@
 
                 } else {
 
-                    console.log("Houve um erro ao tentar realizar o login!");
+                    // console.log("Houve um erro ao tentar realizar o login!");
 
                     resposta.text().then(texto => {
                         console.error(texto);
@@ -172,14 +172,14 @@
                 }
 
             }).catch(function (erro) {
-                console.log(erro);
+                // console.log(erro);
                 alert('Erro no Login');
             })
 
-            console.log(dadosAlerta);
+            // console.log(dadosAlerta);
 
         } else {
-            console.log('Login inválido');
+            // console.log('Login inválido');
             Swal.fire({
                 icon: dadosAlerta[0],
                 title: dadosAlerta[1],
@@ -205,7 +205,8 @@
         if (validarTexto('Nome', nomeVar, 100) &&
             validarTexto('Email', emailVar, 50) &&
             validarTexto('Senha', senhaVar, 50) &&
-            validarTexto('Data de nascimento', dtNascVar)) {
+            validarData('Data de nascimento', dtNascVar) &&
+            validarIguais(senhaVar, confirmacaoSenhaVar)) {
                 
             fetch("/usuarios/cadastrar", {
                 method: "POST",
@@ -221,7 +222,7 @@
                 })
             }).then(function (resposta) {
 
-                console.log("resposta: ", resposta);
+                // console.log("resposta: ", resposta);
 
                 if (resposta.ok) {
 
@@ -244,13 +245,13 @@
                     throw ("Houve um erro ao tentar realizar o cadastro!");
                 }
             }).catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
+                // console.log(`#ERRO: ${resposta}`);
             });
 
             return false;
         }
         else {
-            console.log('Cadastro inválido');
+            // console.log('Cadastro inválido');
             Swal.fire({
                 icon: dadosAlerta[0],
                 title: dadosAlerta[1],
@@ -259,26 +260,8 @@
                 color: '#FFF',
             });
         }
-        
-
 
         return false;
     }
-
-    function changeSection(previousSection, nextSection) {
-    console.log(document.getElementById(previousSection))
-    document.getElementById(previousSection).style.opacity = '0';
-    document.getElementById(previousSection).style.width = '0';
-    document.getElementById(previousSection).style.height = '0';
-    document.getElementById(previousSection).style.minHeight = '0';
-    document.getElementById(previousSection).style.minWidth = '0';
-    document.getElementById(previousSection).style.padding = '0';
-    
-    document.getElementById(nextSection).style.opacity = '1';
-    document.getElementById(nextSection).style.width = '100%';
-    document.getElementById(nextSection).style.height = 'auto';
-    document.getElementById(nextSection).style.minHeight = '100vh';
-    document.getElementById(nextSection).style.padding = '75px';
-}
 
 </script>

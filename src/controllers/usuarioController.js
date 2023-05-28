@@ -80,6 +80,10 @@ function cadastrar(req, res) {
         res.status(400).send("Seu email está undefined!");
     } else if (senha == undefined) {
         res.status(400).send("Sua senha está undefined!");
+    } else if (dtNasc == undefined) {
+        res.status(400).send("Sua data de nascimento está undefined!");
+    } else if (senha != confirmarSenha) {
+        res.status(400).send("Sua senha deve ser confirmada!");
     } else {
         
         usuarioModel.cadastrar(nome, email, senha, dtNasc)

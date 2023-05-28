@@ -1,61 +1,5 @@
 var dadosAlerta = [];
 
-function changeLogin(previousSection, nextSection) {
-    console.log(document.getElementById(previousSection))
-    document.getElementById(previousSection).style.display = 'none';
-    document.getElementById(nextSection).style.display = 'flex';
-}
-
-function validarEmail(email) {
-    if (email == "" || email == undefined) {
-        dadosAlerta = [
-            'error',
-            'Email inválido',
-            'Digite um email...'
-        ];
-    } else if (!email.includes('@')) {
-        dadosAlerta = [
-            'error',
-            'Email inválido',
-            'Digite um email que contenha @...'
-        ];
-    } else if (email.substring(email.indexOf('@') + 1) == "") {
-        dadosAlerta = [
-            'error',
-            'Email inválido',
-            'Digite um email que contenha um provedor após o @...'
-        ];
-    } else {
-        return true;
-    }
-
-    console.log('Email: ' + email);
-
-    return false;
-}
-
-function validarSenha(senha) {
-    if (senha == "" || senha == undefined) {
-        dadosAlerta = [
-            'error',
-            'Senha inválida',
-            'Digite uma senha...'
-        ];
-    } else if (senha.length < 5) {
-        dadosAlerta = [
-            'error',
-            'Senha inválida',
-            'Digite uma senha com no mínimo 5 caracteres...'
-        ];
-    } else {
-        return true;
-    }
-
-    console.log('Senha: ' + senha);
-
-    return false;
-}
-
 function validarTexto(nome, texto, tamanho) {
     if(texto == "" || texto == undefined) {
         dadosAlerta = [
@@ -73,6 +17,45 @@ function validarTexto(nome, texto, tamanho) {
         return true;
     }
 
-    console.log(`${nome}: ${texto}`);
+    // console.log(`${nome}: ${texto}`);
+    return false;
+}
+
+function validarData (nome, data, anoMaisAntigo) {
+    var dataFormatada = new Date(data);
+    var dataAtual = new Date();
+
+    if(data == "" || data == undefined) {
+        dadosAlerta = [
+            'error',
+            `${nome} inválido(a)`,
+            `Digite um(a) ${nome}...`
+        ];
+    } else if(dataFormatada.getFullYear() <= 1900 || dataFormatada.getFullYear() >= dataAtual.getFullYear()) {
+        dadosAlerta = [
+            'error',
+            `${nome} inválido(a)`,
+            `Digite um(a) ${nome} válida ...`
+        ];
+    } else {
+        return true;
+    }
+
+    // console.log(`${nome}: ${texto}`);
+    return false;
+}
+
+function validarIguais (valor1, valor2) {
+    if (valor1 =! valor2) {
+        dadosAlerta = [
+            'error',
+            `${valor1} e/ou ${valor2} inválidos`,
+            `${valor1} e ${valor2} não coincidem...`
+        ];
+    }else {
+        return true;
+    }
+
+    // console.log(`${valor1}: ${valor2}`);
     return false;
 }

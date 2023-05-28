@@ -14,8 +14,8 @@
 
     <script type='text/javascript' src='http://www.youtube.com/player_api'></script>
 
-    <script src="./assets/js/colors.js"></script>
-    <script src="./assets/js/global.js"></script>
+    <!-- <script src="./assets/js/global.js"></script> -->
+    <script src="./assets/js/visuals.js"></script>
 
 </head>
 
@@ -210,17 +210,9 @@
                             explorar e contribuir
                         </p>
                     </figure>
-                    <!-- <article class="examples">
-                    <img src="./assets/img/temp/example1.png" alt="example">
-                    <img src="./assets/img/temp/example2.png" alt="example">
-                    <img src="./assets/img/temp/example3.png" alt="example">
-                    <img src="./assets/img/temp/example4.png" alt="example">
-                    <img src="./assets/img/temp/example5.png" alt="example">
-                    <img src="./assets/img/temp/example6.png" alt="example">
-                </article> -->
-                <div id="samples">
+                    <div id="samples">
 
-                </div>
+                    </div>
                 </article>
 
             </section>
@@ -395,35 +387,6 @@
 
     setInterval(createDreams, 1000);
 
-
-    var doneCards = [
-        false,
-        false,
-        false,
-        false,
-    ]
-
-    function cardsAnimation(img1, img2, c) {
-        img1.style.transition = 'all .4s ease-in-out'
-
-        img1.style.transform = 'translate(-300px, -300px) rotate(-15deg)';
-
-        setTimeout(() => {
-            if (doneCards[c] == false || img1.style.zIndex == 1) {
-                img1.style.zIndex = 0;
-                img2.style.zIndex = 1;
-                doneCards[c] = true
-            } else {
-                img1.style.zIndex = 1;
-                img2.style.zIndex = 0;
-            }
-            setTimeout(img1.style.transform = '', 500);
-
-        }, 400);
-
-        // img1.style.animation = 'cardsAnimation';
-
-    }
 
     // window.onload = samplesAnimation();
 
