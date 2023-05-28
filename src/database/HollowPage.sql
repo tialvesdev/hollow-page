@@ -100,17 +100,17 @@ SELECT postagem.idPostagem,
                 JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
                     WHERE idUsuario = 1;
                     
-SELECT nome,
-        email,
-        DATE_FORMAT(dtNasc, '%Y-%m-%d') AS dtNasc,
-        fotoPerfilSrc,
-        genero,
-        tel,
-        fundoSrc,
-        nomeFundoPerfil
-            FROM usuario
-                JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
-                    WHERE idUsuario = 1;
+    SELECT nome,
+            email,
+            DATE_FORMAT(dtNasc, '%Y-%m-%d') AS dtNasc,
+            fotoPerfilSrc,
+            genero,
+            tel,
+            fundoSrc,
+            nomeFundoPerfil
+                FROM usuario
+                    JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                        WHERE idUsuario = 1;
     
 SELECT usuario.*,
         postagem.idPostagem,

@@ -52,7 +52,7 @@
 .edit-prof-img {
     width: 250px;
     height: 250px;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: 100%;
 }
 

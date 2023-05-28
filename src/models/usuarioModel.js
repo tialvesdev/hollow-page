@@ -16,13 +16,6 @@ function entrar(email, senha) {
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     
-    
-    // VERIFICAÇÃO DE LOGIN CASO FOR DE CLUBES
-    // if(database.executar(instrucao).length == 0) {
-    //     instrucao = `
-    //         SELECT * FROM clube WHERE email = '${email}' AND senha = '${senha}';
-    //     `;
-    // }
         
     return database.executar(instrucao);
 }
@@ -40,34 +33,52 @@ function cadastrar(nome, email, senha, dtNasc) {
     return database.executar(instrucao);
 }
 
-function cadastrarClube(nome, email, senha, cnpj, telefone, uf) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrarClube():", nome, email, senha);
-    
-    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
-    //  e na ordem de inserção dos dados.
+
+function mostrarPerfil(idUsuario) {
+    // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
     var instrucao = `
-        INSERT INTO clube (nomeClube, email, senha, cnpj, telefoneCelular, uf) VALUES ('${nome}', '${email}', '${senha}', '${cnpj}', '${telefone}', '${uf}');
+        SELECT nome,
+            email,
+            DATE_FORMAT(dtNasc, '%Y-%m-%d') AS dtNasc,
+            fotoPerfilSrc,
+            genero,
+            tel,
+            fundoSrc,
+            nomeFundoPerfil
+                FROM usuario
+                    JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                        WHERE idUsuario = ${idUsuario};
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
 
-function cadastrarEndereco(cep, logradouro, numero, complemento) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrarEndereco():", cep, logradouro, numero, complemento);
-    
-    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
-    //  e na ordem de inserção dos dados.
+function mostrarPerfilPosts(idUsuario) {
+    // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
     var instrucao = `
-        INSERT INTO endereco (cep, logradouro, numero, complemento) VALUES ('${cep}', '${logradouro}', '${numero}', '${complemento}');
+        SELECT *,
+            postagem.idPostagem,
+            postagem.titulo,
+            postagem.descricao,
+            postagem.postSrc,
+            DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+            fundoPerfil.fundoSrc,
+            fundoPerfil.nomeFundoPerfil
+                FROM usuario
+                    LEFT JOIN postagem ON idUsuario = fkUsuario
+                    JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                        WHERE idUsuario = ${idUsuario}
+                            ORDER BY dtPostagem DESC;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
+
 
 module.exports = {
+    listar,
     entrar,
     cadastrar,
-    cadastrarClube,
-    cadastrarEndereco,
-    listar,
+    mostrarPerfil,
+    mostrarPerfilPosts
 };

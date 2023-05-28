@@ -35,9 +35,20 @@
                     <div class="edit-aside">
                         <img id="edit_prof_img" src="" alt="Foto de Perfil" class="edit-prof-img">
                         <p id="edit_prof_img_name" class="text edit-text"> <b> Nenhuma foto selecionada </b> </p>
-                        <a class="big-text" href="">
-                            <b> Importar Foto </b>
-                        </a>
+                        <label for="ipt_edit_prof_pic">
+                            <input class="sumir" type="file" name="ipt_edit_prof_pic" id="ipt_edit_prof_pic">
+                            <a class="big-text">
+                                <b> Importar Foto </b>
+                            </a>
+                        </label>
+
+                        <!-- <img src="../assets/img/char/knight-crying.png" alt="Nenhuma foto selecionada" class="ipt-file-img" id="ipt_file_img">
+                        <p class="text ipt-file-name" id="ipt_ile_name">Nenhuma foto selecionada</p>
+                        <label for="ipt_file" class="ipt-file-label">
+                            <input class="ipt-file sumir" type="file" id="ipt_file" name="ipt_file" accept="image/*"
+                            onchange="previewImage(event)" />
+                            <a class="ipt-file-a big-text"><b> Escolher foto </b></a>
+                        </label> -->
                     </div>
                 </div>
                 <hr class="divider">
@@ -50,7 +61,7 @@
                     <div class="edit-aside">
                         <img id="edit_prof_bg" src="" alt="Foto de Capa" class="edit-prof-bg">
                         <p id="edit_prof_bg_name" class="text edit-text"> <b> Nenhuma foto selecionada </b> </p>
-                        <select name="" id="sel_prof_bg"></select>
+                        <select name="sel_prof_bg" id="sel_prof_bg"></select>
                     </div>
                 </div>
             </div>
@@ -71,7 +82,7 @@ window.onload = loadProfile()
 
         var profPosts = document.getElementById('prof_posts')
 
-        fetch(`/posts/profile/${sessionStorage.ID_USUARIO}`, {
+        fetch(`/usuarios/profile/${sessionStorage.ID_USUARIO}`, {
             method: "GET"
         })
             .then(res => {

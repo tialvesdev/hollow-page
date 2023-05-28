@@ -134,7 +134,7 @@
 
         var profPosts = document.getElementById('prof_posts')
 
-        fetch(`/posts/profilePosts/${sessionStorage.ID_USUARIO}`, {
+        fetch(`/usuarios/profilePosts/${sessionStorage.ID_USUARIO}`, {
             method: "GET"
         })
             .then(res => {
