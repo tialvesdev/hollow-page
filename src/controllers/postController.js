@@ -80,10 +80,33 @@ function save(req, res) {
         );
 }
 
+function unsave(req, res) {
+
+    const idPostagem = req.params.idPostagem;
+    const idUsuario = req.params.idUsuario;
+
+    postModel.removerPostSalvo(idPostagem, idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao salvar o post! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 module.exports = {
     testar,
     samples,
     feed,
     post,
-    save
+    save,
+    unsave
 }

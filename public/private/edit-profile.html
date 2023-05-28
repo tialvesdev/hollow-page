@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,17 +13,20 @@
     <link rel="stylesheet" href="../assets/css/edit-style.css">
 
     <script src="../assets/js/session.js"></script>
+    <script src="../assets/js/visuals.js"></script>
+    <script src="../assets/js/validation.js"></script>
 
 </head>
+
 <body>
-    
+
     <div class="edit-wrapper">
         <div class="edit-content">
             <div class="edit-header">
                 <a href="./profile.html" class="seta-voltar seta-float">
                     <img src="../assets/img/icon/arrow-icon.png" alt="Voltar">
-                  </a>
-                  <h1 class="title">Editar Perfil</h1>
+                </a>
+                <h1 class="title">Editar Perfil</h1>
             </div>
             <div class="edit-main">
                 <div class="edit-sect">
@@ -30,25 +34,19 @@
                         <p class="text edit-subtitle">Dados Pessoais: </p>
                         <input type="text" id="ipt_edit_nome" class="ipt" placeholder="Jão">
                         <input type="text" id="ipt_edit_email" class="ipt" placeholder="fulano@gmail.com">
-                        <input type="date" id="ipt_edit_date" class="ipt">
+                        <input type="date" id="ipt_edit_dt_nasc" class="ipt">
                     </div>
+
                     <div class="edit-aside">
                         <img id="edit_prof_img" src="" alt="Foto de Perfil" class="edit-prof-img">
                         <p id="edit_prof_img_name" class="text edit-text"> <b> Nenhuma foto selecionada </b> </p>
                         <label for="ipt_edit_prof_pic">
-                            <input class="sumir" type="file" name="ipt_edit_prof_pic" id="ipt_edit_prof_pic">
+                            <input class="sumir" type="file" name="ipt_edit_prof_pic" id="ipt_edit_prof_pic" accept="image/*"
+                            onchange="previewImage(event)">
                             <a class="big-text">
                                 <b> Importar Foto </b>
                             </a>
                         </label>
-
-                        <!-- <img src="../assets/img/char/knight-crying.png" alt="Nenhuma foto selecionada" class="ipt-file-img" id="ipt_file_img">
-                        <p class="text ipt-file-name" id="ipt_ile_name">Nenhuma foto selecionada</p>
-                        <label for="ipt_file" class="ipt-file-label">
-                            <input class="ipt-file sumir" type="file" id="ipt_file" name="ipt_file" accept="image/*"
-                            onchange="previewImage(event)" />
-                            <a class="ipt-file-a big-text"><b> Escolher foto </b></a>
-                        </label> -->
                     </div>
                 </div>
                 <hr class="divider">
@@ -58,24 +56,50 @@
                         <input type="text" id="ipt_edit_genero" class="ipt" placeholder="Gênero">
                         <input type="text" id="ipt_edit_telefone" class="ipt" placeholder="Telefone">
                     </div>
+
                     <div class="edit-aside">
                         <img id="edit_prof_bg" src="" alt="Foto de Capa" class="edit-prof-bg">
                         <p id="edit_prof_bg_name" class="text edit-text"> <b> Nenhuma foto selecionada </b> </p>
-                        <select name="sel_prof_bg" id="sel_prof_bg"></select>
+                        <!-- <select name="sel_prof_bg" id="sel_prof_bg"></select> -->
+                        <div class="dropdown">
+                            <button onclick="mostrarOpts()" id="drop-btn">Fundo de Perfil 🔽</button>
+                            <div id="drop_group" class="drop-group">
+                                
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <button class="btn" onclick="">Editar</button>
+            <button class="btn" onclick="editar()">Editar</button>
         </div>
     </div>
 
 </body>
+
 </html>
 
 <script>
 
-window.onload = loadProfile()
-    
+    const previewImage = (event) => {
+        const imageFiles = event.target.files;
+
+        var img = document.getElementById('edit_prof_img');
+        var name = document.getElementById('edit_prof_img_name');
+
+        img.src = URL.createObjectURL(imageFiles[0]);
+        img.style.display = 'block';
+        name.innerHTML = imageFiles[0].name;
+        name.style.display = 'block';
+
+        // console.log(URL.createObjectURL(imageFiles[0]));
+    }
+
+    function mostrarOpts() {
+        document.getElementById('drop_group').classList.toggle('aparecer');
+    }
+
+    window.onload = loadProfile()
+
     function loadProfile() {
 
         validarSessao();
@@ -88,11 +112,11 @@ window.onload = loadProfile()
             .then(res => {
                 console.log(res);
                 res.json().then(json => {
-                    console.log(json);
+                    // console.log(json);
                     usuario = json;
 
                     if (json[0].fotoPerfilSrc == null) {
-                        document.getElementById('edit_prof_img').src = `../assets/img/icon/user-icon.png"`;                 
+                        document.getElementById('edit_prof_img').src = `../assets/img/icon/user-icon.png`;
                     } else {
                         document.getElementById('edit_prof_img').src = `../assets/bucket/${json[0].fotoPerfilSrc}`;
                         document.getElementById('edit_prof_img_name').innerHTML = '<b> Foto de Perfil </b>';
@@ -100,7 +124,11 @@ window.onload = loadProfile()
 
                     document.getElementById('ipt_edit_nome').value = json[0].nome;
                     document.getElementById('ipt_edit_email').value = json[0].email;
-                    document.getElementById('ipt_edit_date').value = json[0].dtNasc;
+                    document.getElementById('ipt_edit_dt_nasc').value = json[0].dtNasc;
+
+                    if (json[0].genero != null) {
+                        document.getElementById('ipt_edit_genero').value = json[0].genero;
+                    }
 
                     if (json[0].tel != null) {
                         document.getElementById('ipt_edit_telefone').value = json[0].tel;
@@ -109,12 +137,121 @@ window.onload = loadProfile()
                     document.getElementById('edit_prof_bg').src = `../assets/img/profile/${json[0].fundoSrc}`;
                     document.getElementById('edit_prof_bg_name').innerHTML = `<b> Fundo de perfil: ${json[0].nomeFundoPerfil} </b>`;
 
-                    
+
                 })
             })
             .catch(err => {
                 console.log(err);
+            });
+
+        fetch(`/fundosPerfis/listar`, {
+            method: "GET"
+        })
+            .then(res => {
+                console.log(res);
+                res.json().then(json => {
+
+                    var selectFundos = document.getElementById('sel_prof_bg');
+                    var dropGroup = document.getElementById('drop_group');
+
+                    // json.forEach(fundo => {
+                    //     selectFundos.innerHTML += `
+                    //         <option value="${fundo.idFundoPerfil}"> ${fundo.nomeFundoPerfil} </option>
+                    //     `;
+
+                    // });
+
+                    json.forEach(fundo => {
+                        dropGroup.innerHTML += `
+                            <div class="drop-opt text">${fundo.nomeFundoPerfil}</div>
+                        `;
+                    })
+
+                })
             })
+            .catch(err => {
+                console.log(err);
+            });
+
+    }
+
+    function editar() {
+
+        var idUsuarioVar = sessionStorage.ID_USUARIO
+        var nomeVar = ipt_edit_nome.value;
+        var emailVar = ipt_edit_email.value;
+        var dtNascVar = ipt_edit_dt_nasc.value;
+        var fotoPerfilVar = stringToNull(ipt_edit_prof_pic.files[0]);
+        var generoVar = stringToNull(ipt_edit_genero.value);
+        var telVar = stringToNull(ipt_edit_telefone.value);
+        var fotoCapaVar = 1;
+
+        var dadosEdit = {
+            idUsuarioVar,
+            nomeVar,
+            emailVar,
+            dtNascVar,
+            fotoPerfilVar,
+            generoVar,
+            telVar,
+            fotoCapaVar
+        }
+
+        fetch(`/usuarios/editar`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dadosEdit)
+        })
+            .then(res => {
+                console.log(res);
+                if (res.ok) {
+                    // console.log(res);
+
+                    res.json().then(json => {
+                        // console.log(json);
+                        // console.log(JSON.stringify(json));
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Perfil editado!',
+                            text: 'Redirecionando ao perfil...',
+                            background: '#000',
+                            color: '#FFF',
+                            confirmButtonText: 'Beleza!',
+                        }).then((result) => {
+                            setTimeout(function () {
+                                window.location = "./profile.html";
+                            }, 1000);
+                        });
+
+                    });
+
+                } else {
+
+                    // console.log("Houve um erro ao tentar realizar o login!");
+
+                    res.text().then(texto => {
+                        console.error(texto);
+                        // finalizarAguardar(texto);
+                    });
+                    alert('Deu erro');
+
+                    // Swal.fire({
+                    //     icon: 'error',
+                    //     title: 'Login inválido',
+                    //     text: 'Usuário não existente...',
+                    //     background: '#000',
+                    //     color: '#FFF',
+                    // });
+
+                }
+
+            })
+            .catch(err => {
+                console.log(err);
+            });
 
     }
 

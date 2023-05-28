@@ -18,6 +18,7 @@ var usuarioRouter = require("./src/routes/usuarios");
 var avisosRouter = require("./src/routes/avisos");
 var medidasRouter = require("./src/routes/medidas");
 var postsRouter = require("./src/routes/posts");
+var fundosPerfisRouter = require("./src/routes/fundosPerfis");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -30,7 +31,7 @@ app.use("/usuarios", usuarioRouter);
 app.use("/avisos", avisosRouter);
 app.use("/medidas", medidasRouter);
 app.use("/posts", postsRouter);
-
+app.use("/fundosPerfis", fundosPerfisRouter);
 
 
 app.listen(PORTA, function () {

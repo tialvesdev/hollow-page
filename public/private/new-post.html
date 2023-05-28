@@ -50,7 +50,7 @@
           </label>
         </aside>
       </section>
-      <button onclick="post()" class="btn">Publicar</button>
+      <button onclick="postar()" class="btn">Publicar</button>
     </main>
   </div>
 </body>
@@ -63,7 +63,7 @@
     validarSessao();
   }
  
-  function post() {
+  function postar() {
 
     const formData = new FormData();
     formData.append('foto', ipt_file.files[0])
@@ -132,6 +132,7 @@
     name.innerHTML = imageFiles[0].name;
     name.style.display = 'block';
 
-    console.log(URL.createObjectURL(imageFiles[0]));
-  };
+    // console.log(URL.createObjectURL(imageFiles[0]));
+  }
+
 </script>

@@ -141,6 +141,47 @@ function profilePosts(req, res) {
         
 }
 
+function editar(req, res) {
+
+    var idUsuario = req.body.idUsuarioVar;
+    var nome = req.body.nomeVar;
+    var email = req.body.emailVar;
+    var dtNasc = req.body.dtNascVar;
+    var fotoPerfil = req.body.fotoPerfilVar;
+    var genero = req.body.generoVar;
+    var tel = req.body.telVar;
+    var fotoCapa = req.body.fotoCapaVar;
+
+    // if (nome == undefined) {
+    //     res.status(400).send("Seu nome está undefined!");
+    // } else if (email == undefined) {
+    //     res.status(400).send("Seu email está undefined!");
+    // } else if (senha == undefined) {
+    //     res.status(400).send("Sua senha está undefined!");
+    // } else if (dtNasc == undefined) {
+    //     res.status(400).send("Sua data de nascimento está undefined!");
+    // } else if (senha != confirmarSenha) {
+    //     res.status(400).send("Sua senha deve ser confirmada!");
+    // } else {
+        
+        usuarioModel.editarUsuario(idUsuario, nome, email, dtNasc, fotoPerfil, genero, tel, fotoCapa)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    // }
+}
+
 module.exports = {
     entrar,
     cadastrar,
@@ -148,4 +189,5 @@ module.exports = {
     testar,
     profile,
     profilePosts,
+    editar
 }

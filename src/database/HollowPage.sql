@@ -99,18 +99,29 @@ SELECT postagem.idPostagem,
                 JOIN usuario ON idUsuario = fkUsuario
                 JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
                     WHERE idUsuario = 1;
-                    
-    SELECT nome,
-            email,
-            DATE_FORMAT(dtNasc, '%Y-%m-%d') AS dtNasc,
-            fotoPerfilSrc,
-            genero,
-            tel,
-            fundoSrc,
-            nomeFundoPerfil
-                FROM usuario
-                    JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
-                        WHERE idUsuario = 1;
+           
+select * from usuario;
+select * from salvo;
+
+truncate table salvo;
+
+DELETE FROM salvo WHERE fkPostagem = 3 AND fkUsuario = 1;
+
+update usuario set fotoPerfilSrc = null where idUsuario = 1;
+           
+SELECT nome,
+	email,
+	DATE_FORMAT(dtNasc, '%Y-%m-%d') AS dtNasc,
+	fotoPerfilSrc,
+	genero,
+	tel,
+	fundoSrc,
+	nomeFundoPerfil
+		FROM usuario
+			JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+				WHERE idUsuario = 1
+UNION 
+SELECT * FROM fundoPerfil;
     
 SELECT usuario.*,
         postagem.idPostagem,
@@ -157,6 +168,9 @@ SELECT * FROM postagem
 
 truncate table postagem;
 
+select * from fundoPerfil;
+update fundoPerfil set fundoSrc = 'bg-profile6.jpg' where idFundoPerfil = 6;
+
 SELECT usuario.*,
         postagem.*,
         fundoPerfil.*
@@ -174,26 +188,3 @@ SELECT postagem.idPostagem,
 				FROM postagem
 					JOIN usuario ON idUsuario = fkUsuario
 						ORDER BY dtPostagem;
-
-INSERT INTO postagem (postSrc, dtPostagem, dtLastEdit, titulo, descricao, fkUsuario) VALUES
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1),
-	('b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png', now(), now(), 'Titulo', 'Desc', 1);

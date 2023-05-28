@@ -23,6 +23,10 @@ router.post("/post", upload.single('foto'), function (req, res) {
 router.post("/save/:idPostagem/:idUsuario", function (req, res) {
     postController.save(req, res);
 });
+
+router.delete("/unsave/:idPostagem/:idUsuario", function (req, res) {
+    postController.unsave(req, res);
+});
   
 
 module.exports = router;

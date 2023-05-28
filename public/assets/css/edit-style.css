@@ -54,6 +54,7 @@
     height: 250px;
     object-fit: cover;
     border-radius: 100%;
+    background-color: var(--light-gray);
 }
 
 .edit-text {
@@ -67,4 +68,28 @@
 
 .edit-prof-bg {
     width: 350px;
+}
+
+.dropdown {
+    /* display: flex; */
+}
+
+.drop-btn {
+
+}
+
+.drop-group {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    position: absolute;
+    z-index: 1;
+}
+
+.drop-group.aparecer {
+    display: flex;
+}
+
+.drop-opt {
+
 }

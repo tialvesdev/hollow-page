@@ -1,5 +1,13 @@
 var dadosAlerta = [];
 
+function stringToNull(string) {
+    if (string == '' || string == undefined) {
+        return null
+    } else {
+        return string
+    }
+}
+
 function validarTexto(nome, texto, tamanho) {
     if(texto == "" || texto == undefined) {
         dadosAlerta = [
