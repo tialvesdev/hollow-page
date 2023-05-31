@@ -245,6 +245,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 #samples {
+    transition: all 8s ease-in-out;
     transform: rotate(-8deg);
     display: flex;
     gap: 10px;
@@ -252,7 +253,8 @@ body::-webkit-scrollbar-thumb:hover {
     /* z-index: 1; */
     /* position: relative;
     left: 200px; */
-    overflow-x: scroll;
+    /* overflow-x: scroll;
+    scroll-behavior: smooth; */
 }
 
 .hp {

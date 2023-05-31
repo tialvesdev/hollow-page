@@ -6,11 +6,7 @@ SELECT @@lc_time_names;
 SET lc_time_names = 'pt_BR';
 DROP DATABASE HollowPage;
 
-CREATE TABLE tipoUsuario (
-	idTipoUsuario INT PRIMARY KEY AUTO_INCREMENT,
-    tipoUsuario VARCHAR(20) UNIQUE NOT NULL
-);
-
+-- CREATES
 CREATE TABLE fundoPerfil (
 	idFundoPerfil INT PRIMARY KEY AUTO_INCREMENT,
     nomeFundoPerfil VARCHAR(50) NOT NULL,
@@ -19,7 +15,7 @@ CREATE TABLE fundoPerfil (
 
 CREATE TABLE atributo (
 	idAtributo INT PRIMARY KEY AUTO_INCREMENT,
-    atributo VARCHAR(50) UNIQUE NOT NULL
+    atributo VARCHAR(100) UNIQUE NOT NULL
 );
 
 CREATE TABLE usuario (
@@ -28,22 +24,25 @@ CREATE TABLE usuario (
     email VARCHAR(50) UNIQUE NOT NULL,
     senha VARCHAR(30) NOT NULL,
     dtNasc DATE NOT NULL,
-    genero CHAR(1),
-    tel CHAR(15) UNIQUE,
-    fotoPerfilSrc VARCHAR(500),
-    fkTipoUsuario INT,
     fkFundoPerfil INT,
-		CONSTRAINT usuarioFkTipoUsuario FOREIGN KEY (fkTipoUsuario) REFERENCES tipoUsuario(idTipoUsuario),
 		CONSTRAINT usuarioFkFundoPerfil FOREIGN KEY (fkFundoPerfil) REFERENCES fundoPerfil(idFundoPerfil)
+);
+
+CREATE TABLE ficha (
+	fkUsuario INT PRIMARY KEY,
+	genero CHAR(1) DEFAULT 'X',
+    tel CHAR(11) UNIQUE,
+    fotoPerfilSrc VARCHAR(500) DEFAULT '../assets/img/icon/user-icon.png',
+		CONSTRAINT generoUsuario CHECK (genero IN('M', 'F', 'N', 'X')),
+		CONSTRAINT fichaFkUsuario FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
 );
 
 CREATE TABLE postagem (
 	idPostagem INT PRIMARY KEY AUTO_INCREMENT,
-    postSrc VARCHAR(500) NOT NULL,
-    dtPostagem DATE NOT NULL,
-    dtLastEdit DATE NOT NULL,
-    titulo VARCHAR(100),
-    descricao VARCHAR(300),
+    postagemSrc VARCHAR(500) NOT NULL,
+    dtPostagem DATETIME NOT NULL DEFAULT now(),
+    titulo VARCHAR(100) DEFAULT 'Sem Título',
+    descricao VARCHAR(300) DEFAULT 'Sem Descrição',
     fkUsuario INT,
 		CONSTRAINT postagemFkUsuario FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
 );
@@ -57,32 +56,42 @@ CREATE TABLE filtro (
 );
 
 CREATE TABLE salvo (
-	idSalvo INT AUTO_INCREMENT,
-    dtSalvo DATETIME NOT NULL,
+    dtSalvo DATETIME NOT NULL DEFAULT now(),
     fkPostagem INT,
     fkUsuario INT,
-		CONSTRAINT pkSalvo PRIMARY KEY (idSalvo, fkPostagem, fkUsuario),
+		CONSTRAINT pkSalvo PRIMARY KEY (fkPostagem, fkUsuario),
         CONSTRAINT salvoFkPostagem FOREIGN KEY (fkPostagem) REFERENCES postagem(idPostagem),
         CONSTRAINT salvoFkUsuario FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
 );
 
-DROP TABLE salvo;
+-- SELECTS ALL
+SELECT * FROM fundoPerfil;
+SELECT * FROM atributo;
+SELECT * FROM usuario;
+SELECT * FROM ficha;
+SELECT * FROM postagem;
+SELECT * FROM filtro;
 SELECT * FROM salvo;
 
+desc usuario;
+alter table usuario modify column fotoPerfilSrc varchar(1000);
+
+-- BASIC INSERTS
 INSERT INTO usuario (nome, email, senha, dtNasc) VALUES
 	('Tiago', 'ti@gmail.com', '12345', '2005-09-23');
     
 INSERT INTO fundoPerfil (nomeFundoPerfil, fundoSrc) VALUES
-	('Cidade das Lágrimas', 'bg-profile1.png'),
-	('Lago Azul', 'bg-profile2.png'),
-	('Poder das Almas', 'bg-profile3.png'),
-	('O Cavaleiro', 'bg-profile4.png'),
-	('O Vazio', 'bg-profile5.png'),
-	('Pico de Cristal', 'bg-profile6.png');
+	('Cidade das Lágrimas', 'bg-profile1.jpg'),
+	('Lago Azul', 'bg-profile2.jpg'),
+	('Poder das Almas', 'bg-profile3.jpg'),
+	('O Cavaleiro', 'bg-profile4.jpg'),
+	('O Vazio', 'bg-profile5.jpg'),
+	('Pico de Cristal', 'bg-profile6.jpg');
     
-UPDATE usuario SET fotoPerfilSrc = 'b8beaab357aa1d0a43b78a6e7a07a39e795fd7e8d1835fd46ace4e8172103d509b06e243c30840913ab285ef1ca14384aba63c55b987985f0f3035805f41726b.png' WHERE idUsuario = 1;
-    
-UPDATE usuario SET fkFundoPerfil = 2 WHERE idUsuario = 1;
+-- ZONA
+UPDATE usuario 
+SET fotoPerfilSrc = null 
+WHERE idUsuario = 1;
 
 SELECT * FROM postagem
 	ORDER BY RAND()
@@ -99,29 +108,10 @@ SELECT postagem.idPostagem,
                 JOIN usuario ON idUsuario = fkUsuario
                 JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
                     WHERE idUsuario = 1;
-           
-select * from usuario;
-select * from salvo;
-
-truncate table salvo;
 
 DELETE FROM salvo WHERE fkPostagem = 3 AND fkUsuario = 1;
 
 update usuario set fotoPerfilSrc = null where idUsuario = 1;
-           
-SELECT nome,
-	email,
-	DATE_FORMAT(dtNasc, '%Y-%m-%d') AS dtNasc,
-	fotoPerfilSrc,
-	genero,
-	tel,
-	fundoSrc,
-	nomeFundoPerfil
-		FROM usuario
-			JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
-				WHERE idUsuario = 1
-UNION 
-SELECT * FROM fundoPerfil;
     
 SELECT usuario.*,
         postagem.idPostagem,
@@ -150,23 +140,12 @@ SELECT *,
                     WHERE idUsuario = 2
                         ORDER BY dtPostagem DESC;
 
-SELECT * FROM usuario;
-
-SELECT * FROM postagem;
-
 SELECT usuario.*,
         postagem.*,
 		fundoPerfil.*
 			FROM usuario
 				JOIN postagem ON idUsuario = fkUsuario
                 JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil;
-                
-SELECT * FROM usuario
-UNION
-SELECT * FROM postagem
-	WHERE fkUsuario = 1;
-
-truncate table postagem;
 
 select * from fundoPerfil;
 update fundoPerfil set fundoSrc = 'bg-profile6.jpg' where idFundoPerfil = 6;

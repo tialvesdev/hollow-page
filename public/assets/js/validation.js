@@ -2,9 +2,9 @@ var dadosAlerta = [];
 
 function stringToNull(string) {
     if (string == '' || string == undefined) {
-        return null
+        return ''
     } else {
-        return string
+        return `'${string}'`
     }
 }
 
@@ -19,17 +19,43 @@ function validarTexto(nome, texto, tamanho) {
         dadosAlerta = [
             'error',
             `${nome} inválido(a)`,
-            `Digite um(a) ${nome} até ${tamanho} caracteres...`
+            `Digite um(a) ${nome} de até ${tamanho} caracteres...`
         ];
     } else {
+        console.log(nome + 'certo');
         return true;
     }
 
-    // console.log(`${nome}: ${texto}`);
+    console.log(`${nome}: ${texto}`);
     return false;
 }
 
-function validarData (nome, data, anoMaisAntigo) {
+function validarTelefone(nome, texto, tamanho) {
+    console.log(typeof texto, texto == null);
+    if (texto == '') {
+        return true
+    } else if(texto == undefined) {
+        dadosAlerta = [
+            'error',
+            `${nome} inválido(a)`,
+            `Digite um(a) ${nome}...`
+        ];
+    } else if(texto.length != tamanho) {
+        dadosAlerta = [
+            'error',
+            `${nome} inválido(a)`,
+            `Digite um(a) ${nome} com exatos ${tamanho} caracteres...`
+        ];
+    } else {
+        console.log(nome + ' estrito certo');
+        return true;
+    }
+
+    console.log(`${nome}: ${texto}`);
+    return false;
+}
+
+function validarData (nome, data) {
     var dataFormatada = new Date(data);
     var dataAtual = new Date();
 
@@ -39,15 +65,21 @@ function validarData (nome, data, anoMaisAntigo) {
             `${nome} inválido(a)`,
             `Digite um(a) ${nome}...`
         ];
+        console.log('if');
     } else if(dataFormatada.getFullYear() <= 1900 || dataFormatada.getFullYear() >= dataAtual.getFullYear()) {
         dadosAlerta = [
             'error',
             `${nome} inválido(a)`,
             `Digite um(a) ${nome} válida ...`
         ];
+        console.log('else if');
+
     } else {
+        console.log('else, data certa');
+
         return true;
     }
+    console.log('acabou');
 
     // console.log(`${nome}: ${texto}`);
     return false;

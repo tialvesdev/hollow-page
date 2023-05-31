@@ -1,4 +1,5 @@
 var express = require("express");
+const upload = require('../config/configUpload');
 var router = express.Router();
 
 var usuarioController = require("../controllers/usuarioController");
@@ -27,7 +28,7 @@ router.get('/profilePosts/:idUsuario', (req, res) => {
     usuarioController.profilePosts(req, res);
 });
 
-router.put('/editar', (req, res) => {
+router.put('/editar',upload.single('fotoPerfilVar'), (req, res) => {
     usuarioController.editar(req, res);
 });
 

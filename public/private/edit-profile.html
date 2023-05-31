@@ -9,6 +9,9 @@
     <title>Editar Perfil</title>
     <link rel="shortcut icon" href="../assets/img/icon/hollow-icon.ico" type="image/x-icon">
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="../assets/css/global.style.css">
     <link rel="stylesheet" href="../assets/css/edit-style.css">
 
@@ -53,20 +56,27 @@
                 <div class="edit-sect">
                     <div class="edit-aside">
                         <p class="text edit-subtitle">Dados Adicionais: </p>
-                        <input type="text" id="ipt_edit_genero" class="ipt" placeholder="Gênero">
+                        <!-- <input type="text" id="ipt_edit_genero" class="ipt" placeholder="Gênero"> -->
+                        <select class="select-edit-genero text" id="select_edit_genero">
+                            <option value="X">Selecione um gênero...</option>
+                            <option id="opt_edit_genero_1" value="M">Masculino</option>
+                            <option id="opt_edit_genero_2" value="F">Feminino</option>
+                            <option id="opt_edit_genero_3" value="N">Não-binário</option>
+                            <option id="opt_edit_genero_4" value="X">Prefiro não dizer</option>
+                        </select>
                         <input type="text" id="ipt_edit_telefone" class="ipt" placeholder="Telefone">
                     </div>
 
                     <div class="edit-aside">
+                        <div class="dropdown">
+                            <button onclick="mostrarOpts()" id="drop-btn" class="drop-btn text"><p>Fundo de Perfil</p> <p>▼</p></button>
+                            <ul id="drop_group" class="drop-group">
+                                
+                            </ul>
+                            <input type="number" id="ipt_edit_bg" style="display: none;">
+                        </div>
                         <img id="edit_prof_bg" src="" alt="Foto de Capa" class="edit-prof-bg">
                         <p id="edit_prof_bg_name" class="text edit-text"> <b> Nenhuma foto selecionada </b> </p>
-                        <!-- <select name="sel_prof_bg" id="sel_prof_bg"></select> -->
-                        <div class="dropdown">
-                            <button onclick="mostrarOpts()" id="drop-btn">Fundo de Perfil 🔽</button>
-                            <div id="drop_group" class="drop-group">
-                                
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -91,7 +101,6 @@
         name.innerHTML = imageFiles[0].name;
         name.style.display = 'block';
 
-        // console.log(URL.createObjectURL(imageFiles[0]));
     }
 
     function mostrarOpts() {
@@ -127,7 +136,15 @@
                     document.getElementById('ipt_edit_dt_nasc').value = json[0].dtNasc;
 
                     if (json[0].genero != null) {
-                        document.getElementById('ipt_edit_genero').value = json[0].genero;
+                        for (let i = 0; i < 4; i++) {
+                            var opt_genero = document.getElementById(`opt_edit_genero_${i + 1}`);
+
+                            if (opt_genero.value == json[0].genero) {
+                                opt_genero.setAttribute('selected', 'selected');
+                            }
+                            
+                        }
+                        // document.getElementById('ipt_edit_genero').value = json[0].genero;
                     }
 
                     if (json[0].tel != null) {
@@ -136,6 +153,7 @@
 
                     document.getElementById('edit_prof_bg').src = `../assets/img/profile/${json[0].fundoSrc}`;
                     document.getElementById('edit_prof_bg_name').innerHTML = `<b> Fundo de perfil: ${json[0].nomeFundoPerfil} </b>`;
+                    document.getElementById('ipt_edit_bg').value = json[0].fkFundoPerfil;
 
 
                 })
@@ -154,16 +172,11 @@
                     var selectFundos = document.getElementById('sel_prof_bg');
                     var dropGroup = document.getElementById('drop_group');
 
-                    // json.forEach(fundo => {
-                    //     selectFundos.innerHTML += `
-                    //         <option value="${fundo.idFundoPerfil}"> ${fundo.nomeFundoPerfil} </option>
-                    //     `;
-
-                    // });
-
                     json.forEach(fundo => {
                         dropGroup.innerHTML += `
-                            <div class="drop-opt text">${fundo.nomeFundoPerfil}</div>
+                            <li class="drop-opt text" style="background-image: url('../assets/img/profile/${fundo.fundoSrc}')" onclick="selectBg(${fundo.idFundo}, '${fundo.nomeFundoPerfil}', '${fundo.fundoSrc}')">
+                                ${fundo.nomeFundoPerfil}
+                            </li>
                         `;
                     })
 
@@ -175,83 +188,109 @@
 
     }
 
+    function selectBg(idFundo, nomeFundo, fundoSrc) {
+        edit_prof_bg_name.innerHTML = `<b> ${nomeFundo} </b>`;
+        edit_prof_bg.src = `../assets/img/profile/${fundoSrc}`;
+
+        ipt_edit_bg.value = idFundo;
+
+        mostrarOpts()
+    }
+
     function editar() {
 
-        var idUsuarioVar = sessionStorage.ID_USUARIO
-        var nomeVar = ipt_edit_nome.value;
-        var emailVar = ipt_edit_email.value;
-        var dtNascVar = ipt_edit_dt_nasc.value;
-        var fotoPerfilVar = stringToNull(ipt_edit_prof_pic.files[0]);
-        var generoVar = stringToNull(ipt_edit_genero.value);
-        var telVar = stringToNull(ipt_edit_telefone.value);
-        var fotoCapaVar = 1;
+        // var idUsuarioVar = sessionStorage.ID_USUARIO
+        // var nomeVar = ipt_edit_nome.value;
+        // var emailVar = ipt_edit_email.value;
+        // var dtNascVar = ipt_edit_dt_nasc.value;
+        // var fotoPerfilVar = ipt_edit_prof_pic.files[0] == undefined ? null : ipt_edit_prof_pic.files[0];
+        // var generoVar = stringToNull(select_edit_genero.value);
+        // var telVar = stringToNull(ipt_edit_telefone.value);
+        // var fotoCapaVar = 1;
 
-        var dadosEdit = {
-            idUsuarioVar,
-            nomeVar,
-            emailVar,
-            dtNascVar,
-            fotoPerfilVar,
-            generoVar,
-            telVar,
-            fotoCapaVar
+        const formData = new FormData();
+        formData.append('idUsuarioVar', sessionStorage.ID_USUARIO)
+        formData.append('nomeVar', ipt_edit_nome.value)
+        formData.append('emailVar', ipt_edit_email.value)
+        formData.append('dtNascVar', ipt_edit_dt_nasc.value)
+        formData.append('fotoPerfilVar', ipt_edit_prof_pic.files[0] == undefined ? stringToNull('') : ipt_edit_prof_pic.files[0])
+        formData.append('generoVar', select_edit_genero.value)
+        formData.append('telVar', stringToNull(ipt_edit_telefone.value))
+        formData.append('fotoCapaVar', 1);
+
+        for (const value of formData.values()) {
+            console.log(value);
         }
 
-        fetch(`/usuarios/editar`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dadosEdit)
-        })
-            .then(res => {
-                console.log(res);
-                if (res.ok) {
-                    // console.log(res);
+        if (validarTexto('Nome', formData.get('nomeVar'), 100) &&
+            validarTexto('Email', formData.get('emailVar'), 50) &&
+            validarData('Data de nascimento', formData.get('dtNascVar')) &&
+            validarTelefone('Telefone', formData.get('telVar'), 11)) {
+                console.log('if, passou na validação');
 
-                    res.json().then(json => {
-                        // console.log(json);
-                        // console.log(JSON.stringify(json));
+            fetch(`/usuarios/editar`, {
+                method: "PUT",
+                body: formData
+            })
+                .then(res => {
+                    console.log(res);
+                    if (res.ok) {
+                        // console.log(res);
 
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Perfil editado!',
-                            text: 'Redirecionando ao perfil...',
-                            background: '#000',
-                            color: '#FFF',
-                            confirmButtonText: 'Beleza!',
-                        }).then((result) => {
-                            setTimeout(function () {
-                                window.location = "./profile.html";
-                            }, 1000);
+                        res.json().then(json => {
+                            // console.log(json);
+                            // console.log(JSON.stringify(json));
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Perfil editado!',
+                                text: 'Redirecionando ao perfil...',
+                                background: '#000',
+                                color: '#FFF',
+                                confirmButtonText: 'Beleza!',
+                            }).then((result) => {
+                                setTimeout(function () {
+                                    window.location = "./profile.html";
+                                }, 1000);
+                            });
+
                         });
 
-                    });
+                    } else {
 
-                } else {
+                        // console.log("Houve um erro ao tentar realizar o login!");
 
-                    // console.log("Houve um erro ao tentar realizar o login!");
+                        res.text().then(texto => {
+                            console.error(texto);
+                            // finalizarAguardar(texto);
+                        });
+                        alert('Deu erro');
 
-                    res.text().then(texto => {
-                        console.error(texto);
-                        // finalizarAguardar(texto);
-                    });
-                    alert('Deu erro');
+                        // Swal.fire({
+                        //     icon: 'error',
+                        //     title: 'Login inválido',
+                        //     text: 'Usuário não existente...',
+                        //     background: '#000',
+                        //     color: '#FFF',
+                        // });
 
-                    // Swal.fire({
-                    //     icon: 'error',
-                    //     title: 'Login inválido',
-                    //     text: 'Usuário não existente...',
-                    //     background: '#000',
-                    //     color: '#FFF',
-                    // });
+                    }
 
-                }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
 
-            })
-            .catch(err => {
-                console.log(err);
+        } else {
+            console.log('else, n passou');
+            Swal.fire({
+                icon: dadosAlerta[0],
+                title: dadosAlerta[1],
+                text: dadosAlerta[2],
+                background: '#000',
+                color: '#FFF',
             });
+        }
 
     }
 

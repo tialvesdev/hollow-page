@@ -386,7 +386,7 @@
 .text-wrap {
     width: fit-content;
     word-wrap: break-word;
-    word-break: break-all;
+    /* word-break: break-all; */
 }
 
 .hidden {

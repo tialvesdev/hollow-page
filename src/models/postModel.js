@@ -5,7 +5,7 @@ function amostras() {
     var instrucao = `
         SELECT * FROM postagem
             ORDER BY RAND()
-                LIMIT 10;
+                LIMIT 15;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
@@ -69,10 +69,51 @@ function removerPostSalvo(idPostagem, idUsuario) {
     return database.executar(instrucao);
 }
 
+function montarGrafico(idUsuario, limite_linhas) {
+
+    instrucaoSql = ''
+
+        instrucaoSql = `
+            SELECT 
+                COUNT(idPostagem) AS nPosts,
+                DATE_FORMAT(dtPostagem, '%d/%m/%Y') AS dataPost
+                    FROM postagem
+                        JOIN usuario ON idUsuario = fkUsuario
+                            WHERE idUsuario = ${idUsuario}
+                                GROUP BY dataPost
+                                    LIMIT ${limite_linhas};
+        `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function atualizarGrafico(idUsuario) {
+
+    instrucaoSql = ''
+
+        instrucaoSql = `
+            SELECT 
+                COUNT(idPostagem) AS nPosts,
+                DATE_FORMAT(dtPostagem, '%d/%m/%Y') AS dataPost
+                    FROM postagem
+                        JOIN usuario ON idUsuario = fkUsuario
+                            WHERE idUsuario = ${idUsuario}
+                                GROUP BY dataPost
+                                    LIMIT 1;
+        `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+
 module.exports = {
     amostras,
     criarFeed,
     postar,
     salvarPost,
-    removerPostSalvo
+    removerPostSalvo,
+    montarGrafico,
+    atualizarGrafico
 }

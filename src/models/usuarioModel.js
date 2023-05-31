@@ -65,17 +65,28 @@ function mostrarPerfilPosts(idUsuario) {
     return database.executar(instrucao);
 }
 
-function editarUsuario(idUsuario, nome, email, dtNasc, fotoPerfil, genero, tel, fotoCapa) {
+function editarUsuario(usuario) {
+
+    // function stringToNull(string) {
+    //     if (string == '' || string == undefined) {
+    //         return null
+    //     } else {
+    //         return `'${string}'`
+    //     }
+    // }
+
+    
+
     var instrucao = `
         UPDATE usuario 
-        SET nome = '${nome}',
-            email = '${email}',
-            dtNasc = '${dtNasc}',
-            fotoPerfilSrc = '${fotoPerfil}',
-            genero = '${genero}',
-            tel = '${tel}',
-            fkFundoPerfil = ${fotoCapa}
-                WHERE idUsuario = ${idUsuario};
+        SET nome = '${usuario.nome}',
+            email = '${usuario.email}',
+            dtNasc = '${usuario.dtNasc}',
+            fotoPerfilSrc = '${usuario.fotoPerfilSrc == '' ? null : `'${usuario.fotoPerfilSrc}'`}',
+            genero = ${usuario.genero},
+            tel = ${usuario.tel == '' ? null : `'${usuario.tel}'`},
+            fkFundoPerfil = ${usuario.fotoCapa}
+                WHERE idUsuario = ${usuario.idUsuario};
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);

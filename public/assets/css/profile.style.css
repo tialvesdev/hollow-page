@@ -8,6 +8,7 @@
     position: relative;
     z-index: 0;
     transition: all .25s ease-in-out;
+    min-height: 100vh;
 }
 
 .prof-header {

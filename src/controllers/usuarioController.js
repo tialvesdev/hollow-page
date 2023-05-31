@@ -143,15 +143,22 @@ function profilePosts(req, res) {
 
 function editar(req, res) {
 
-    var idUsuario = req.body.idUsuarioVar;
-    var nome = req.body.nomeVar;
-    var email = req.body.emailVar;
-    var dtNasc = req.body.dtNascVar;
-    var fotoPerfil = req.body.fotoPerfilVar;
-    var genero = req.body.generoVar;
-    var tel = req.body.telVar;
-    var fotoCapa = req.body.fotoCapaVar;
+    // var idUsuario = req.body.idUsuarioVar;
+    // var nome = req.body.nomeVar;
+    // var email = req.body.emailVar;
+    // var dtNasc = req.body.dtNascVar;
+    // var fotoPerfil = req.body.fotoPerfilVar;
+    // var genero = req.body.generoVar;
+    // var tel = req.body.telVar;
+    // var fotoCapa = req.body.fotoCapaVar;
 
+    console.log(req.file.filename);
+
+    const fotoPerfil = req.file.filename;
+    const { idUsuarioVar, nomeVar, emailVar, dtNascVar, generoVar, telVar, fotoCapaVar } = req.body
+    const usuario = { fotoPerfil, idUsuarioVar, nomeVar, emailVar, dtNascVar, generoVar, telVar, fotoCapaVar }
+
+    // console.log(tel);
     // if (nome == undefined) {
     //     res.status(400).send("Seu nome está undefined!");
     // } else if (email == undefined) {
@@ -164,7 +171,7 @@ function editar(req, res) {
     //     res.status(400).send("Sua senha deve ser confirmada!");
     // } else {
         
-        usuarioModel.editarUsuario(idUsuario, nome, email, dtNasc, fotoPerfil, genero, tel, fotoCapa)
+        usuarioModel.editarUsuario(usuario)
             .then(
                 function (resultado) {
                     res.json(resultado);

@@ -12,11 +12,11 @@ router.get('/samples', function (req, res) {
     postController.samples(req, res);
 })
 
-router.get('/feed', upload.single('foto'), (req, res) => {
+router.get('/feed', (req, res) => {
     postController.feed(req, res);
 });
 
-router.post("/post", upload.single('foto'), function (req, res) {
+router.post("/post", upload.single('fotoPostagem'), function (req, res) {
     postController.post(req, res);
 });
 
@@ -27,6 +27,15 @@ router.post("/save/:idPostagem/:idUsuario", function (req, res) {
 router.delete("/unsave/:idPostagem/:idUsuario", function (req, res) {
     postController.unsave(req, res);
 });
+
+router.get("/montarGrafico/:idUsuario", function (req, res) {
+    postController.montarGrafico(req, res);
+});
+
+router.get("/atualizarGrafico/:idUsuario", function (req, res) {
+    postController.atualizarGrafico(req, res);
+})
+
   
 
 module.exports = router;

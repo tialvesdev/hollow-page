@@ -66,12 +66,12 @@
   function postar() {
 
     const formData = new FormData();
-    formData.append('foto', ipt_file.files[0])
+    formData.append('fotoPostagem', ipt_file.files[0])
     formData.append('titulo', ipt_titulo.value)
     formData.append('descricao', ipt_desc.value)
     formData.append('idUsuario', sessionStorage.ID_USUARIO)
 
-    console.log(formData.get('foto'))
+    console.log(formData.get('fotoPostagem'))
 
     if (validarTexto('Título', formData.get('titulo'), 100) && validarTexto('Descrição', formData.get('descricao'), 300) && validarTexto('Foto', formData.get('foto'), 0)) {
 
