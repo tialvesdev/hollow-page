@@ -8,7 +8,7 @@
 
     <title>Perfil</title>
     <link rel="shortcut icon" href="../assets/img/icon/hollow-icon.ico" type="image/x-icon">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css" rel="stylesheet">
 
@@ -18,10 +18,10 @@
     <script src="../assets/js/visuals.js"></script>
     <script src="../assets/js/session.js"></script>
     <script src="../assets/js/postModal.js"></script>
-    
+
     <!-- scripts do Chart.js - 2022-1 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
 </head>
 
 <body>
@@ -72,20 +72,31 @@
         </header>
 
         <main class="prof-main">
+            <a class="edit-btn" href="./edit-profile.html">
+                <img src="../assets/img/icon/edit-icon.png" alt="">
+            </a>
             <div class="prof-opts">
-                <a onclick="changeSectionSmooth('prof_main_wrapper', 'prof_advanced', 'prof_posts')" class="text prof-opts-a" onclick="">
-                    Posts
+                <a id="prof_opt_posts"
+                    onclick="changeSectionSmooth('prof_main_wrapper', 'prof_advanced', 'prof_saved', 'prof_posts'); colorText('prof_opt_advanced', 'prof_opt_saved', 'prof_opt_posts')"
+                    class="text prof-opts-a">
+                    POSTS
                 </a>
-                <a class="text prof-opts-a" href="./edit-profile.html">
-                    Editar
+                <a id="prof_opt_saved" class="text prof-opts-a"
+                    onclick="changeSectionSmooth('prof_main_wrapper', 'prof_advanced', 'prof_posts', 'prof_saved'); colorText('prof_opt_advanced', 'prof_opt_posts', 'prof_opt_saved')">
+                    SALVOS
                 </a>
-                <a onclick="changeSectionSmooth('prof_main_wrapper', 'prof_posts', 'prof_advanced')" class="text prof-opts-a" onclick="">
-                    Avançado
+                <a id="prof_opt_advanced"
+                    onclick="changeSectionSmooth('prof_main_wrapper', 'prof_posts', 'prof_saved', 'prof_advanced'); colorText('prof_opt_saved', 'prof_opt_posts', 'prof_opt_advanced')"
+                    class="text prof-opts-a">
+                    AVANÇADO
                 </a>
             </div>
             <hr class="divider">
             <div class="prof-main-wrapper" id="prof_main_wrapper">
                 <div id="prof_posts" class="prof-posts">
+                </div>
+                <div id="prof_saved" class="prof-saved">
+
                 </div>
                 <div id="prof_advanced" class="prof-advanced">
                     <div id="graficos">
@@ -96,12 +107,16 @@
                             <div class="graph">
                                 <canvas id="myChartCanvas"></canvas>
                             </div>
-                            <!-- <div class="label-captura">
-                                <p id="avisoCaptura1" style="color: white"></p>
-                            </div> -->
                         </div>
                     </div>
-                    <!-- onload = obterDadosGrafico(sessionStorage.ID_USUARIO) -->
+                    <!-- <div class="advanced-kpis">
+                        <div class="kpi-card">
+
+                        </div>
+                    </div> -->
+                    <div class="slamano">
+                        <button onclick="excluirPerfil(sessionStorage.ID_USUARIO)">Excluir Perfil</button>
+                    </div>
                 </div>
             </div>
         </main>
@@ -143,15 +158,16 @@
 
 <script>
 
-let proximaAtualizacao;
+    let proximaAtualizacao;
 
     window.onload = loadProfile()
-    
+
     function loadProfile() {
 
         validarSessao();
 
-        var profPosts = document.getElementById('prof_posts')
+        var profPosts = document.getElementById('prof_posts');
+        var profSaved = document.getElementById('prof_saved');
 
         fetch(`/usuarios/profilePosts/${sessionStorage.ID_USUARIO}`, {
             method: "GET"
@@ -165,7 +181,7 @@ let proximaAtualizacao;
                             <a class="prof-pic" href="./edit-profile.html">
                                 <img src="../assets/img/icon/user-icon.png" alt="Foto de Perfil">
                             </a>
-                        `;                       
+                        `;
                     } else {
                         document.getElementById('prof_pic_img').src = `../assets/bucket/${json[0].fotoPerfilSrc}`;
                     }
@@ -188,20 +204,52 @@ let proximaAtualizacao;
                         `;
                     }
 
-                    
+
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        fetch(`/posts/savedPosts/${sessionStorage.ID_USUARIO}`, {
+            method: "GET"
+        })
+            .then(res => {
+                res.json().then(json => {
+                    salvos = json;
+
+                    console.log(salvos);
+
+                    if (json[0].idPostagem != null) {
+                        json.forEach(post => {
+                            profSaved.innerHTML += `
+                                <img onclick="openPostModal('prof_wrapper', ${post.idPostagem})" class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
+                            `
+                        })
+                    } else {
+                        profSaved.innerHTML += `
+                            <div>
+                                <img class="no-posts" src="../assets/img/char/knight-crying.png" alt="">
+                                <p class="text"> Nenhuma postagem foi feita ainda </p>
+                            </div>
+                        `;
+                    }
+
+
                 })
             })
             .catch(err => {
                 console.log(err);
             })
 
-            obterDadosGrafico(sessionStorage.ID_USUARIO);
+
+        obterDadosGrafico(sessionStorage.ID_USUARIO);
 
     }
 
     var usuario;
 
-    
+
 
     // O gráfico é construído com três funções:
     // 1. obterDadosGrafico -> Traz dados do Banco de Dados para montar o gráfico da primeira vez
@@ -216,147 +264,205 @@ let proximaAtualizacao;
     //     Para ajustar o "select", ajuste o comando sql em src/models
     function obterDadosGrafico(idUsuario) {
 
-// alterarTitulo(idUsuario)
+        // alterarTitulo(idUsuario)
 
-if (proximaAtualizacao != undefined) {
-    clearTimeout(proximaAtualizacao);
-}
+        if (proximaAtualizacao != undefined) {
+            clearTimeout(proximaAtualizacao);
+        }
 
-fetch(`/posts/montarGrafico/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
-    if (response.ok) {
-        response.json().then(function (resposta) {
-            console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-            resposta.reverse();
+        fetch(`/posts/montarGrafico/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (resposta) {
+                    console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+                    resposta.reverse();
 
-            plotarGrafico(resposta, idUsuario);
-            
-        });
-    } else {
-        console.error('Nenhum dado encontrado ou erro na API');
-    }
-})
-    .catch(function (error) {
-        console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-    });
-}
+                    plotarGrafico(resposta, idUsuario);
 
-// Esta função *plotarGrafico* usa os dados capturados na função anterior para criar o gráfico
-// Configura o gráfico (cores, tipo, etc), materializa-o na página e, 
-// A função *plotarGrafico* também invoca a função *atualizarGrafico*
-function plotarGrafico(resposta, idUsuario) {
-
-console.log('iniciando plotagem do gráfico...');
-
-// Criando estrutura para plotar gráfico - labels
-let labels = [];
-
-// Criando estrutura para plotar gráfico - dados
-let dados = {
-    labels: labels,
-    datasets: [{
-        label: 'Nº de Postagens',
-        data: [],
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
-    }]
-};
-
-console.log('----------------------------------------------')
-console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
-console.log(resposta)
-
-// Inserindo valores recebidos em estrutura para plotar o gráfico
-for (i = 0; i < resposta.length; i++) {
-    var registro = resposta[i];
-    labels.push(registro.dataPost);
-    dados.datasets[0].data.push(registro.nPosts);
-}
-
-console.log('----------------------------------------------')
-console.log('O gráfico será plotado com os respectivos valores:')
-console.log('Labels:')
-console.log(labels)
-console.log('Dados:')
-console.log(dados.datasets)
-console.log('----------------------------------------------')
-
-// Criando estrutura para plotar gráfico - config
-const config = {
-    type: 'line',
-    data: dados,
-};
-
-// Adicionando gráfico criado em div na tela
-let myChart = new Chart(
-    document.getElementById(`myChartCanvas`),
-    config
-);
-
-setTimeout(() => atualizarGrafico(idUsuario, dados, myChart), 2000);
-}
-
-
-// Esta função *atualizarGrafico* atualiza o gráfico que foi renderizado na página,
-// buscando a última medida inserida em tabela contendo as capturas, 
-
-//     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
-//     Para ajustar o "select", ajuste o comando sql em src/models
-function atualizarGrafico(idUsuario, dados, myChart) {
-
-
-
-fetch(`/posts/atualizarGrafico/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
-    if (response.ok) {
-        response.json().then(function (novoRegistro) {
-
-            // obterdados(idAquario);
-            // alertar(novoRegistro, idAquario);
-            console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
-            console.log(`Dados atuais do gráfico:`);
-            console.log(dados);
-
-            // let avisoCaptura = document.getElementById(`avisoCaptura${idAquario}`)
-            // avisoCaptura.innerHTML = ""
-
-
-            if (novoRegistro[0].dataPost == dados.labels[dados.labels.length - 1]) {
-                console.log("---------------------------------------------------------------")
-                console.log("Como não há dados novos para captura, o gráfico não atualizará.")
-                // avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
-                console.log("Horário do novo dado capturado:")
-                console.log(novoRegistro[0].dataPost)
-                console.log("Horário do último dado capturado:")
-                console.log(dados.labels[dados.labels.length - 1])
-                console.log("---------------------------------------------------------------")
+                });
             } else {
-                // tirando e colocando valores no gráfico
-                dados.labels.shift(); // apagar o primeiro
-                dados.labels.push(novoRegistro[0].dataPost); // incluir um novo momento
-
-                dados.datasets[0].data.shift();  // apagar o primeiro de umidade
-                dados.datasets[0].data.push(novoRegistro[0].nPosts); // incluir uma nova medida de umidade
-
-                // dados.datasets[1].data.shift();  // apagar o primeiro de temperatura
-                // dados.datasets[1].data.push(novoRegistro[0].temperatura); // incluir uma nova medida de temperatura
-
-                myChart.update();
+                console.error('Nenhum dado encontrado ou erro na API');
             }
-
-            // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-            proximaAtualizacao = setTimeout(() => atualizarGrafico(idUsuario, dados, myChart), 2000);
-        });
-    } else {
-        console.error('Nenhum dado encontrado ou erro na API');
-        // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-        proximaAtualizacao = setTimeout(() => atualizarGrafico(idUsuario, dados, myChart), 2000);
+        })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
     }
-})
-    .catch(function (error) {
-        console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-    });
 
-}
+    // Esta função *plotarGrafico* usa os dados capturados na função anterior para criar o gráfico
+    // Configura o gráfico (cores, tipo, etc), materializa-o na página e, 
+    // A função *plotarGrafico* também invoca a função *atualizarGrafico*
+    function plotarGrafico(resposta, idUsuario) {
+
+        console.log('iniciando plotagem do gráfico...');
+
+        // Criando estrutura para plotar gráfico - labels
+        let labels = [];
+
+        // Criando estrutura para plotar gráfico - dados
+        let dados = {
+            labels: labels,
+            datasets: [{
+                label: 'Nº de Postagens',
+                data: [],
+                fill: false,
+                borderColor: '#BF78CE',
+                tension: 0.1
+            }]
+        };
+
+        console.log('----------------------------------------------')
+        console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
+        console.log(resposta)
+
+        // Inserindo valores recebidos em estrutura para plotar o gráfico
+        for (i = 0; i < resposta.length; i++) {
+            var registro = resposta[i];
+            labels.push(registro.dataPost);
+            dados.datasets[0].data.push(registro.nPosts);
+        }
+
+        console.log('----------------------------------------------')
+        console.log('O gráfico será plotado com os respectivos valores:')
+        console.log('Labels:')
+        console.log(labels)
+        console.log('Dados:')
+        console.log(dados.datasets)
+        console.log('----------------------------------------------')
+
+        // Criando estrutura para plotar gráfico - config
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        // Adicionando gráfico criado em div na tela
+        let myChart = new Chart(
+            document.getElementById(`myChartCanvas`),
+            config
+        );
+
+        setTimeout(() => atualizarGrafico(idUsuario, dados, myChart), 2000);
+    }
+
+
+    // Esta função *atualizarGrafico* atualiza o gráfico que foi renderizado na página,
+    // buscando a última medida inserida em tabela contendo as capturas, 
+
+    //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
+    //     Para ajustar o "select", ajuste o comando sql em src/models
+    function atualizarGrafico(idUsuario, dados, myChart) {
+
+
+
+        fetch(`/posts/atualizarGrafico/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (novoRegistro) {
+
+                    // obterdados(idAquario);
+                    // alertar(novoRegistro, idAquario);
+                    console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
+                    console.log(`Dados atuais do gráfico:`);
+                    console.log(dados);
+
+                    // let avisoCaptura = document.getElementById(`avisoCaptura${idAquario}`)
+                    // avisoCaptura.innerHTML = ""
+
+
+                    if (novoRegistro[0].dataPost == dados.labels[dados.labels.length - 1]) {
+                        console.log("---------------------------------------------------------------")
+                        console.log("Como não há dados novos para captura, o gráfico não atualizará.")
+                        // avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
+                        console.log("Horário do novo dado capturado:")
+                        console.log(novoRegistro[0].dataPost)
+                        console.log("Horário do último dado capturado:")
+                        console.log(dados.labels[dados.labels.length - 1])
+                        console.log("---------------------------------------------------------------")
+                    } else {
+                        // tirando e colocando valores no gráfico
+                        dados.labels.shift(); // apagar o primeiro
+                        dados.labels.push(novoRegistro[0].dataPost); // incluir um novo momento
+
+                        dados.datasets[0].data.shift();  // apagar o primeiro de umidade
+                        dados.datasets[0].data.push(novoRegistro[0].nPosts); // incluir uma nova medida de umidade
+
+                        // dados.datasets[1].data.shift();  // apagar o primeiro de temperatura
+                        // dados.datasets[1].data.push(novoRegistro[0].temperatura); // incluir uma nova medida de temperatura
+
+                        myChart.update();
+                    }
+
+                    // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+                    proximaAtualizacao = setTimeout(() => atualizarGrafico(idUsuario, dados, myChart), 2000);
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+                // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+                proximaAtualizacao = setTimeout(() => atualizarGrafico(idUsuario, dados, myChart), 2000);
+            }
+        })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+
+    }
+
+    function excluirPerfil(idUsuario) {
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'Você tem certeza que quer excluir o seu perfil?',
+            text: 'Isso irá apagar todas aas suas informações permanentemente',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Sim, excluir',
+            denyButtonText: 'Não, não excluir',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                actions: 'my-actions',
+                cancelButton: 'order-1 right-gap',
+                confirmButton: 'order-2',
+                denyButton: 'order-3',
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                    fetch(`/usuarios/excluir/${sessionStorage.ID_USUARIO}`, {
+                        method: "DELETE"
+                    })
+                        .then(res => {
+                            if (res.ok) {
+
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Perfil excluído com sucesso, saindo do sistema...',
+                                    confirmButtonText: 'Okay'
+                                })
+                                .then(() => {
+                                    sessionStorage.removeItem('ID_USUARIO');
+                                    window.location = "../index.html";
+                                })
+
+                            } else {
+                                throw ("Houve um erro ao tentar realizar o cadastro!");
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+
+                    
+            } else if (result.isDenied) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Perfil não excluído.',
+                    background: '#000',
+                    color: '#FFF',
+                    confirmButtonText: 'Beleza!',
+                })
+            }
+        })
+
+    }
 
 
 </script>

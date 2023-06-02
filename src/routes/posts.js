@@ -12,7 +12,7 @@ router.get('/samples', function (req, res) {
     postController.samples(req, res);
 })
 
-router.get('/feed', (req, res) => {
+router.get('/feed/:idUsuario', (req, res) => {
     postController.feed(req, res);
 });
 
@@ -34,7 +34,11 @@ router.get("/montarGrafico/:idUsuario", function (req, res) {
 
 router.get("/atualizarGrafico/:idUsuario", function (req, res) {
     postController.atualizarGrafico(req, res);
-})
+});
+
+router.get("/savedPosts/:idUsuario", function (req, res) {
+    postController.savedPosts(req, res);
+});
 
   
 

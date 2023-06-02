@@ -88,6 +88,15 @@ INSERT INTO fundoPerfil (nomeFundoPerfil, fundoSrc) VALUES
 	('O Vazio', 'bg-profile5.jpg'),
 	('Pico de Cristal', 'bg-profile6.jpg');
     
+-- SELECTS DASHBOARD
+SELECT 
+	COUNT(idPostagem) AS nPosts,
+    DATE_FORMAT(dtPostagem, '%d/%m/%Y') AS dataPost
+		FROM postagem
+				WHERE fkUsuario = 1
+					GROUP BY dataPost;
+    
+    
 -- ZONA
 UPDATE usuario 
 SET fotoPerfilSrc = null 

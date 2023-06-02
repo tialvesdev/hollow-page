@@ -24,7 +24,9 @@ function samples(req, res) {
 
 function feed(req, res) {
 
-    postModel.criarFeed()
+    var idUsuario = req.params.idUsuario;
+
+    postModel.criarFeed(idUsuario)
         .then(resultado => {
             res.json(resultado);
         }).catch(err => {
@@ -142,6 +144,19 @@ function atualizarGrafico(req, res) {
     });
 }
 
+function savedPosts(req, res) {
+
+    var idUsuario = req.params.idUsuario;
+
+    postModel.postsSalvos(idUsuario)
+        .then(resultado => {
+            res.json(resultado);
+        }).catch(err => {
+            res.status(500).send(err);
+        });
+
+}
+
 module.exports = {
     testar,
     samples,
@@ -150,5 +165,6 @@ module.exports = {
     save,
     unsave,
     montarGrafico,
-    atualizarGrafico
+    atualizarGrafico,
+    savedPosts
 }

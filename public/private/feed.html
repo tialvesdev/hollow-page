@@ -118,7 +118,7 @@
 
         var feed = document.getElementById('feed');
 
-        fetch(`/posts/feed/`, {
+        fetch(`/posts/feed/${sessionStorage.ID_USUARIO}`, {
             method: "GET"
         })
             .then(res => {

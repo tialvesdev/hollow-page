@@ -11,7 +11,7 @@ function amostras() {
     return database.executar(instrucao);
 }
 
-function criarFeed() {
+function criarFeed(idUsuario) {
     // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
     var instrucao = `
     SELECT postagem.idPostagem,
@@ -21,10 +21,13 @@ function criarFeed() {
         DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
         postagem.fkUsuario,
         usuario.nome,
-        usuario.fotoPerfilSrc
+        usuario.fotoPerfilSrc,
+        salvo.fkUsuario
             FROM postagem
-                JOIN usuario ON idUsuario = fkUsuario
-                    ORDER BY dtPostagem;
+                LEFT JOIN salvo ON idPostagem = fkPostagem
+                JOIN usuario ON idUsuario = postagem.fkUsuario
+					WHERE salvo.fkUsuario = ${idUsuario} OR salvo.fkUsuario is null
+						ORDER BY dtPostagem;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
@@ -78,10 +81,9 @@ function montarGrafico(idUsuario, limite_linhas) {
                 COUNT(idPostagem) AS nPosts,
                 DATE_FORMAT(dtPostagem, '%d/%m/%Y') AS dataPost
                     FROM postagem
-                        JOIN usuario ON idUsuario = fkUsuario
-                            WHERE idUsuario = ${idUsuario}
-                                GROUP BY dataPost
-                                    LIMIT ${limite_linhas};
+                        WHERE fkUsuario = ${idUsuario}
+                            GROUP BY dataPost
+                                LIMIT ${limite_linhas};
         `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -97,14 +99,32 @@ function atualizarGrafico(idUsuario) {
                 COUNT(idPostagem) AS nPosts,
                 DATE_FORMAT(dtPostagem, '%d/%m/%Y') AS dataPost
                     FROM postagem
-                        JOIN usuario ON idUsuario = fkUsuario
-                            WHERE idUsuario = ${idUsuario}
-                                GROUP BY dataPost
-                                    LIMIT 1;
+                        WHERE fkUsuario = ${idUsuario}
+                            GROUP BY dataPost
+                                LIMIT 1;
         `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
+}
+
+function postsSalvos(idUsuario) {
+    // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
+    var instrucao = `
+    SELECT postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        postagem.fkUsuario
+            FROM postagem
+                JOIN usuario ON idUsuario = fkUsuario
+                JOIN salvo ON fkPostagem = idPostagem
+                    WHERE salvo.fkUsuario = ${idUsuario}
+                        ORDER BY dtSalvo;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
 }
 
 
@@ -115,5 +135,6 @@ module.exports = {
     salvarPost,
     removerPostSalvo,
     montarGrafico,
-    atualizarGrafico
+    atualizarGrafico,
+    postsSalvos
 }

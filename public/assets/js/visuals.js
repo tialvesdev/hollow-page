@@ -15,17 +15,29 @@ function changeSection(previousSection, nextSection) {
     document.getElementById(nextSection).style.padding = '75px';
 }
 
-function changeSectionSmooth(wrapperDiv, previousSection, nextSection) {
+function changeSectionSmooth(wrapperDiv, otherSection1, otherSection2, nextSection) {
     var wrapper = document.getElementById(wrapperDiv);
-    var prevSect = document.getElementById(previousSection);
+    var other1 = document.getElementById(otherSection1);
+    var other2 = document.getElementById(otherSection2);
     var nextSect = document.getElementById(nextSection);
 
     wrapper.classList.toggle('oculto');
     
-    setTimeout(() => prevSect.style.display = 'none', 401);
+    setTimeout(() => other1.style.display = 'none', 401);
+    setTimeout(() => other2.style.display = 'none', 402);
     setTimeout(() => nextSect.style.display = 'flex', 415);
     
     setTimeout(() => wrapper.classList.toggle('amostra'), 430);
+}
+
+function colorText (noColor1, noColor2, color) {
+    var colorEl = document.getElementById(color);
+    var noColor1El = document.getElementById(noColor1);
+    var noColor2El = document.getElementById(noColor2);
+
+    noColor1El.style.color = '#FFFFFF';
+    noColor2El.style.color = '#FFFFFF';
+    colorEl.style.color = '#69E2EE';
 }
 
 function setHidden(id) {

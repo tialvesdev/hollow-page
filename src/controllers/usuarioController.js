@@ -189,6 +189,24 @@ function editar(req, res) {
     // }
 }
 
+function excluir(req, res) {
+
+    const idUsuario = req.params.idUsuario;
+
+    usuarioModel.excluirPerfil(idUsuario)
+        .then(resultado => {
+        //     if (resultado.length >= 1 ) {
+
+                res.json(resultado);
+            // } else {
+                // res.status(403).send('')
+            // }
+        }).catch(err => {
+            res.status(500).send(err);
+        });
+        
+}
+
 module.exports = {
     entrar,
     cadastrar,
@@ -196,5 +214,6 @@ module.exports = {
     testar,
     profile,
     profilePosts,
-    editar
+    editar,
+    excluir
 }

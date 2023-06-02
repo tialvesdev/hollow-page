@@ -92,6 +92,27 @@ function editarUsuario(usuario) {
     return database.executar(instrucao);
 }
 
+function excluirPerfil(idUsuario) {
+
+    var instrucao1 = `
+        DELETE FROM salvo WHERE fkUsuario = ${idUsuario};
+    `;
+
+    var instrucao2 = `
+        DELETE FROM postagem WHERE fkUsuario = ${idUsuario};
+    `;
+
+    var instrucao3 = `
+        DELETE FROM usuario WHERE idUsuario = ${idUsuario};
+    `;
+    // console.log("Executando a instrução SQL: \n" + instrucao1);
+
+    database.executar(instrucao1);
+    database.executar(instrucao2);
+        
+    return database.executar(instrucao3);
+}
+
 
 module.exports = {
     listar,
@@ -99,5 +120,6 @@ module.exports = {
     cadastrar,
     mostrarPerfil,
     mostrarPerfilPosts,
-    editarUsuario
+    editarUsuario,
+    excluirPerfil
 };

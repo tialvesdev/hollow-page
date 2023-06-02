@@ -32,4 +32,8 @@ router.put('/editar',upload.single('fotoPerfilVar'), (req, res) => {
     usuarioController.editar(req, res);
 });
 
+router.delete('/excluir/:idUsuario', (req, res) => {
+    usuarioController.excluir(req, res);
+});
+
 module.exports = router;

@@ -1,3 +1,20 @@
+.display-none {
+    display: none;
+}
+
+.display-flex {
+    display: flex;
+}
+
+.display-block {
+    display: block;
+}
+
+canvas {
+    width: 400px !important;
+    height: 250px !important;
+}
+
 .profile-wrapper {
     background-color: var(--gray-bg);
     display: flex;
@@ -63,7 +80,8 @@
     transition: all ease-in-out .2s;
     font-family: 'Lexend';
     cursor: pointer;
-    text-decoration: underline;
+    /* text-decoration: underline; */
+    font-size: 20px;
 }
 
 .prof-opts-a:hover {
@@ -76,7 +94,7 @@
     transition: all .4s ease-in-out;
 }
 
-.prof-posts {
+.prof-posts, .prof-saved {
     padding: 25px;
     display: flex;
     flex-wrap: wrap;
@@ -88,10 +106,31 @@
 .prof-advanced {
     width: 100%;
     display: none;
+    align-items: center;
+    justify-content: center;
 }
 
 .testesla {
     width: 100%;
     height: 250px;
     /* background-color: aqua; */
+}
+
+.edit-btn {
+    /* position: absolute;
+    left: 20vw; */
+    align-self: self-end;
+    position: absolute;
+    transform: translate(-30px, 30px);
+    transition: all .25s ease-in-out;
+}
+
+.edit-btn:hover {
+    transform: translate(-30px, 30px) scale(1.25);
+}
+
+.edit-btn img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
 }
