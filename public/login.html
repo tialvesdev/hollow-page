@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../assets/css/global.style.css">
+    <link rel="stylesheet" href="../assets/css/utils/global.style.css">
     <link rel="stylesheet" href="../assets/css/login.style.css">
 
     <script src="./assets/js/validation.js"></script>
@@ -135,6 +135,7 @@
                         sessionStorage.EMAIL_USUARIO = json.email;
                         sessionStorage.NOME_USUARIO = json.nome;
                         sessionStorage.ID_USUARIO = json.idUsuario;
+                        sessionStorage.ID_FICHA = json.idFicha;
 
                         Swal.fire({
                             icon: 'success',
@@ -144,9 +145,18 @@
                             color: '#FFF',
                             confirmButtonText: 'Beleza!',
                         }).then((result) => {
-                            setTimeout(function () {
-                                window.location = "../private/feed.html";
-                            }, 1000);
+                            if (sessionStorage.ID_FICHA == 'undefined') {
+                                setTimeout(function () {
+                                    window.location = "../private/adc-info.html";
+                                }, 1000); 
+
+                            } else {
+                                setTimeout(function () {
+                                    window.location = "../private/feed.html";
+                                }, 1000);
+
+                            }
+
                         });
 
                     });

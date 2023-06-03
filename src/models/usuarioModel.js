@@ -10,7 +10,9 @@ function listar() {
 
 function entrar(email, senha) {
     var instrucao = `
-        SELECT * FROM usuario WHERE email = '${email}' AND senha = '${senha}';
+        SELECT * FROM usuario 
+            LEFT JOIN ficha ON idUsuario = fkUsuario
+                WHERE email = '${email}' AND senha = '${senha}';
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     

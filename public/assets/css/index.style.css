@@ -56,12 +56,13 @@ body::-webkit-scrollbar-thumb:hover {
     padding: 10px;
     transition: all .25s ease-in-out;
 }
-  
+
 .nav-a:hover {
     transform: scale(1.2);
 }
 
-.nav-btn-tema, .nav-btn-cor {
+.nav-btn-tema,
+.nav-btn-cor {
     background: none;
     border: none;
     cursor: pointer;
@@ -81,7 +82,8 @@ body::-webkit-scrollbar-thumb:hover {
     border-radius: 100%;
 }
 
-.nav-sel-cor:hover, .nav-btn-tema:hover {
+.nav-sel-cor:hover,
+.nav-btn-tema:hover {
     transition: transform .2s ease-in-out;
     transform: scale(1.25);
 }
@@ -140,7 +142,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .main {
-    position: relative; 
+    position: relative;
     width: 100%;
     background-color: var(--gray-bg);
     z-index: 1;
@@ -265,7 +267,7 @@ body::-webkit-scrollbar-thumb:hover {
     background-position: center;
     display: flex;
     align-items: center;
-    
+
 }
 
 .hp-figure {
@@ -281,7 +283,7 @@ body::-webkit-scrollbar-thumb:hover {
     width: 100%;
 }
 
-.hp-text{
+.hp-text {
     text-align: center;
 }
 
@@ -339,7 +341,7 @@ body::-webkit-scrollbar-thumb:hover {
     border: none;
 }
 
-.section-footer{
+.section-footer {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -358,7 +360,7 @@ body::-webkit-scrollbar-thumb:hover {
     gap: 15px;
 }
 
-.socials-a{
+.socials-a {
     display: flex;
     width: 50px;
     height: 50px;
@@ -385,17 +387,24 @@ body::-webkit-scrollbar-thumb:hover {
     color: var(--light-gray);
 }
 
-.front {
-    position: relative;
-    z-index: 3;
-}
+@keyframes cardsAnimation {
+    0% {
+        z-index: 1;
+        transition: all .5s ease-in-out;
+    }
 
-.dream-efx-img {
-    margin-top: 100vh;
-    z-index: 2;
-    position: absolute;
-    pointer-events: none;
-    animation: dreamsAnimation 10s linear infinite;
+    10% {
+        transform: translate(-300px, -300px) rotate(-15deg)
+    }
+
+    60% {
+        z-index: 0;
+    }
+
+    100% {
+        transform: none;
+        transition: all .25s ease-in-out
+    }
 }
 
 @keyframes dreamsAnimation {
@@ -403,31 +412,17 @@ body::-webkit-scrollbar-thumb:hover {
         transform: scale(0) translateY(0) rotate(0deg);
         opacity: 0;
     }
+
     10% {
         opacity: 1;
     }
+
     90% {
         opacity: 1;
     }
+
     100% {
         transform: scale(1) translateY(-800px) rotate(360deg);
         opacity: 0;
-    }
-}
-
-@keyframes cardsAnimation {
-    0% {
-        z-index: 1;
-        transition: all .5s ease-in-out;
-    }
-    10% {
-        transform: translate(-300px, -300px) rotate(-15deg)
-    }
-    60% {
-        z-index: 0;
-    }
-    100% {
-        transform: none;
-        transition: all .25s ease-in-out
     }
 }

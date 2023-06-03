@@ -44,15 +44,13 @@
     align-self: center;
 }
 
-.ipt-file {
-
-}
+.ipt-file {}
 
 .ipt-file-label {
-   display: flex;
-   width: min-content;
-   justify-content: center;
-   transition: all .25s ease-in-out;
+    display: flex;
+    width: min-content;
+    justify-content: center;
+    transition: all .25s ease-in-out;
 }
 
 .ipt-file-label:hover {
@@ -70,7 +68,8 @@
     object-fit: contain;
 }
 
-.ipt-file-name, .ipt-file-a {
+.ipt-file-name,
+.ipt-file-a {
     /* width: 100%; */
     white-space: nowrap;
     text-align: center;

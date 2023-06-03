@@ -45,10 +45,9 @@ function entrar(req, res) {
                     console.log(`Resultados: ${JSON.stringify(resultado)}`);
 
                     if (resultado.length == 1) {
-                        // VERIFICAR SE É UM FUNCIONÁRIO OU UM CLUBE
-
                         console.log(resultado);
                         res.json(resultado[0]);
+
                     } else if (resultado.length == 0) {
                         res.status(403).send("Email e/ou senha inválido(s)");
                     } else {

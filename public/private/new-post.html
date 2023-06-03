@@ -12,11 +12,13 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="../assets/css/global.style.css">
+  <link rel="stylesheet" href="../assets/css/utils/global.style.css">
   <link rel="stylesheet" href="../assets/css/new-post.css">
+  <link rel="stylesheet" href="../assets/css/utils/private.style.css">
 
   <script src="../assets/js/validation.js"></script>
   <script src="../assets/js/session.js"></script>
+  <script src="../assets/js/visuals.js"></script>
 </head>
 
 <body>
@@ -42,10 +44,10 @@
         <aside class="np-aside center">
           <img src="../assets/img/char/knight-crying.png" alt="Nenhuma foto selecionada" class="ipt-file-img"
             id="ipt_file_img">
-          <p class="text ipt-file-name" id="ipt_ile_name">Nenhuma foto selecionada</p>
+          <p class="text ipt-file-name" id="ipt_file_name">Nenhuma foto selecionada</p>
           <label for="ipt_file" class="ipt-file-label">
             <input class="ipt-file sumir" type="file" id="ipt_file" name="ipt_file" accept="image/*"
-              onchange="previewImage(event)" />
+              onchange="previewImage(event, 'ipt_file_img', 'ipt_file_name')" />
             <a class="ipt-file-a big-text"><b> Escolher foto </b></a>
           </label>
         </aside>
@@ -119,20 +121,6 @@
     // element.style.height = "1px";
     console.log(`(scrollHeight: ${element.scrollHeight} > clientHeight: ${element.clientHeight}) ? (scrollHeight: ${element.scrollHeight}px) : "40px"`);
     element.style.height = (element.scrollHeight > element.clientHeight) ? (element.scrollHeight) + "px" : "40px";
-  }
-
-  const previewImage = (event) => {
-    const imageFiles = event.target.files;
-
-    var img = document.getElementById('ipt_file_img');
-    var name = document.getElementById('ipt_ile_name');
-
-    img.src = URL.createObjectURL(imageFiles[0]);
-    img.style.display = 'block';
-    name.innerHTML = imageFiles[0].name;
-    name.style.display = 'block';
-
-    // console.log(URL.createObjectURL(imageFiles[0]));
   }
 
 </script>

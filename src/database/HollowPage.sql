@@ -6,6 +6,8 @@ SELECT @@lc_time_names;
 SET lc_time_names = 'pt_BR';
 DROP DATABASE HollowPage;
 
+show tables;
+
 -- CREATES
 CREATE TABLE fundoPerfil (
 	idFundoPerfil INT PRIMARY KEY AUTO_INCREMENT,
@@ -80,6 +82,9 @@ alter table usuario modify column fotoPerfilSrc varchar(1000);
 INSERT INTO usuario (nome, email, senha, dtNasc) VALUES
 	('Tiago', 'ti@gmail.com', '12345', '2005-09-23');
     
+INSERT INTO salvo (dtSalvo, fkPostagem, fkUsuario) VALUES
+	(now(), 3, 2);
+    
 INSERT INTO fundoPerfil (nomeFundoPerfil, fundoSrc) VALUES
 	('Cidade das Lágrimas', 'bg-profile1.jpg'),
 	('Lago Azul', 'bg-profile2.jpg'),
@@ -88,16 +93,35 @@ INSERT INTO fundoPerfil (nomeFundoPerfil, fundoSrc) VALUES
 	('O Vazio', 'bg-profile5.jpg'),
 	('Pico de Cristal', 'bg-profile6.jpg');
     
--- SELECTS DASHBOARD
+-- SELECTS
 SELECT 
 	COUNT(idPostagem) AS nPosts,
     DATE_FORMAT(dtPostagem, '%d/%m/%Y') AS dataPost
 		FROM postagem
 				WHERE fkUsuario = 1
 					GROUP BY dataPost;
+                    
+SELECT * FROM usuario 
+	LEFT JOIN ficha ON idUsuario = fkUsuario
+		WHERE email = 'ti@gmail.com' AND senha = '12345';
     
     
 -- ZONA
+SELECT postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        postagem.fkUsuario,
+        usuario.nome,
+        usuario.fotoPerfilSrc,
+        salvo.fkUsuario
+            FROM postagem
+                LEFT JOIN salvo ON idPostagem = fkPostagem
+                JOIN usuario ON idUsuario = postagem.fkUsuario
+					WHERE salvo.fkUsuario = 1 OR salvo.fkUsuario is null
+						ORDER BY dtPostagem;
+
 UPDATE usuario 
 SET fotoPerfilSrc = null 
 WHERE idUsuario = 1;

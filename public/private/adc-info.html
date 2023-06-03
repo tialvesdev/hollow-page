@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastro Adicional</title>
+    <link rel="shortcut icon" href="../assets/img/icon/hollow-icon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="../assets/css/adc-info.style.css">
+    <link rel="stylesheet" href="../assets/css/utils/global.style.css">
+    <link rel="stylesheet" href="../assets/css/utils/private.style.css">
+
+    <script src="../assets/js/session.js"></script>
+    <script src="../assets/js/visuals.js"></script>
+</head>
+
+<body>
+    <div id="cad_adc" class="cad-adc">
+        <div id="cad_adc_modal" class="cad-adc-modal front">
+            <div id="cad_sect_1" class="cad-adc-sect aparecer">
+
+                <h2 class="title">Cadastro realizado com sucesso</h2>
+                <p class="text cad-adc-text">A partir daqui terão alguns campos opcionais para você preencher, como Foto
+                    de
+                    Perfil.</p>
+
+                <img class="cad-adc-img" src="../assets/img/char/hornet-grub.png" alt="">
+
+                <p class="small-text">*Você também poderá cadastrar esses dados mais tarde, editanto seu perfil</p>
+
+                <button onclick="changeSectionSmooth('cad_adc_modal', 'cad_sect_1', 'cad_sect_3', 'cad_sect_2')"
+                    class="btn">Vamos
+                    Lá!</button>
+                <a onclick="cadastroAdicional(0)" class="a">Pular</a>
+            </div>
+
+            <div id="cad_sect_2" class="cad-adc-sect">
+                <label for="cad_ipt_img" class="cad-img-sect">
+                    <input class="ipt-file sumir" onchange="previewImage(event, 'cad_img', 'cad_img_text')" type="file"
+                        accept="image/*" id="cad_ipt_img" name="cad_ipt_img">
+                    <div class="cad-img-div">
+                        <img class="cad-img" id="cad_img" src="../assets/img/icon/user-icon.png" alt="Foto de Perfil">
+                        <p id="cad_img_text" class="text">Foto de Perfil</p>
+                    </div>
+                    <a class="cad-img-btn a">Importar Foto</a>
+                </label>
+
+                <div class="ipt-wrapper">
+                    <img src="../assets/img/icon/border-angle.png" alt="Angle" class="ipt-angle">
+                    <!-- <input class="ipt" type="date" id="ipt_cadastrar_dt_birth" placeholder="01/01/2001"> -->
+                    <select class="select-adc-genero text" id="select_adc_genero">
+                        <option value="X">Selecione um gênero...</option>
+                        <option id="opt_edit_genero_1" value="M">Masculino</option>
+                        <option id="opt_edit_genero_2" value="F">Feminino</option>
+                        <option id="opt_edit_genero_3" value="N">Não-binário</option>
+                        <option id="opt_edit_genero_4" value="X">Prefiro não dizer</option>
+                    </select>
+                </div>
+
+                <div class="ipt-wrapper">
+                    <img src="../assets/img/icon/border-angle.png" alt="Angle" class="ipt-angle">
+                    <input class="ipt" type="text" id="ipt_cad_tel" placeholder="Telefone">
+                </div>
+
+                <button onclick="cadastroAdicional()" class="btn">Confirmar</button>
+                <a onclick="changeSectionSmooth('cad_adc_modal', 'cad_sect_2', 'cad_sect_3', 'cad_sect_1')"
+                    class="a">Voltar</a>
+            </div>
+
+            <div id="cad_sect_3" class="cad-adc-sect">
+                <h2>Cadastro Adicional Completo</h2>
+                <img src="" alt="">
+                <button class="btn">Beleza!</button>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+
+    var dreamsVar = () => {
+        createDreams('cad_adc', true);
+    }
+
+    setInterval(dreamsVar, 1000);
+
+    function cadastroAdicional(isAdded) {
+
+        if (isAdded == 0) {
+            // fetch com insert vazio, só com fkUsuario
+            fetch(`/fichas/fichaVazia/${sessionStorage.ID_USUARIO}`, {
+                method: "POST"
+            })
+                .then(res => {
+                    alert('voltou do then');
+
+                    window.location = './feed.html';
+
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+
+
+        } else {
+            // setar variaveis
+            if (cad_ipt_img.files[0] == undefined) {
+                // fetch com insert e sem foto
+            } else {
+                // fetch com insert e com foto
+            }
+        }
+
+    }
+
+</script>

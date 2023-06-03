@@ -18,6 +18,11 @@ body::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
+.login-made {
+    /* width: 100%; */
+
+}
+
 .feed-wrapper {
     min-height: 100vh;
 }

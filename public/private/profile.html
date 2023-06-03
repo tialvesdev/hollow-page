@@ -12,8 +12,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../assets/css/global.style.css">
+    <link rel="stylesheet" href="../assets/css/utils/global.style.css">
     <link rel="stylesheet" href="../assets/css/profile.style.css">
+    <link rel="stylesheet" href="../assets/css/utils/private.style.css">
 
     <script src="../assets/js/visuals.js"></script>
     <script src="../assets/js/session.js"></script>
@@ -65,7 +66,7 @@
             </a>
             <div class="prof-info">
                 <div id="prof_pic_div">
-                    <img id="prof_pic_img" class="prof-pic" src="" alt="">
+                    <img id="prof_pic_img" class="prof-pic" src="../assets/img/icon/user-icon.png" alt="">
                 </div>
                 <p id="prof_name" class="big-text prof-name">Fulano</p>
             </div>
@@ -94,9 +95,16 @@
             <hr class="divider">
             <div class="prof-main-wrapper" id="prof_main_wrapper">
                 <div id="prof_posts" class="prof-posts">
+                    <div class="no-posts">
+                        <img src="../assets/img/char/knight-crying.png" alt="Sem postagens feitas">
+                        <p class="big-text">Você não fez nenhuma postagem ainda</p>
+                    </div>
                 </div>
                 <div id="prof_saved" class="prof-saved">
-
+                    <div class="no-posts">
+                        <img src="../assets/img/char/knight-crying.png" alt="Sem postagens feitas">
+                        <p class="big-text">Você não salvou nenhuma postagem ainda</p>
+                    </div>
                 </div>
                 <div id="prof_advanced" class="prof-advanced">
                     <div id="graficos">
@@ -412,6 +420,8 @@
             icon: 'warning',
             title: 'Você tem certeza que quer excluir o seu perfil?',
             text: 'Isso irá apagar todas aas suas informações permanentemente',
+            background: '#0F0F0F',
+            color: '#FFFFFF',
             showDenyButton: true,
             showCancelButton: true,
             confirmButtonText: 'Sim, excluir',
@@ -426,31 +436,33 @@
         }).then((result) => {
             if (result.isConfirmed) {
 
-                    fetch(`/usuarios/excluir/${sessionStorage.ID_USUARIO}`, {
-                        method: "DELETE"
-                    })
-                        .then(res => {
-                            if (res.ok) {
+                fetch(`/usuarios/excluir/${sessionStorage.ID_USUARIO}`, {
+                    method: "DELETE"
+                })
+                    .then(res => {
+                        if (res.ok) {
 
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Perfil excluído com sucesso, saindo do sistema...',
-                                    confirmButtonText: 'Okay'
-                                })
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Perfil excluído com sucesso, saindo do sistema...',
+                                background: '#0F0F0F',
+                                color: '#FFFFFF',
+                                confirmButtonText: 'Okay'
+                            })
                                 .then(() => {
                                     sessionStorage.removeItem('ID_USUARIO');
                                     window.location = "../index.html";
                                 })
 
-                            } else {
-                                throw ("Houve um erro ao tentar realizar o cadastro!");
-                            }
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        })
+                        } else {
+                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
 
-                    
+
             } else if (result.isDenied) {
                 Swal.fire({
                     icon: 'error',

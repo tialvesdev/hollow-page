@@ -94,13 +94,18 @@ canvas {
     transition: all .4s ease-in-out;
 }
 
-.prof-posts, .prof-saved {
+.prof-posts,
+.prof-saved {
     padding: 25px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 20px;
+}
+
+.prof-saved {
+    display: none;
 }
 
 .prof-advanced {
@@ -133,4 +138,14 @@ canvas {
     width: 20px;
     height: 20px;
     object-fit: contain;
+}
+
+.no-posts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.no-posts img {
+    width: 200px;
 }

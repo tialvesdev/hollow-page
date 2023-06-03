@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="./assets/img/icon/hollow-icon.ico" type="image/x-icon">
     <title>Hollow Page</title>
 
-    <link rel="stylesheet" href="./assets/css/global.style.css">
+    <link rel="stylesheet" href="./assets/css/utils/global.style.css">
     <link rel="stylesheet" href="./assets/css/index.style.css">
 
     <script type='text/javascript' src='http://www.youtube.com/player_api'></script>
@@ -301,7 +301,7 @@
             referrerpolicy: 'no-referrer'
         });
     }
-    
+
     var samples = document.getElementById('samples');
 
     window.onscroll = () => addBlur('nav');
@@ -353,48 +353,18 @@
         }
     }
 
-    function createDreams() {
-        var section = document.getElementById('hollow_knight');
-        var dream = document.createElement('img');
-        dream.classList.add('dream-efx-img');
-        dream.src = './assets/img/icon/dream-particle.png';
-
-        var size = Math.random() * 500;
-        var randomColor = colors[Math.floor(Math.random() * colors.length)];
-
-        dream.style.width = 50 + size + 'px';
-        dream.style.height = 50 + size + 'px';
-
-        dream.style.top = Math.random() * innerHeight + 'px';
-        dream.style.left = Math.random() * innerWidth + 'px';
-
-        if (selectedColor == '') {
-
-            dream.style.filter = `invert(97%) sepia(97%) saturate(4%) hue-rotate(77deg) brightness(104%) contrast(100%) 
-            drop-shadow(0 0 5px ${randomColor}) drop-shadow(0 0 10px ${randomColor}) drop-shadow(0 0 15px ${randomColor}) blur(${Math.floor(Math.random() * 10)}px)`;
-
-        } else {
-
-            dream.style.filter = `invert(97%) sepia(97%) saturate(4%) hue-rotate(77deg) brightness(104%) contrast(100%) 
-            drop-shadow(0 0 5px ${selectedColor}) drop-shadow(0 0 10px ${selectedColor}) drop-shadow(0 0 15px ${selectedColor}) blur(${Math.floor(Math.random() * 10)}px)`;
-        }
-
-
-        section.appendChild(dream);
-
-        setTimeout(() => {
-            dream.remove();
-        }, 10000);
+    var dreamsVar = () => {
+        createDreams('hollow_knight', false);
     }
 
-    setInterval(createDreams, 1000);
+    setInterval(dreamsVar, 1000);
 
 
     // window.onload = samplesAnimation();
 
     function samplesAnimation() {
         var samplesWidth = samples.offsetWidth;
-        
+
         var scrollSample = () => {
             samples.style.transform == `rotate(-8deg) translateX(-${samplesWidth}px)`
 
@@ -403,7 +373,7 @@
 
             } else {
                 samples.style.transform = `rotate(-8deg)`;
-                
+
             }
         }
 
