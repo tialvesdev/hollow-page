@@ -51,6 +51,7 @@ canvas {
     width: 150px;
     border-radius: 100%;
     display: block;
+    object-fit: cover;
 }
 
 .prof-pic img {

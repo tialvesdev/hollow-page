@@ -38,7 +38,7 @@
             </div>
 
             <div id="cad_sect_2" class="cad-adc-sect">
-                <label for="cad_ipt_img" class="cad-img-sect">
+                <label for="adc_ipt_img" class="cad-img-sect">
                     <input class="ipt-file sumir" onchange="previewImage(event, 'cad_img', 'cad_img_text')" type="file"
                         accept="image/*" id="adc_ipt_img" name="adc_ipt_img">
                     <div class="cad-img-div">
@@ -71,9 +71,9 @@
             </div>
 
             <div id="cad_sect_3" class="cad-adc-sect">
-                <h2>Cadastro Adicional Completo</h2>
-                <img src="" alt="">
-                <button class="btn">Beleza!</button>
+                <h2 class="title">Cadastro Adicional Completo</h2>
+                <img src="../assets/img/char/ok-knight.png" alt="">
+                <a class="btn" href="./feed.html">Beleza!</a>
             </div>
 
         </div>
@@ -110,12 +110,58 @@
 
         } else {
             // setar variaveis
+            var adcFoto = adc_ipt_img.files[0];
+            var adcGenero = select_adc_genero.value;
+            var adcTel = ipt_adc_tel.value;
 
-            if (adc_ipt_img.files[0] == undefined) {
+            console.log(adcFoto, adcGenero, adcTel);
+
+            if (adcFoto == undefined) {
                 // fetch com insert e sem foto
+
+                fetch(`/fichas/fichaSemFoto/${sessionStorage.ID_USUARIO}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        genero: adcGenero,
+                        tel: adcTel
+                    })
+                })
+                    .then(res => {
+                        alert('voltou do then');
+
+                        changeSectionSmooth('cad_adc_modal', 'cad_sect_1', 'cad_sect_2', 'cad_sect_3')
+
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
 
             } else {
                 // fetch com insert e com foto
+                const formData = new FormData();
+                formData.append('foto', adcFoto);
+                formData.append('genero', adcGenero);
+                formData.append('tel', adcTel);
+
+                fetch(`/fichas/fichaComFoto/${sessionStorage.ID_USUARIO}`, {
+                    method: "POST",
+                    // headers: {
+                    //     "Content-Type": "application/json"
+                    // },
+                    body: formData
+                })
+                    .then(res => {
+                        alert('voltou do then');
+
+                        changeSectionSmooth('cad_adc_modal', 'cad_sect_1', 'cad_sect_2', 'cad_sect_3')
+
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
 
             }
         }
