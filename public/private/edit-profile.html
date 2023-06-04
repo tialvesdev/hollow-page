@@ -45,8 +45,8 @@
                         <img id="edit_prof_img" src="" alt="Foto de Perfil" class="edit-prof-img">
                         <p id="edit_prof_img_name" class="text edit-text"> <b> Nenhuma foto selecionada </b> </p>
                         <label for="ipt_edit_prof_pic">
-                            <input class="sumir" type="file" name="ipt_edit_prof_pic" id="ipt_edit_prof_pic" accept="image/*"
-                            onchange="previewImage(event)">
+                            <input class="sumir" type="file" name="ipt_edit_prof_pic" id="ipt_edit_prof_pic"
+                                accept="image/*" onchange="previewImage(event, 'edit_prof_img', 'edit_prof_img_name')">
                             <a class="big-text">
                                 <b> Importar Foto </b>
                             </a>
@@ -70,9 +70,12 @@
 
                     <div class="edit-aside">
                         <div class="dropdown">
-                            <button onclick="mostrarOpts()" id="drop-btn" class="drop-btn text"><p>Fundo de Perfil</p> <p>▼</p></button>
+                            <button onclick="mostrarOpts()" id="drop-btn" class="drop-btn text">
+                                <p>Fundo de Perfil</p>
+                                <p>▼</p>
+                            </button>
                             <ul id="drop_group" class="drop-group">
-                                
+
                             </ul>
                             <input type="number" id="ipt_edit_bg" style="display: none;">
                         </div>
@@ -90,19 +93,6 @@
 </html>
 
 <script>
-
-    const previewImage = (event) => {
-        const imageFiles = event.target.files;
-
-        var img = document.getElementById('edit_prof_img');
-        var name = document.getElementById('edit_prof_img_name');
-
-        img.src = URL.createObjectURL(imageFiles[0]);
-        img.style.display = 'block';
-        name.innerHTML = imageFiles[0].name;
-        name.style.display = 'block';
-
-    }
 
     function mostrarOpts() {
         document.getElementById('drop_group').classList.toggle('aparecer');
@@ -125,16 +115,18 @@
                     // console.log(json);
                     usuario = json;
 
-                    if (json[0].fotoPerfilSrc == null) {
-                        document.getElementById('edit_prof_img').src = `../assets/img/icon/user-icon.png`;
-                    } else {
-                        document.getElementById('edit_prof_img').src = `../assets/bucket/${json[0].fotoPerfilSrc}`;
-                        document.getElementById('edit_prof_img_name').innerHTML = '<b> Foto de Perfil </b>';
-                    }
+                    document.getElementById('edit_prof_img').src = json[0].fotoPerfilSrc;
+                    document.getElementById('edit_prof_img_name').innerHTML = '<b> Foto de Perfil </b>';
 
                     document.getElementById('ipt_edit_nome').value = json[0].nome;
                     document.getElementById('ipt_edit_email').value = json[0].email;
-                    document.getElementById('ipt_edit_dt_nasc').value = json[0].dtNasc;
+
+                    console.log(json[0].dtNasc);
+
+                    var dateparts = json[0].dtNasc.split('/');
+                    var newDate = dateparts[2] + "-" + dateparts[1] + "-" + dateparts[0]
+
+                    document.getElementById('ipt_edit_dt_nasc').value = newDate;
 
                     if (json[0].genero != null) {
                         for (let i = 0; i < 4; i++) {
@@ -143,7 +135,7 @@
                             if (opt_genero.value == json[0].genero) {
                                 opt_genero.setAttribute('selected', 'selected');
                             }
-                            
+
                         }
                         // document.getElementById('ipt_edit_genero').value = json[0].genero;
                     }
@@ -175,8 +167,8 @@
 
                     json.forEach(fundo => {
                         dropGroup.innerHTML += `
-                            <li class="drop-opt text" style="background-image: url('../assets/img/profile/${fundo.fundoSrc}')" onclick="selectBg(${fundo.idFundo}, '${fundo.nomeFundoPerfil}', '${fundo.fundoSrc}')">
-                                ${fundo.nomeFundoPerfil}
+                            <li class="drop-opt text" style="background-image: url('../assets/img/profile/${fundo.fundoSrc}')" onclick="selectBg(${fundo.idFundoPerfil}, '${fundo.nomeFundoPerfil}', '${fundo.fundoSrc}')">
+                                <p> ${fundo.nomeFundoPerfil} </p>
                             </li>
                         `;
                     })
@@ -200,87 +192,147 @@
 
     function editar() {
 
-        // var idUsuarioVar = sessionStorage.ID_USUARIO
-        // var nomeVar = ipt_edit_nome.value;
-        // var emailVar = ipt_edit_email.value;
-        // var dtNascVar = ipt_edit_dt_nasc.value;
-        // var fotoPerfilVar = ipt_edit_prof_pic.files[0] == undefined ? null : ipt_edit_prof_pic.files[0];
-        // var generoVar = stringToNull(select_edit_genero.value);
-        // var telVar = stringToNull(ipt_edit_telefone.value);
-        // var fotoCapaVar = 1;
+        var idUsuarioVar = sessionStorage.ID_USUARIO
+        var nomeVar = ipt_edit_nome.value;
+        var emailVar = ipt_edit_email.value;
+        var dtNascVar = ipt_edit_dt_nasc.value;
+        var fotoPerfilVar = ipt_edit_prof_pic.files[0];
+        var generoVar = stringToNull(select_edit_genero.value);
+        var telVar = stringToNull(ipt_edit_telefone.value);
+        var fotoCapaVar = ipt_edit_bg.value;
 
-        const formData = new FormData();
-        formData.append('idUsuarioVar', sessionStorage.ID_USUARIO)
-        formData.append('nomeVar', ipt_edit_nome.value)
-        formData.append('emailVar', ipt_edit_email.value)
-        formData.append('dtNascVar', ipt_edit_dt_nasc.value)
-        formData.append('fotoPerfilVar', ipt_edit_prof_pic.files[0] == undefined ? stringToNull('') : ipt_edit_prof_pic.files[0])
-        formData.append('generoVar', select_edit_genero.value)
-        formData.append('telVar', stringToNull(ipt_edit_telefone.value))
-        formData.append('fotoCapaVar', 1);
+        if (validarTexto('Nome', nomeVar, 100) &&
+            validarTexto('Email', emailVar, 50) &&
+            validarData('Data de nascimento', dtNascVar) &&
+            validarTelefone('Telefone', telVar, 11)) {
+                
+            console.log(fotoPerfilVar);
+            if (fotoPerfilVar == undefined) {
+                // fetch sem foto
+                alert('no sem foto');
 
-        for (const value of formData.values()) {
-            console.log(value);
-        }
+                fetch(`/usuarios/editarSemFoto`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        idUsuarioVar: idUsuarioVar,
+                        nomeVar: nomeVar,
+                        emailVar: emailVar,
+                        dtNascVar: dtNascVar,
+                        generoVar: generoVar,
+                        telVar: telVar,
+                        fotoCapaVar: fotoCapaVar
+                    })
+                })
+                    .then(res => {
+                        console.log(res);
+                        if (res.ok) {
 
-        if (validarTexto('Nome', formData.get('nomeVar'), 100) &&
-            validarTexto('Email', formData.get('emailVar'), 50) &&
-            validarData('Data de nascimento', formData.get('dtNascVar')) &&
-            validarTelefone('Telefone', formData.get('telVar'), 11)) {
-                console.log('if, passou na validação');
+                            res.json().then(json => {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Perfil editado!',
+                                    text: 'Redirecionando ao perfil...',
+                                    background: '#000',
+                                    color: '#FFF',
+                                    confirmButtonText: 'Beleza!',
+                                }).then((result) => {
+                                    setTimeout(function () {
+                                        window.location = "./profile.html";
+                                    }, 1000);
+                                });
 
-            fetch(`/usuarios/editar`, {
-                method: "PUT",
-                body: formData
-            })
-                .then(res => {
-                    console.log(res);
-                    if (res.ok) {
-                        // console.log(res);
-
-                        res.json().then(json => {
-                            // console.log(json);
-                            // console.log(JSON.stringify(json));
-
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Perfil editado!',
-                                text: 'Redirecionando ao perfil...',
-                                background: '#000',
-                                color: '#FFF',
-                                confirmButtonText: 'Beleza!',
-                            }).then((result) => {
-                                setTimeout(function () {
-                                    window.location = "./profile.html";
-                                }, 1000);
                             });
 
-                        });
+                        } else {
+                            console.log("Houve um erro ao tentar atualizar o perfil sem foto!");
 
-                    } else {
+                            res.text().then(texto => {
+                                console.error(texto);
+                            });
+                            alert('Deu erro');
 
-                        // console.log("Houve um erro ao tentar realizar o login!");
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Login inválido',
+                                text: 'Usuário não existente...',
+                                background: '#000',
+                                color: '#FFF',
+                            });
 
-                        res.text().then(texto => {
-                            console.error(texto);
-                            // finalizarAguardar(texto);
-                        });
-                        alert('Deu erro');
+                        }
 
-                        // Swal.fire({
-                        //     icon: 'error',
-                        //     title: 'Login inválido',
-                        //     text: 'Usuário não existente...',
-                        //     background: '#000',
-                        //     color: '#FFF',
-                        // });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
 
-                    }
+            } else {
+                // fetch com foto
+                alert('no com foto');
 
+                const formData = new FormData();
+                formData.append('idUsuarioVar', idUsuarioVar)
+                formData.append('nomeVar', nomeVar)
+                formData.append('emailVar', emailVar)
+                formData.append('dtNascVar', dtNascVar)
+                formData.append('fotoPerfilVar', fotoPerfilVar)
+                formData.append('generoVar', generoVar)
+                formData.append('telVar', telVar)
+                formData.append('fotoCapaVar', fotoCapaVar)
+
+                fetch(`/usuarios/editarComFoto`, {
+                    method: "PUT",
+                    // headers: {
+                    //     "Content-Type": "application/json"
+                    // },
+                    body: formData
                 })
-                .catch(err => {
-                    console.log(err);
-                });
+                    .then(res => {
+                        console.log(res);
+
+                        if (res.ok) {
+                            res.json().then(json => {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Perfil editado!',
+                                    text: 'Redirecionando ao perfil...',
+                                    background: '#000',
+                                    color: '#FFF',
+                                    confirmButtonText: 'Beleza!',
+                                }).then((result) => {
+                                    setTimeout(function () {
+                                        window.location = "./profile.html";
+                                    }, 1000);
+                                });
+
+                            });
+
+                        } else {
+                            console.log("Houve um erro ao tentar editar o perfil!");
+
+                            res.text().then(texto => {
+                                console.error(texto);
+                            });
+                            alert('Deu erro');
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Login inválido',
+                                text: 'Usuário não existente...',
+                                background: '#000',
+                                color: '#FFF',
+                            });
+
+                        }
+
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
 
         } else {
             console.log('else, n passou');

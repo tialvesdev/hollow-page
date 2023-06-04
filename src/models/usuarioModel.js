@@ -90,31 +90,56 @@ function mostrarPerfilPosts(idUsuario) {
     return database.executar(instrucao);
 }
 
-function editarUsuario(usuario) {
+function editarUsuarioSemFoto(idUsuario, nome, email, dtNasc, genero, tel, fotoCapa) {
 
-    // function stringToNull(string) {
-    //     if (string == '' || string == undefined) {
-    //         return null
-    //     } else {
-    //         return `'${string}'`
-    //     }
-    // }
-
-    
-
-    var instrucao = `
+    var instrucao1 = `
         UPDATE usuario 
-        SET nome = '${usuario.nome}',
-            email = '${usuario.email}',
-            dtNasc = '${usuario.dtNasc}',
-            fotoPerfilSrc = '${usuario.fotoPerfilSrc == '' ? null : `'${usuario.fotoPerfilSrc}'`}',
-            genero = ${usuario.genero},
-            tel = ${usuario.tel == '' ? null : `'${usuario.tel}'`},
-            fkFundoPerfil = ${usuario.fotoCapa}
-                WHERE idUsuario = ${usuario.idUsuario};
+        SET nome = '${nome}',
+            email = '${email}',
+            dtNasc = '${dtNasc}',
+            fkFundoPerfil = ${fotoCapa}
+                WHERE idUsuario = ${idUsuario};
     `;
-    console.log("Executando a instrução SQL: \n" + instrucao);
-    return database.executar(instrucao);
+
+    var instrucao2 = `
+        UPDATE ficha 
+        SET genero = ${genero},
+            tel = ${tel == '' ? null : `${tel}`}
+                WHERE fkUsuario = ${idUsuario};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucao1);
+    database.executar(instrucao1);
+
+    console.log("Executando a instrução SQL: \n" + instrucao2);
+    return database.executar(instrucao2);
+}
+
+
+function editarUsuarioComFoto(idUsuario, nome, email, dtNasc, fotoPerfil, genero, tel, fotoCapa) {
+
+    var instrucao1 = `
+        UPDATE usuario 
+        SET nome = '${nome}',
+            email = '${email}',
+            dtNasc = '${dtNasc}',
+            fkFundoPerfil = ${fotoCapa}
+                WHERE idUsuario = ${idUsuario};
+    `;
+
+    var instrucao2 = `
+        UPDATE ficha 
+        SET fotoPerfilSrc = '../assets/bucket/${fotoPerfil}',
+            genero = ${genero},
+            tel = ${tel == '' ? null : `${tel}`}
+                WHERE fkUsuario = ${idUsuario};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucao1);
+    database.executar(instrucao1);
+
+    console.log("Executando a instrução SQL: \n" + instrucao2);
+    return database.executar(instrucao2);
 }
 
 function excluirPerfil(idUsuario) {
@@ -145,7 +170,8 @@ module.exports = {
     cadastrar,
     mostrarPerfil,
     mostrarPerfilPosts,
-    editarUsuario,
+    editarUsuarioSemFoto,
+    editarUsuarioComFoto,
     excluirPerfil,
     getKpis
 };

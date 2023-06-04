@@ -45,12 +45,6 @@ function fichaSemFoto(req, res) {
 }
 
 function fichaComFoto(req, res) {
-
-    
-    // const imagem = req.file.filename;
-    // const { titulo, descricao, idUsuario } = req.body
-    // const post = { imagem, titulo, descricao, idUsuario }
-
     const idUsuario = req.params.idUsuario;
     const genero = req.body.genero;
     const tel = req.body.tel;

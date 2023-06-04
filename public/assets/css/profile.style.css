@@ -60,6 +60,14 @@ canvas {
     object-fit: contain;
 }
 
+.prof-name {
+    background-color: var(--gray-bg);
+    color: var(--white);
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 10px;
+}
+
 .prof-main {
     width: 80%;
     background-color: var(--black2);

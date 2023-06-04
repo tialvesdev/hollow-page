@@ -17,15 +17,15 @@ function criarFeed(idUsuario) {
         postagem.descricao,
         postagem.postagemSrc,
         DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
-        postagem.fkUsuario,
+        postagem.fkUsuario AS postFkUsuario,
         usuario.nome,
         ficha.fotoPerfilSrc,
-        salvo.fkUsuario
+        salvo.fkUsuario AS salvoFkUsuario
             FROM postagem
-                LEFT JOIN salvo ON idPostagem = fkPostagem
                 JOIN usuario ON idUsuario = postagem.fkUsuario
                 JOIN ficha ON  idUsuario = ficha.fkUsuario
-					WHERE salvo.fkUsuario = ${idUsuario} OR salvo.fkUsuario is null
+                LEFT JOIN salvo ON idPostagem = salvo.fkPostagem
+					-- WHERE salvo.fkUsuario = ${idUsuario} OR salvo.fkUsuario is null
 						ORDER BY dtPostagem;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
@@ -102,10 +102,14 @@ function postsSalvos(idUsuario) {
         postagem.descricao,
         postagem.postagemSrc,
         DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
-        postagem.fkUsuario
+        postagem.fkUsuario,
+        salvo.fkUsuario AS salvoFkUsuario,
+        usuario.nome,
+        ficha.fotoPerfilSrc
             FROM postagem
                 JOIN usuario ON idUsuario = fkUsuario
-                JOIN salvo ON fkPostagem = idPostagem
+                JOIN ficha ON idUsuario = ficha.fkUsuario
+                LEFT JOIN salvo ON idPostagem = salvo.fkPostagem
                     WHERE salvo.fkUsuario = ${idUsuario}
                         ORDER BY dtSalvo;
     `;

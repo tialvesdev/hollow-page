@@ -32,8 +32,12 @@ router.get('/kpis/:idUsuario', (req, res) => {
     usuarioController.kpis(req, res);
 });
 
-router.put('/editar',upload.single('fotoPerfilVar'), (req, res) => {
-    usuarioController.editar(req, res);
+router.put('/editarSemFoto', (req, res) => {
+    usuarioController.editarSemFoto(req, res);
+});
+
+router.put('/editarComFoto', upload.single('fotoPerfilVar'), (req, res) => {
+    usuarioController.editarComFoto(req, res);
 });
 
 router.delete('/excluir/:idUsuario', (req, res) => {

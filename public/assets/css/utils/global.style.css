@@ -7,6 +7,22 @@
     scroll-behavior: smooth;
 }
 
+*::-webkit-scrollbar {
+    width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: var(--gray-bg);
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 :root {
     --white: #FFFFFF;
     --black: #000000;
@@ -161,6 +177,10 @@
     position: absolute;
     top: 25px;
     left: 25px;
+}
+
+option {
+    cursor: pointer;
 }
 
 .btn-voltar-float {

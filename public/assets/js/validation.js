@@ -40,7 +40,7 @@ function validarTelefone(nome, texto, tamanho) {
             `${nome} inválido(a)`,
             `Digite um(a) ${nome}...`
         ];
-    } else if(texto.length != tamanho) {
+    } else if(texto.length - 2 != tamanho) {
         dadosAlerta = [
             'error',
             `${nome} inválido(a)`,
@@ -50,6 +50,8 @@ function validarTelefone(nome, texto, tamanho) {
         console.log(nome + ' estrito certo');
         return true;
     }
+
+    console.log(texto.length, tamanho);
 
     console.log(`${nome}: ${texto}`);
     return false;

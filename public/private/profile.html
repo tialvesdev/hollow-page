@@ -372,7 +372,7 @@
                             no_posts_saved.style.display = 'none'
                             json.forEach(post => {
                                 profSaved.innerHTML += `
-                                <img onclick="openPostModal('prof_wrapper', ${post.idPostagem})" class="post" src="${post.postagemSrc}" alt="${post.titulo}">
+                                <img onclick="openPostModal('prof_wrapper', ${post.idPostagem}, 1)" class="post" src="${post.postagemSrc}" alt="${post.titulo}">
                             `
                             })
                         } else {

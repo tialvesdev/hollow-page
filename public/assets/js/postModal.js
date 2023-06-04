@@ -2,20 +2,31 @@ var postSelected;
 var handleSave;
 var handleUnsave;
 
-function openPostModal(wrapper, idPost) {
+function openPostModal(wrapper, idPost, isSalvo) {
     var wrapperTag = document.getElementById(wrapper);
     var postModal = document.getElementById('post_modal');
 
-    usuario.forEach(post => {
-        if (post.idPostagem == idPost) {
-            postSelected = post;
-        }
-    });
+    if (isSalvo == 1) {
+        salvos.forEach(post => {
+            if (post.idPostagem == idPost) {
+                postSelected = post;
+            }
+        });
+    } else {
+        usuario.forEach(post => {
+            if (post.idPostagem == idPost) {
+                postSelected = post;
+            }
+        });
+
+    }
+
 
     console.log(postSelected);
 
     wrapperTag.style.filter = 'brightness(50%)';
-    // document.getElementById('greetings_header').style.filter = 'brightness(50%)';
+    window.location == 'http://localhost:3333/private/feed.html' ? document.getElementById('greetings_header').style.filter = 'brightness(50%)' : null;
+
 
     postModal.style.display = 'flex';
     postModal.style.width = '70%';
@@ -25,7 +36,7 @@ function openPostModal(wrapper, idPost) {
     // if (postSelected.fotoPerfilSrc == null) {
     //     document.getElementById('modal_prof_pic').src = `../assets/img/icon/user-icon.png`;                      
     // } else {
-        document.getElementById('modal_prof_pic').src = `${postSelected.fotoPerfilSrc}`;
+    document.getElementById('modal_prof_pic').src = `${postSelected.fotoPerfilSrc}`;
     // }
 
     document.getElementById('modal_prof_info').setAttribute('href', `./profile.html`)
@@ -33,7 +44,7 @@ function openPostModal(wrapper, idPost) {
 
     document.getElementById('modal_post').src = `${postSelected.postagemSrc}`;
     document.getElementById('modal_date').innerHTML = postSelected.dtPostagem;
-    
+
     document.getElementById('modal_title').innerHTML = postSelected.titulo;
     document.getElementById('modal_desc').innerHTML = postSelected.descricao;
     document.getElementById('modal_download_a').setAttribute('download', `${postSelected.titulo}-${postSelected.nome}`);
@@ -47,19 +58,20 @@ function openPostModal(wrapper, idPost) {
         removerPostSalvo(postSelected.idPostagem)
     }
 
-    if (postSelected.fkUsuario == sessionStorage.ID_USUARIO) {
+    if (postSelected.salvoFkUsuario == sessionStorage.ID_USUARIO) {
         document.getElementById('modal_save').classList.add('dark-btn');
         document.getElementById('modal_save').innerHTML = 'Salvo!';
         document.getElementById('modal_save').addEventListener('click', handleUnsave);
-        
-        // alert('salvo');
+
+        alert('salvo');
 
     } else {
         document.getElementById('modal_save').classList.remove('dark-btn');
         document.getElementById('modal_save').innerHTML = 'Salvar';
         document.getElementById('modal_save').addEventListener('click', handleSave);
-        
-        // alert('nao salvo');
+
+        console.log(postSelected.salvoFkUsuario, sessionStorage.ID_USUARIO);
+        alert('nao salvo');
 
     }
 
@@ -99,7 +111,7 @@ function salvarPost(idPostagem) {
                 handleUnsave = () => {
                     removerPostSalvo(postSelected.idPostagem)
                 }
-                
+
                 document.getElementById('modal_save').addEventListener('click', handleUnsave);
             } else {
                 throw ("Houve um erro ao tentar salvar a postagem!");
@@ -117,13 +129,13 @@ function removerPostSalvo(idPostagem) {
     })
         .then(res => {
             if (res.ok) {
-                
-                    document.getElementById('modal_save').classList.remove('dark-btn');
-                    document.getElementById('modal_save').innerHTML = 'Salvar';
-                    document.getElementById('modal_save').removeEventListener('click', handleUnsave);
 
-                    document.getElementById('modal_save').addEventListener('click', handleSave);
-                    
+                document.getElementById('modal_save').classList.remove('dark-btn');
+                document.getElementById('modal_save').innerHTML = 'Salvar';
+                document.getElementById('modal_save').removeEventListener('click', handleUnsave);
+
+                document.getElementById('modal_save').addEventListener('click', handleSave);
+
             } else {
                 throw ("Houve um erro ao tentar remover postagem dos salvos!");
             }
