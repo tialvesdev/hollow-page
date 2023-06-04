@@ -27,20 +27,6 @@ body::-webkit-scrollbar-thumb:hover {
     min-height: 100vh;
 }
 
-/* .side-opt:after {
-    content: '';
-    width: calc(100% - 20px);
-    transform: scaleX(0); 
-    background-color: var(--dreams);
-    transform-origin: bottom right;
-    transition: transform 0.25s ease-out;
-  }
-  
-.side-opt:hover:after {
-    transform: scaleX(1);
-    transform-origin: bottom left;
-} */
-
 .feed-content {
     min-height: 100vh;
     margin-left: 75px;

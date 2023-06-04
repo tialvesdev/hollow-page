@@ -40,7 +40,7 @@
             <div id="cad_sect_2" class="cad-adc-sect">
                 <label for="cad_ipt_img" class="cad-img-sect">
                     <input class="ipt-file sumir" onchange="previewImage(event, 'cad_img', 'cad_img_text')" type="file"
-                        accept="image/*" id="cad_ipt_img" name="cad_ipt_img">
+                        accept="image/*" id="adc_ipt_img" name="adc_ipt_img">
                     <div class="cad-img-div">
                         <img class="cad-img" id="cad_img" src="../assets/img/icon/user-icon.png" alt="Foto de Perfil">
                         <p id="cad_img_text" class="text">Foto de Perfil</p>
@@ -62,7 +62,7 @@
 
                 <div class="ipt-wrapper">
                     <img src="../assets/img/icon/border-angle.png" alt="Angle" class="ipt-angle">
-                    <input class="ipt" type="text" id="ipt_cad_tel" placeholder="Telefone">
+                    <input class="ipt" type="text" id="ipt_adc_tel" placeholder="Telefone">
                 </div>
 
                 <button onclick="cadastroAdicional()" class="btn">Confirmar</button>
@@ -105,15 +105,18 @@
                 })
                 .catch(err => {
                     console.log(err);
-                })
+                });
 
 
         } else {
             // setar variaveis
-            if (cad_ipt_img.files[0] == undefined) {
+
+            if (adc_ipt_img.files[0] == undefined) {
                 // fetch com insert e sem foto
+
             } else {
                 // fetch com insert e com foto
+
             }
         }
 

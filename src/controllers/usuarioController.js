@@ -140,6 +140,24 @@ function profilePosts(req, res) {
         
 }
 
+function kpis(req, res) {
+
+    const idUsuario = req.params.idUsuario;
+
+    usuarioModel.getKpis(idUsuario)
+        .then(resultado => {
+            if (resultado.length >= 1 ) {
+
+                res.json(resultado);
+            } else {
+                // res.status(403).send('')
+            }
+        }).catch(err => {
+            res.status(500).send(err);
+        });
+        
+}
+
 function editar(req, res) {
 
     // var idUsuario = req.body.idUsuarioVar;
@@ -214,5 +232,6 @@ module.exports = {
     profile,
     profilePosts,
     editar,
-    excluir
+    excluir,
+    kpis
 }

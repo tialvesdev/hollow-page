@@ -120,17 +120,6 @@
 
         validarSessao();
 
-        // if (sessionStorage.ID_FICHA == 'undefined') {
-        //     alert('é null');
-
-        //     document.getElementById('sidebar').style.display = 'none';
-        //     document.getElementById('greetings_header').style.display = 'none';
-        //     document.getElementById('feed_content').style.background = 'var(--black2)';
-        //     document.getElementById('cad_adc').style.display = 'flex';
-        // } else {
-
-        // alert('não é null');
-
         document.getElementById('p_greetings').innerHTML = greetingsTexts[Math.floor(Math.random() * (greetingsTexts.length - 1))];
 
         var feed = document.getElementById('feed');
@@ -148,8 +137,8 @@
                         posts.push(post);
 
                         feed.innerHTML += `
-                                <img onclick="openPostModal('feed_content', ${post.idPostagem})" class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
-                            `;
+                            <img onclick="openPostModal('feed_content', ${post.idPostagem})" class="post" src="${post.postagemSrc}" alt="${post.titulo}">
+                        `;
 
                     });
                 })
@@ -158,32 +147,31 @@
                 feed.innerHTML = '';
                 console.log(err);
             })
-        // }
 
     }
 
-    function salvarPost(idPostagem) {
-        fetch(`/posts/save/${idPostagem}/${sessionStorage.ID_USUARIO}`, {
-            method: "POST"
-        })
-            .then(res => {
-                if (res.ok) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Postagem salva!',
-                        background: '#000',
-                        color: '#FFF',
-                        confirmButtonText: 'Beleza!',
-                    });
-                } else {
-                    throw ("Houve um erro ao tentar salvar a postagem!");
-                }
+    // function salvarPost(idPostagem) {
+    //     fetch(`/posts/save/${idPostagem}/${sessionStorage.ID_USUARIO}`, {
+    //         method: "POST"
+    //     })
+    //         .then(res => {
+    //             if (res.ok) {
+    //                 Swal.fire({
+    //                     icon: 'success',
+    //                     title: 'Postagem salva!',
+    //                     background: '#000',
+    //                     color: '#FFF',
+    //                     confirmButtonText: 'Beleza!',
+    //                 });
+    //             } else {
+    //                 throw ("Houve um erro ao tentar salvar a postagem!");
+    //             }
 
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //         })
+    // }
 
 
 

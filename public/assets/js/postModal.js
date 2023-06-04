@@ -12,29 +12,32 @@ function openPostModal(wrapper, idPost) {
         }
     });
 
+    console.log(postSelected);
+
     wrapperTag.style.filter = 'brightness(50%)';
+    // document.getElementById('greetings_header').style.filter = 'brightness(50%)';
 
     postModal.style.display = 'flex';
     postModal.style.width = '70%';
     postModal.style.padding = '0 25px 25px 25px';
     postModal.style.opacity = '1';
 
-    if (postSelected.fotoPerfilSrc == null) {
-        document.getElementById('modal_prof_pic').src = `../assets/img/icon/user-icon.png`;                      
-    } else {
-        document.getElementById('modal_prof_pic').src = `../assets/bucket/${postSelected.fotoPerfilSrc}`;
-    }
+    // if (postSelected.fotoPerfilSrc == null) {
+    //     document.getElementById('modal_prof_pic').src = `../assets/img/icon/user-icon.png`;                      
+    // } else {
+        document.getElementById('modal_prof_pic').src = `${postSelected.fotoPerfilSrc}`;
+    // }
 
     document.getElementById('modal_prof_info').setAttribute('href', `./profile.html`)
     document.getElementById('modal_prof_name').innerHTML = postSelected.nome;
 
-    document.getElementById('modal_post').src = `../assets/bucket/${postSelected.postSrc}`;
+    document.getElementById('modal_post').src = `${postSelected.postagemSrc}`;
     document.getElementById('modal_date').innerHTML = postSelected.dtPostagem;
     
     document.getElementById('modal_title').innerHTML = postSelected.titulo;
     document.getElementById('modal_desc').innerHTML = postSelected.descricao;
     document.getElementById('modal_download_a').setAttribute('download', `${postSelected.titulo}-${postSelected.nome}`);
-    document.getElementById('modal_download_a').setAttribute('href', `../assets/bucket/${postSelected.fotoPerfilSrc}`);
+    document.getElementById('modal_download_a').setAttribute('href', `${postSelected.fotoPerfilSrc}`);
 
     handleSave = () => {
         salvarPost(postSelected.idPostagem)
@@ -49,14 +52,14 @@ function openPostModal(wrapper, idPost) {
         document.getElementById('modal_save').innerHTML = 'Salvo!';
         document.getElementById('modal_save').addEventListener('click', handleUnsave);
         
-        alert('salvo');
+        // alert('salvo');
 
     } else {
         document.getElementById('modal_save').classList.remove('dark-btn');
         document.getElementById('modal_save').innerHTML = 'Salvar';
         document.getElementById('modal_save').addEventListener('click', handleSave);
         
-        alert('nao salvo');
+        // alert('nao salvo');
 
     }
 
@@ -68,6 +71,7 @@ function closePostModal(wrapper) {
     var postModal = document.getElementById('post_modal');
 
     wrapperTag.style.filter = 'none';
+    // document.getElementById('greetings_header').style.filter = 'none';
 
     postModal.style.display = 'none';
     postModal.style.width = '0';

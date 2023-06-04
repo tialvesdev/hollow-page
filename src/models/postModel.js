@@ -1,7 +1,6 @@
 var database = require("../database/config");
 
 function amostras() {
-    // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
     var instrucao = `
         SELECT * FROM postagem
             ORDER BY RAND()
@@ -12,20 +11,20 @@ function amostras() {
 }
 
 function criarFeed(idUsuario) {
-    // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
     var instrucao = `
     SELECT postagem.idPostagem,
         postagem.titulo,
         postagem.descricao,
-        postagem.postSrc,
+        postagem.postagemSrc,
         DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
         postagem.fkUsuario,
         usuario.nome,
-        usuario.fotoPerfilSrc,
+        ficha.fotoPerfilSrc,
         salvo.fkUsuario
             FROM postagem
                 LEFT JOIN salvo ON idPostagem = fkPostagem
                 JOIN usuario ON idUsuario = postagem.fkUsuario
+                JOIN ficha ON  idUsuario = ficha.fkUsuario
 					WHERE salvo.fkUsuario = ${idUsuario} OR salvo.fkUsuario is null
 						ORDER BY dtPostagem;
     `;
@@ -33,25 +32,16 @@ function criarFeed(idUsuario) {
     return database.executar(instrucao);
 }
 
-// Coloque os mesmos parâmetros aqui. Vá para a var instrucao
 function postar(post) {
-    // console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", titulo, descricao, foto, idUsuario);
-    
-    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
-    //  e na ordem de inserção dos dados.
     var instrucao = `
-        INSERT INTO postagem (postSrc, dtPostagem, dtLastEdit, titulo, descricao, fkUsuario) VALUES 
-            ('${post.imagem}', now(), now(), '${post.titulo}', '${post.descricao}', ${post.idUsuario});
+        INSERT INTO postagem (postagemSrc, dtPostagem, titulo, descricao, fkUsuario) VALUES 
+            ('../assets/bucket/${post.imagem}', now(), '${post.titulo}', '${post.descricao}', ${post.idUsuario});
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
 
 function salvarPost(idPostagem, idUsuario) {
-    // console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", titulo, descricao, foto, idUsuario);
-    
-    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
-    //  e na ordem de inserção dos dados.
     var instrucao = `
         INSERT INTO salvo (dtSalvo, fkPostagem, fkUsuario) VALUES 
             (now(), ${idPostagem}, ${idUsuario});
@@ -61,10 +51,6 @@ function salvarPost(idPostagem, idUsuario) {
 }
 
 function removerPostSalvo(idPostagem, idUsuario) {
-    // console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", titulo, descricao, foto, idUsuario);
-    
-    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
-    //  e na ordem de inserção dos dados.
     var instrucao = `
         DELETE FROM salvo WHERE fkPostagem = ${idPostagem} AND fkUsuario = ${idUsuario};
     `;
@@ -114,7 +100,7 @@ function postsSalvos(idUsuario) {
     SELECT postagem.idPostagem,
         postagem.titulo,
         postagem.descricao,
-        postagem.postSrc,
+        postagem.postagemSrc,
         DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
         postagem.fkUsuario
             FROM postagem
@@ -122,6 +108,42 @@ function postsSalvos(idUsuario) {
                 JOIN salvo ON fkPostagem = idPostagem
                     WHERE salvo.fkUsuario = ${idUsuario}
                         ORDER BY dtSalvo;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function postMaisSalvo(idUsuario) {
+    // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
+    var instrucao = `
+    SELECT 
+	COUNT(idPostagem) AS vezesSalvo,
+    postagem.postagemSrc AS foto
+		FROM postagem
+            JOIN salvo ON idPostagem = fkPostagem
+            JOIN usuario ON idUsuario = postagem.fkUsuario
+				WHERE postagem.fkUsuario = ${idUsuario}
+					GROUP BY foto
+						ORDER BY vezesSalvo DESC
+							LIMIT 1;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function postMenosSalvo(idUsuario) {
+    // console.log("ACESSEI O FEED MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
+    var instrucao = `
+    SELECT 
+	COUNT(idPostagem) AS vezesSalvo,
+    postagem.postagemSrc AS foto
+		FROM postagem
+            JOIN salvo ON idPostagem = fkPostagem
+            JOIN usuario ON idUsuario = postagem.fkUsuario
+				WHERE postagem.fkUsuario = ${idUsuario}
+					GROUP BY foto
+						ORDER BY vezesSalvo
+							LIMIT 1;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
@@ -136,5 +158,7 @@ module.exports = {
     removerPostSalvo,
     montarGrafico,
     atualizarGrafico,
-    postsSalvos
+    postsSalvos,
+    postMaisSalvo,
+    postMenosSalvo
 }

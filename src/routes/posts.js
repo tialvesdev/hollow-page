@@ -40,6 +40,12 @@ router.get("/savedPosts/:idUsuario", function (req, res) {
     postController.savedPosts(req, res);
 });
 
-  
+router.get("/postMaisSalvo/:idUsuario", function (req, res) {
+    postController.maisSalvo(req, res);
+});
+
+router.get("/postMenosSalvo/:idUsuario", function (req, res) {
+    postController.menosSalvo(req, res);
+});
 
 module.exports = router;

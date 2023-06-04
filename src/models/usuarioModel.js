@@ -33,7 +33,7 @@ function mostrarPerfil(idUsuario) {
     var instrucao = `
         SELECT nome,
             email,
-            DATE_FORMAT(dtNasc, '%Y-%m-%d') AS dtNasc,
+            DATE_FORMAT(dtNasc, '%d/%m/%Y') AS dtNasc,
             fotoPerfilSrc,
             genero,
             tel,
@@ -41,7 +41,24 @@ function mostrarPerfil(idUsuario) {
             nomeFundoPerfil
                 FROM usuario
                     JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                    JOIN ficha ON idUsuario = fkUsuario
                         WHERE idUsuario = ${idUsuario};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function getKpis(idUsuario) {
+    var instrucao = `
+    SELECT 
+        postagem.titulo as titulo,
+        postagem.postagemSrc as foto,
+        COUNT(salvo.fkUsuario) as nSalvo
+            FROM postagem
+                JOIN salvo ON idPostagem = fkPostagem
+                JOIN usuario ON idUsuario = salvo.fkUsuario
+                    WHERE postagem.fkUsuario = ${idUsuario}
+                        GROUP BY titulo, postagemSrc;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
@@ -49,17 +66,23 @@ function mostrarPerfil(idUsuario) {
 
 function mostrarPerfilPosts(idUsuario) {
     var instrucao = `
-        SELECT *,
+        SELECT usuario.nome,
+            usuario.email,
+            DATE_FORMAT(usuario.dtNasc, '%d/%m/%Y') AS dtNasc,
             postagem.idPostagem,
             postagem.titulo,
             postagem.descricao,
-            postagem.postSrc,
+            postagem.postagemSrc,
             DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
             fundoPerfil.fundoSrc,
-            fundoPerfil.nomeFundoPerfil
+            fundoPerfil.nomeFundoPerfil,
+            ficha.genero,
+            ficha.tel,
+            ficha.fotoPerfilSrc
                 FROM usuario
-                    LEFT JOIN postagem ON idUsuario = fkUsuario
+                    LEFT JOIN postagem ON idUsuario = postagem.fkUsuario
                     JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                    JOIN ficha ON idUsuario = ficha.fkUsuario
                         WHERE idUsuario = ${idUsuario}
                             ORDER BY dtPostagem DESC;
     `;
@@ -123,5 +146,6 @@ module.exports = {
     mostrarPerfil,
     mostrarPerfilPosts,
     editarUsuario,
-    excluirPerfil
+    excluirPerfil,
+    getKpis
 };

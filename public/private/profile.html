@@ -101,14 +101,32 @@
                     </div>
                 </div>
                 <div id="prof_saved" class="prof-saved">
-                    <div class="no-posts">
+                    <div id="no_posts_saved" class="no-posts">
                         <img src="../assets/img/char/knight-crying.png" alt="Sem postagens feitas">
                         <p class="big-text">Você não salvou nenhuma postagem ainda</p>
                     </div>
                 </div>
                 <div id="prof_advanced" class="prof-advanced">
+                    <div class="advanced-info">
+                        <div>
+                            <p class="small-text">Email: </p>
+                            <h3 class="text lifeblood" id="user_email">sla@sla.com</h3>
+                        </div>
+                        <div>
+                            <p class="small-text">Data de nascimento: </p>
+                            <h3 class="text grimm2" id="user_dtNasc">01/01/2001</h3>
+                        </div>
+                        <div>
+                            <p class="small-text">Gênero: </p>
+                            <h3 class="text godmaster" id="user_genero">Masculino</h3>
+                        </div>
+                        <div>
+                            <p class="small-text">Telefone: </p>
+                            <h3 class="text dreams" id="user_tel">11988776655</h3>
+                        </div>
+                    </div>
                     <div id="graficos">
-                        <div id="grafico1" class="display-block">
+                        <div id="grafico1">
                             <h3 class="tituloGraficos">
                                 <span id="tituloAquario1">123</span>
                             </h3>
@@ -116,15 +134,30 @@
                                 <canvas id="myChartCanvas"></canvas>
                             </div>
                         </div>
-                    </div>
-                    <!-- <div class="advanced-kpis">
-                        <div class="kpi-card">
-
+                        <div id="kpis" class="advanced-kpis">
+                            <div class="kpi-card text">
+                                <img id="kpi_most_img" src="" alt="">
+                                <div>
+                                    <p class="small-text">Post mais salvo</p>
+                                    <p id="kpi_most" class="text lifeblood"></p>
+                                </div>
+                            </div>
+                            <div class="kpi-card text">
+                                <img id="kpi_least_img" src="" alt="">
+                                <div>
+                                    <p class="small-text">Post menos salvo</p>
+                                    <p id="kpi_least" class="text grimm2"></p>
+                                </div>
+                            </div>
                         </div>
-                    </div> -->
-                    <div class="slamano">
-                        <button onclick="excluirPerfil(sessionStorage.ID_USUARIO)">Excluir Perfil</button>
+                        <div id="no_graph">
+                            <img src="../assets/img/char/ok-knight.png" alt="">
+                            <p class="text">Faça postagens para aparecer suas informações aqui</p>
+                        </div>
                     </div>
+                    <button class="btn red-btn" onclick="excluirPerfil(sessionStorage.ID_USUARIO)">Excluir
+                        Perfil
+                    </button>
                 </div>
             </div>
         </main>
@@ -177,12 +210,31 @@
         var profPosts = document.getElementById('prof_posts');
         var profSaved = document.getElementById('prof_saved');
 
-        fetch(`/usuarios/profilePosts/${sessionStorage.ID_USUARIO}`, {
+        fetch(`/usuarios/profile/${sessionStorage.ID_USUARIO}`, {
             method: "GET"
         })
             .then(res => {
                 res.json().then(json => {
-                    usuario = json;
+
+                    // usuario = json;
+
+                    user_email.innerHTML = json[0].email;
+                    user_dtNasc.innerHTML = json[0].dtNasc;
+                    user_tel.innerHTML = json[0].tel;
+
+                    if (json[0].genero == 'F') {
+                        user_genero.innerHTML = 'Feminino';
+
+                    } else if (json[0].genero == 'M') {
+                        user_genero.innerHTML = 'Masculino';
+
+                    } else if (json[0].genero == 'N') {
+                        user_genero.innerHTML = 'Não-binário';
+
+                    } else if (json[0].genero == 'X') {
+                        user_genero.innerHTML = 'Indefinido';
+
+                    }
 
                     if (json[0].fotoPerfilSrc == null) {
                         document.getElementById('prof_pic_div').innerHTML = `
@@ -191,33 +243,122 @@
                             </a>
                         `;
                     } else {
-                        document.getElementById('prof_pic_img').src = `../assets/bucket/${json[0].fotoPerfilSrc}`;
+                        document.getElementById('prof_pic_img').src = `${json[0].fotoPerfilSrc}`;
                     }
 
                     document.getElementById('prof_name').innerHTML = json[0].nome;
                     document.getElementById('prof_header').style.backgroundImage = `url('../assets/img/profile/${json[0].fundoSrc}')`;
-
-                    if (json[0].idPostagem != null) {
-                        json.forEach(post => {
-                            profPosts.innerHTML += `
-                                <img onclick="openPostModal('prof_wrapper', ${post.idPostagem})" class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
-                            `
-                        })
-                    } else {
-                        profPosts.innerHTML += `
-                            <div>
-                                <img class="no-posts" src="../assets/img/char/knight-crying.png" alt="">
-                                <p class="text"> Nenhuma postagem foi feita ainda </p>
-                            </div>
-                        `;
-                    }
-
 
                 })
             })
             .catch(err => {
                 console.log(err);
             });
+
+        fetch(`/usuarios/profilePosts/${sessionStorage.ID_USUARIO}`, {
+            method: "GET"
+        })
+            .then(res => {
+                res.json().then(json => {
+
+                    usuario = json;
+
+                    if (json[0].idPostagem != null) {
+                        profPosts.innerHTML = '';
+                        json.forEach(post => {
+                            profPosts.innerHTML += `
+                                <img onclick="openPostModal('prof_wrapper', ${post.idPostagem})" class="post" src="${post.postagemSrc}" alt="${post.titulo}">
+                            `
+                        })
+                    } else {
+                        profPosts.innerHTML = `
+                            <div class="no-posts">
+                                <img class="no-posts" src="../assets/img/char/knight-crying.png" alt="">
+                                <p class="big-text"> Nenhuma postagem foi feita ainda </p>
+                            </div>
+                        `;
+                    }
+
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        fetch(`/posts/postMaisSalvo/${sessionStorage.ID_USUARIO}`, {
+            method: "GET"
+        })
+            .then(res => {
+                res.json().then(json => {
+
+                    console.log(json[0]);
+
+                    if (json.length > 0) {
+                        kpi_most.innerHTML = `${json[0].vezesSalvo}x`;
+                        kpi_most_img.src = json[0].foto;
+
+                    } else {
+                        console.log('not ok');
+                        kpis.style.display = 'none';
+                        graficos.style.justifyContent = 'center';
+
+                    }
+
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        fetch(`/posts/postMenosSalvo/${sessionStorage.ID_USUARIO}`, {
+            method: "GET"
+        })
+            .then(res => {
+                res.json().then(json => {
+
+                    console.log(json[0]);
+
+                    if (json.length > 0) {
+                        kpi_least.innerHTML = `${json[0].vezesSalvo}x`;
+                        kpi_least_img.src = json[0].foto;
+
+                    } else {
+                        console.log('not ok');
+                        kpis.style.display = 'none';
+                        graficos.style.justifyContent = 'center';
+
+                    }
+
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        // fetch(`/posts/kpis/${sessionStorage.ID_USUARIO}`, {
+        //     method: "GET"
+        // })
+        //     .then(res => {
+        //         res.json().then(json => {
+        //             console.log('teste');
+
+        //             if (json.length > 0) {
+        //                 kpi_count.innerHTML = `${json[0].nSalvo}x`;
+        //                 kpi_count_img.src = json[0].foto;
+
+        //             } else {
+        //                 console.log('not ok');
+        //                 kpis.style.display = 'none';
+
+        //             }
+
+        //         })
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //         console.log('teste');
+
+        //     })
 
         fetch(`/posts/savedPosts/${sessionStorage.ID_USUARIO}`, {
             method: "GET"
@@ -226,23 +367,23 @@
                 res.json().then(json => {
                     salvos = json;
 
-                    console.log(salvos);
-
-                    if (json[0].idPostagem != null) {
-                        json.forEach(post => {
-                            profSaved.innerHTML += `
-                                <img onclick="openPostModal('prof_wrapper', ${post.idPostagem})" class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
+                    if (json.length > 0) {
+                        if (json[0].idPostagem != null) {
+                            no_posts_saved.style.display = 'none'
+                            json.forEach(post => {
+                                profSaved.innerHTML += `
+                                <img onclick="openPostModal('prof_wrapper', ${post.idPostagem})" class="post" src="${post.postagemSrc}" alt="${post.titulo}">
                             `
-                        })
-                    } else {
-                        profSaved.innerHTML += `
+                            })
+                        } else {
+                            profSaved.innerHTML += `
                             <div>
                                 <img class="no-posts" src="../assets/img/char/knight-crying.png" alt="">
                                 <p class="text"> Nenhuma postagem foi feita ainda </p>
                             </div>
                         `;
+                        }
                     }
-
 
                 })
             })
@@ -250,29 +391,14 @@
                 console.log(err);
             })
 
-
         obterDadosGrafico(sessionStorage.ID_USUARIO);
+
 
     }
 
     var usuario;
 
-
-
-    // O gráfico é construído com três funções:
-    // 1. obterDadosGrafico -> Traz dados do Banco de Dados para montar o gráfico da primeira vez
-    // 2. plotarGrafico -> Monta o gráfico com os dados trazidos e exibe em tela
-    // 3. atualizarGrafico -> Atualiza o gráfico, trazendo novamente dados do Banco
-
-    // Esta função *obterDadosGrafico* busca os últimos dados inseridos em tabela de medidas.
-    // para, quando carregar o gráfico da primeira vez, já trazer com vários dados.
-    // A função *obterDadosGrafico* também invoca a função *plotarGrafico*
-
-    //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
-    //     Para ajustar o "select", ajuste o comando sql em src/models
     function obterDadosGrafico(idUsuario) {
-
-        // alterarTitulo(idUsuario)
 
         if (proximaAtualizacao != undefined) {
             clearTimeout(proximaAtualizacao);
@@ -296,24 +422,19 @@
             });
     }
 
-    // Esta função *plotarGrafico* usa os dados capturados na função anterior para criar o gráfico
-    // Configura o gráfico (cores, tipo, etc), materializa-o na página e, 
-    // A função *plotarGrafico* também invoca a função *atualizarGrafico*
     function plotarGrafico(resposta, idUsuario) {
 
         console.log('iniciando plotagem do gráfico...');
 
-        // Criando estrutura para plotar gráfico - labels
         let labels = [];
 
-        // Criando estrutura para plotar gráfico - dados
         let dados = {
             labels: labels,
             datasets: [{
                 label: 'Nº de Postagens',
                 data: [],
                 fill: false,
-                borderColor: '#BF78CE',
+                backgroundColor: '#BF78CE',
                 tension: 0.1
             }]
         };
@@ -322,7 +443,6 @@
         console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
         console.log(resposta)
 
-        // Inserindo valores recebidos em estrutura para plotar o gráfico
         for (i = 0; i < resposta.length; i++) {
             var registro = resposta[i];
             labels.push(registro.dataPost);
@@ -337,75 +457,57 @@
         console.log(dados.datasets)
         console.log('----------------------------------------------')
 
-        // Criando estrutura para plotar gráfico - config
         const config = {
-            type: 'line',
+            type: 'bar',
             data: dados,
         };
 
-        // Adicionando gráfico criado em div na tela
         let myChart = new Chart(
             document.getElementById(`myChartCanvas`),
             config
         );
 
+        document.getElementById('grafico1').style.display = 'block';
+        no_graph.innerHTML = '';
         setTimeout(() => atualizarGrafico(idUsuario, dados, myChart), 2000);
     }
 
-
-    // Esta função *atualizarGrafico* atualiza o gráfico que foi renderizado na página,
-    // buscando a última medida inserida em tabela contendo as capturas, 
-
-    //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
-    //     Para ajustar o "select", ajuste o comando sql em src/models
     function atualizarGrafico(idUsuario, dados, myChart) {
-
-
 
         fetch(`/posts/atualizarGrafico/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
             if (response.ok) {
                 response.json().then(function (novoRegistro) {
 
-                    // obterdados(idAquario);
-                    // alertar(novoRegistro, idAquario);
                     console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
                     console.log(`Dados atuais do gráfico:`);
                     console.log(dados);
 
-                    // let avisoCaptura = document.getElementById(`avisoCaptura${idAquario}`)
-                    // avisoCaptura.innerHTML = ""
-
-
                     if (novoRegistro[0].dataPost == dados.labels[dados.labels.length - 1]) {
                         console.log("---------------------------------------------------------------")
                         console.log("Como não há dados novos para captura, o gráfico não atualizará.")
-                        // avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
                         console.log("Horário do novo dado capturado:")
                         console.log(novoRegistro[0].dataPost)
                         console.log("Horário do último dado capturado:")
                         console.log(dados.labels[dados.labels.length - 1])
                         console.log("---------------------------------------------------------------")
+
                     } else {
-                        // tirando e colocando valores no gráfico
                         dados.labels.shift(); // apagar o primeiro
                         dados.labels.push(novoRegistro[0].dataPost); // incluir um novo momento
 
                         dados.datasets[0].data.shift();  // apagar o primeiro de umidade
                         dados.datasets[0].data.push(novoRegistro[0].nPosts); // incluir uma nova medida de umidade
 
-                        // dados.datasets[1].data.shift();  // apagar o primeiro de temperatura
-                        // dados.datasets[1].data.push(novoRegistro[0].temperatura); // incluir uma nova medida de temperatura
-
                         myChart.update();
+
                     }
 
-                    // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
                     proximaAtualizacao = setTimeout(() => atualizarGrafico(idUsuario, dados, myChart), 2000);
                 });
             } else {
                 console.error('Nenhum dado encontrado ou erro na API');
-                // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
                 proximaAtualizacao = setTimeout(() => atualizarGrafico(idUsuario, dados, myChart), 2000);
+
             }
         })
             .catch(function (error) {

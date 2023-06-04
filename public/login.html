@@ -135,7 +135,9 @@
                         sessionStorage.EMAIL_USUARIO = json.email;
                         sessionStorage.NOME_USUARIO = json.nome;
                         sessionStorage.ID_USUARIO = json.idUsuario;
-                        sessionStorage.ID_FICHA = json.idFicha;
+                        sessionStorage.ID_FICHA = json.fkUsuario;
+
+                        console.log(json);
 
                         Swal.fire({
                             icon: 'success',
@@ -145,7 +147,7 @@
                             color: '#FFF',
                             confirmButtonText: 'Beleza!',
                         }).then((result) => {
-                            if (sessionStorage.ID_FICHA == 'undefined') {
+                            if (sessionStorage.ID_FICHA == 'undefined' || sessionStorage.ID_FICHA == 'null') {
                                 setTimeout(function () {
                                     window.location = "../private/adc-info.html";
                                 }, 1000); 

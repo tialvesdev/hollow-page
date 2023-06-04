@@ -28,6 +28,10 @@ router.get('/profilePosts/:idUsuario', (req, res) => {
     usuarioController.profilePosts(req, res);
 });
 
+router.get('/kpis/:idUsuario', (req, res) => {
+    usuarioController.kpis(req, res);
+});
+
 router.put('/editar',upload.single('fotoPerfilVar'), (req, res) => {
     usuarioController.editar(req, res);
 });

@@ -23,54 +23,6 @@
     --font: 'Poppins';
 }
 
-.grimm1 {
-    color: var(--grimm1);
-}
-
-.grimm2 {
-    color: var(--grimm2);
-}
-
-.crystal {
-    color: var(--crystal);
-}
-
-.dreams {
-    color: var(--dreams);
-}
-
-.lifeblood {
-    color: var(--lifeblood);
-}
-
-.godmaster {
-    color: var(--godmaster);
-}
-
-.bg-grimm1 {
-    background-color: var(--grimm1);
-}
-
-.bg-grimm2 {
-    background-color: var(--grimm2);
-}
-
-.bg-crystal {
-    background-color: var(--crystal);
-}
-
-.bg-dreams {
-    background-color: var(--dreams);
-}
-
-.bg-lifeblood {
-    background-color: var(--lifeblood);
-}
-
-.bg-godmaster {
-    background-color: var(--godmaster);
-}
-
 .title {
     color: var(--white);
     font-family: 'Poppins';
@@ -135,6 +87,17 @@
     background-color: var(--black2);
     color: var(--dreams);
     border: 1px solid var(--dreams);
+}
+
+.red-btn {
+    background-color: var(--black2);
+    color: var(--grimm1);
+    border: 1px solid var(--grimm1);
+}
+
+.red-btn:hover {
+    color: var(--grimm2);
+    border: 1px solid var(--grimm2);
 }
 
 .ipt-wrapper {
@@ -316,6 +279,55 @@
 .swal2-actions .swal2-confirm:hover {
     outline: 2px solid var(--godmaster);
     outline-offset: 5px;
+}
+
+
+.grimm1 {
+    color: var(--grimm1);
+}
+
+.grimm2 {
+    color: var(--grimm2);
+}
+
+.crystal {
+    color: var(--crystal);
+}
+
+.dreams {
+    color: var(--dreams);
+}
+
+.lifeblood {
+    color: var(--lifeblood);
+}
+
+.godmaster {
+    color: var(--godmaster);
+}
+
+.bg-grimm1 {
+    background-color: var(--grimm1);
+}
+
+.bg-grimm2 {
+    background-color: var(--grimm2);
+}
+
+.bg-crystal {
+    background-color: var(--crystal);
+}
+
+.bg-dreams {
+    background-color: var(--dreams);
+}
+
+.bg-lifeblood {
+    background-color: var(--lifeblood);
+}
+
+.bg-godmaster {
+    background-color: var(--godmaster);
 }
 
 @keyframes rotation {

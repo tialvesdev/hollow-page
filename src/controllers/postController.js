@@ -157,6 +157,32 @@ function savedPosts(req, res) {
 
 }
 
+function maisSalvo(req, res) {
+
+    var idUsuario = req.params.idUsuario;
+
+    postModel.postMaisSalvo(idUsuario)
+        .then(resultado => {
+            res.json(resultado);
+        }).catch(err => {
+            res.status(500).send(err);
+        });
+
+}
+
+function menosSalvo(req, res) {
+
+    var idUsuario = req.params.idUsuario;
+
+    postModel.postMenosSalvo(idUsuario)
+        .then(resultado => {
+            res.json(resultado);
+        }).catch(err => {
+            res.status(500).send(err);
+        });
+
+}
+
 module.exports = {
     testar,
     samples,
@@ -166,5 +192,7 @@ module.exports = {
     unsave,
     montarGrafico,
     atualizarGrafico,
-    savedPosts
+    savedPosts,
+    maisSalvo,
+    menosSalvo
 }

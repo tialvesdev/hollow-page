@@ -111,8 +111,11 @@ canvas {
 .prof-advanced {
     width: 100%;
     display: none;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 25px;
+    padding: 25px;
 }
 
 .testesla {
@@ -148,4 +151,63 @@ canvas {
 
 .no-posts img {
     width: 200px;
+}
+
+.advanced-info {
+    padding: 15px;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+#no_graph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#grafico1 {
+    display: none;
+}
+
+#graficos {
+    width: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.advanced-kpis {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.kpi-card {
+    width: 225px;
+    height: 150px;
+    display: flex;
+    /* flex-direction: column; */
+    padding: 10px;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 15px;
+    /* background: rgba(255, 255, 255, 0.1); */
+    background-color: var(--gray-bg);
+    /* box-shadow: 0 8px 32px 0 rgba(61, 61, 61, 0.37); */
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.kpi-card img {
+    height: 100px;
+}
+
+#kpi_count_img {
+    width: 100px;
 }

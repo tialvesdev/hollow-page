@@ -75,7 +75,29 @@
 
     console.log(formData.get('fotoPostagem'))
 
-    if (validarTexto('Título', formData.get('titulo'), 100) && validarTexto('Descrição', formData.get('descricao'), 300) && validarTexto('Foto', formData.get('foto'), 0)) {
+    if (!(validarTexto('Título', formData.get('titulo'), 100)) && !(validarTexto('Descrição', formData.get('descricao'), 300))) {
+
+      console.log('Publicação inválida');
+      Swal.fire({
+        icon: dadosAlerta[0],
+        title: dadosAlerta[1],
+        text: dadosAlerta[2],
+        background: '#000',
+        color: '#FFF',
+      })
+
+    } else if (ipt_file.files[0] == undefined) {
+      
+      console.log('Publicação inválida');
+      Swal.fire({
+        icon: 'error',
+        title: 'Imagem inválida',
+        text: 'Digite uma imagem para a postagem',
+        background: '#000',
+        color: '#FFF',
+      })
+
+    } else {
 
       fetch("/posts/post", {
         method: "POST",
@@ -102,16 +124,6 @@
         .catch(err => {
           console.log(err);
         })
-
-    } else {
-      console.log('Publicação inválida');
-      Swal.fire({
-        icon: dadosAlerta[0],
-        title: dadosAlerta[1],
-        text: dadosAlerta[2],
-        background: '#000',
-        color: '#FFF',
-      })
     }
 
     return false;
