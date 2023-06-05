@@ -27,17 +27,12 @@ function openPostModal(wrapper, idPost, isSalvo) {
     wrapperTag.style.filter = 'brightness(50%)';
     window.location == 'http://localhost:3333/private/feed.html' ? document.getElementById('greetings_header').style.filter = 'brightness(50%)' : null;
 
-
     postModal.style.display = 'flex';
     postModal.style.width = '70%';
     postModal.style.padding = '0 25px 25px 25px';
     postModal.style.opacity = '1';
 
-    // if (postSelected.fotoPerfilSrc == null) {
-    //     document.getElementById('modal_prof_pic').src = `../assets/img/icon/user-icon.png`;                      
-    // } else {
     document.getElementById('modal_prof_pic').src = `${postSelected.fotoPerfilSrc}`;
-    // }
 
     document.getElementById('modal_prof_info').setAttribute('href', `./profile.html`)
     document.getElementById('modal_prof_name').innerHTML = postSelected.nome;
@@ -50,32 +45,6 @@ function openPostModal(wrapper, idPost, isSalvo) {
     document.getElementById('modal_download_a').setAttribute('download', `${postSelected.titulo}-${postSelected.nome}`);
     document.getElementById('modal_download_a').setAttribute('href', `${postSelected.fotoPerfilSrc}`);
 
-    handleSave = () => {
-        salvarPost(postSelected.idPostagem)
-    };
-
-    handleUnsave = () => {
-        removerPostSalvo(postSelected.idPostagem)
-    }
-
-    if (postSelected.salvoFkUsuario == sessionStorage.ID_USUARIO) {
-        document.getElementById('modal_save').classList.add('dark-btn');
-        document.getElementById('modal_save').innerHTML = 'Salvo!';
-        document.getElementById('modal_save').addEventListener('click', handleUnsave);
-
-        alert('salvo');
-
-    } else {
-        document.getElementById('modal_save').classList.remove('dark-btn');
-        document.getElementById('modal_save').innerHTML = 'Salvar';
-        document.getElementById('modal_save').addEventListener('click', handleSave);
-
-        console.log(postSelected.salvoFkUsuario, sessionStorage.ID_USUARIO);
-        alert('nao salvo');
-
-    }
-
-
 }
 
 function closePostModal(wrapper) {
@@ -83,7 +52,7 @@ function closePostModal(wrapper) {
     var postModal = document.getElementById('post_modal');
 
     wrapperTag.style.filter = 'none';
-    // document.getElementById('greetings_header').style.filter = 'none';
+    window.location == 'http://localhost:3333/private/feed.html' ? document.getElementById('greetings_header').style.filter = 'none' : null;
 
     postModal.style.display = 'none';
     postModal.style.width = '0';

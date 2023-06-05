@@ -183,6 +183,23 @@ function menosSalvo(req, res) {
 
 }
 
+function isSaved(req, res) {
+
+    const idUsuario = req.params.idPostagem;
+    const idPostagem = req.params.idPostagem;
+    // console.log(`var idUsuario = ${idUsuario}`);
+
+    postModel.verificarPostSalvo(idPostagem, idUsuario)
+        .then(resultado => {
+            res.json(resultado);
+
+        }).catch(err => {
+            res.status(500).send(err);
+            
+        });
+        
+}
+
 module.exports = {
     testar,
     samples,
@@ -194,5 +211,6 @@ module.exports = {
     atualizarGrafico,
     savedPosts,
     maisSalvo,
-    menosSalvo
+    menosSalvo,
+    isSaved
 }

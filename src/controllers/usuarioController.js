@@ -122,6 +122,8 @@ function profile(req, res) {
         
 }
 
+
+
 function profilePosts(req, res) {
 
     const idUsuario = req.params.idUsuario;

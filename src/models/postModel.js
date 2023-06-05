@@ -19,14 +19,21 @@ function criarFeed(idUsuario) {
         DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
         postagem.fkUsuario AS postFkUsuario,
         usuario.nome,
-        ficha.fotoPerfilSrc,
-        salvo.fkUsuario AS salvoFkUsuario
+        ficha.fotoPerfilSrc
             FROM postagem
                 JOIN usuario ON idUsuario = postagem.fkUsuario
-                JOIN ficha ON  idUsuario = ficha.fkUsuario
-                LEFT JOIN salvo ON idPostagem = salvo.fkPostagem
-					-- WHERE salvo.fkUsuario = ${idUsuario} OR salvo.fkUsuario is null
-						ORDER BY dtPostagem;
+                JOIN ficha ON  idUsuario = ficha.fkUsuario;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function verificarPostSalvo(idUsuario, idPostagem) {
+    var instrucao = `
+    SELECT
+	    fkUsuario
+		    FROM salvo
+			    WHERE fkPostagem = ${idPostagem} AND fkUsuario = ${idUsuario};
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
@@ -158,6 +165,7 @@ module.exports = {
     amostras,
     criarFeed,
     postar,
+    verificarPostSalvo,
     salvarPost,
     removerPostSalvo,
     montarGrafico,

@@ -140,7 +140,7 @@
                         posts.push(post);
 
                         feed.innerHTML += `
-                            <img onclick="openPostModal('feed_content', ${post.idPostagem})" class="post" src="${post.postagemSrc}" alt="${post.titulo}">
+                            <img onclick="verificarSalvo(${post.idPostagem})" class="post" src="${post.postagemSrc}" alt="${post.titulo}">
                         `;
 
                     });
@@ -150,6 +150,53 @@
                 feed.innerHTML = '';
                 console.log(err);
             })
+
+    }
+
+    function verificarSalvo(idPostagem) {
+
+        fetch(`/posts/isSaved/${idPostagem}/${sessionStorage.ID_USUARIO}`, {
+            method: "GET"
+        })
+            .then(res => {
+                res.json().then(json => {
+
+                    console.log(json);
+
+                    handleSave = () => {
+                        salvarPost(idPostagem)
+                    };
+
+                    handleUnsave = () => {
+                        removerPostSalvo(idPostagem)
+                    }
+
+                    if (json.length > 0) {
+                        // botao de unsave
+                        document.getElementById('modal_save').classList.add('dark-btn');
+                        document.getElementById('modal_save').innerHTML = 'Salvo!';
+                        document.getElementById('modal_save').addEventListener('click', handleUnsave);
+
+                        console.log(idPostagem, sessionStorage.ID_USUARIO);
+                        // alert('salvo');
+
+                    } else {
+                        // botao de save
+                        document.getElementById('modal_save').classList.remove('dark-btn');
+                        document.getElementById('modal_save').innerHTML = 'Salvar';
+                        document.getElementById('modal_save').addEventListener('click', handleSave);
+
+                        // alert('nao salvo');
+                    }
+
+                })
+            })
+            .catch(err => {
+                feed.innerHTML = '';
+                console.log(err);
+            })
+
+        openPostModal('feed_content', idPostagem)
 
     }
 

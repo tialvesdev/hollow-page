@@ -16,6 +16,10 @@ router.get('/feed/:idUsuario', (req, res) => {
     postController.feed(req, res);
 });
 
+router.get('/isSaved/:idPostagem/:idUsuario', (req, res) => {
+    postController.isSaved(req, res);
+});
+
 router.post("/post", upload.single('fotoPostagem'), function (req, res) {
     postController.post(req, res);
 });
