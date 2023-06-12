@@ -20,7 +20,6 @@
     <script src="../assets/js/session.js"></script>
     <script src="../assets/js/postModal.js"></script>
 
-    <!-- scripts do Chart.js - 2022-1 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
@@ -33,21 +32,13 @@
                 <img class="side-opt-img" src="../assets/img/icon/home-icon.png" alt="">
                 <b>Home</b>
             </a>
-            <a class="side-opt" href="">
-                <img class="side-opt-img" src="../assets/img/icon/filter-icon.png" alt="">
-                <b>Filtro</b>
-            </a>
-            <a class="side-opt" href="">
-                <img class="side-opt-img" src="../assets/img/icon/search-icon.png" alt="">
-                <b>Pesquisar</b>
-            </a>
-        </div>
-        <div class="side-down">
             <a class="side-opt" href="./new-post.html">
                 <img class="side-opt-img" src="../assets/img/icon/plus-icon.png" alt="">
                 <b>Postar</b>
             </a>
-            <a class="side-opt" href="./profile.html">
+        </div>
+        <div class="side-down">
+            <a class="side-opt" onclick="sessionStorage.PROFILE_ID = sessionStorage.ID_USUARIO; window.location = './profile.html'">
                 <img class="side-opt-img" src="../assets/img/icon/profile-icon.png" alt="">
                 <b>Perfil</b>
             </a>
@@ -73,7 +64,7 @@
         </header>
 
         <main class="prof-main">
-            <a class="edit-btn" href="./edit-profile.html">
+            <a id="prof_edit" class="edit-btn" href="./edit-profile.html">
                 <img src="../assets/img/icon/edit-icon.png" alt="">
             </a>
             <div class="prof-opts">
@@ -168,7 +159,7 @@
             <a onclick="closePostModal('prof_wrapper')" class="seta-voltar seta-modal">
                 <img src="../assets/img/icon/arrow-icon.png" alt="">
             </a>
-            <a href="" id="modal_prof_info" class="modal-prof-info">
+            <a id="modal_prof_info" class="modal-prof-info">
                 <img class="modal-prof-pic" id="modal_prof_pic" src="" alt="Foto de Perfil">
                 <p class="text"> <b id="modal_prof_name"> Nome de Fulano </b> </p>
             </a>
@@ -209,8 +200,9 @@
 
         var profPosts = document.getElementById('prof_posts');
         var profSaved = document.getElementById('prof_saved');
+        var profileID = sessionStorage.PROFILE_ID;
 
-        fetch(`/usuarios/profile/${sessionStorage.ID_USUARIO}`, {
+        fetch(`/usuarios/profile/${profileID}`, {
             method: "GET"
         })
             .then(res => {
@@ -255,7 +247,16 @@
                 console.log(err);
             });
 
-        fetch(`/usuarios/profilePosts/${sessionStorage.ID_USUARIO}`, {
+        if (profileID != sessionStorage.ID_USUARIO) {
+            prof_saved.style.display = 'none';
+            graficos.style.display = 'none';
+            prof_opt_saved.style.display = 'none';
+            prof_opt_advanced.style.display = 'none';
+            prof_edit.style.display = 'none';
+
+        }
+
+        fetch(`/usuarios/profilePosts/${profileID}`, {
             method: "GET"
         })
             .then(res => {
@@ -267,7 +268,7 @@
                         profPosts.innerHTML = '';
                         json.forEach(post => {
                             profPosts.innerHTML += `
-                                <img onclick="openPostModal('prof_wrapper', ${post.idPostagem})" class="post" src="${post.postagemSrc}" alt="${post.titulo}">
+                                <img onclick="verificarSalvo('prof_wrapper', ${post.idPostagem})" class="post" src="${post.postagemSrc}" alt="${post.titulo}">
                             `
                         })
                     } else {
@@ -335,31 +336,6 @@
                 console.log(err);
             });
 
-        // fetch(`/posts/kpis/${sessionStorage.ID_USUARIO}`, {
-        //     method: "GET"
-        // })
-        //     .then(res => {
-        //         res.json().then(json => {
-        //             console.log('teste');
-
-        //             if (json.length > 0) {
-        //                 kpi_count.innerHTML = `${json[0].nSalvo}x`;
-        //                 kpi_count_img.src = json[0].foto;
-
-        //             } else {
-        //                 console.log('not ok');
-        //                 kpis.style.display = 'none';
-
-        //             }
-
-        //         })
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //         console.log('teste');
-
-        //     })
-
         fetch(`/posts/savedPosts/${sessionStorage.ID_USUARIO}`, {
             method: "GET"
         })
@@ -372,7 +348,7 @@
                             no_posts_saved.style.display = 'none'
                             json.forEach(post => {
                                 profSaved.innerHTML += `
-                                <img onclick="openPostModal('prof_wrapper', ${post.idPostagem}, 1)" class="post" src="${post.postagemSrc}" alt="${post.titulo}">
+                                <img onclick="verificarSalvo('prof_wrapper', ${post.idPostagem}, 1)" class="post" src="${post.postagemSrc}" alt="${post.titulo}">
                             `
                             })
                         } else {

@@ -23,7 +23,6 @@
 
 <body>
   <div class="new-post-wrapper">
-    <!-- form action="/upload" method="POST" enctype="multipart/form-data" -->
     <main class="np-main">
       <section class="np-sect">
         <aside class="np-aside">
@@ -64,7 +63,7 @@
   window.onload = () => {
     validarSessao();
   }
- 
+
   function postar() {
 
     const formData = new FormData();
@@ -87,7 +86,7 @@
       })
 
     } else if (ipt_file.files[0] == undefined) {
-      
+
       console.log('Publicação inválida');
       Swal.fire({
         icon: 'error',
@@ -104,8 +103,6 @@
         body: formData
       })
         .then(res => {
-          // alert('voltou do then');
-
           console.log('Publicação adicionada com sucesso');
           Swal.fire({
             icon: 'success',
@@ -130,9 +127,9 @@
   }
 
   function textAreaAdjust(element) {
-    // element.style.height = "1px";
     console.log(`(scrollHeight: ${element.scrollHeight} > clientHeight: ${element.clientHeight}) ? (scrollHeight: ${element.scrollHeight}px) : "40px"`);
     element.style.height = (element.scrollHeight > element.clientHeight) ? (element.scrollHeight) + "px" : "40px";
+
   }
 
 </script>

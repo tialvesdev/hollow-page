@@ -83,7 +83,6 @@ function validarData (nome, data) {
     }
     console.log('acabou');
 
-    // console.log(`${nome}: ${texto}`);
     return false;
 }
 
@@ -97,7 +96,5 @@ function validarIguais (valor1, valor2) {
     }else {
         return true;
     }
-
-    // console.log(`${valor1}: ${valor2}`);
     return false;
 }

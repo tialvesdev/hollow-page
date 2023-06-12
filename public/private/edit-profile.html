@@ -57,7 +57,6 @@
                 <div class="edit-sect">
                     <div class="edit-aside">
                         <p class="text edit-subtitle">Dados Adicionais: </p>
-                        <!-- <input type="text" id="ipt_edit_genero" class="ipt" placeholder="Gênero"> -->
                         <select class="select-edit-genero text" id="select_edit_genero">
                             <option value="X">Selecione um gênero...</option>
                             <option id="opt_edit_genero_1" value="M">Masculino</option>
@@ -112,7 +111,6 @@
             .then(res => {
                 console.log(res);
                 res.json().then(json => {
-                    // console.log(json);
                     usuario = json;
 
                     document.getElementById('edit_prof_img').src = json[0].fotoPerfilSrc;
@@ -137,7 +135,6 @@
                             }
 
                         }
-                        // document.getElementById('ipt_edit_genero').value = json[0].genero;
                     }
 
                     if (json[0].tel != null) {
@@ -205,12 +202,9 @@
             validarTexto('Email', emailVar, 50) &&
             validarData('Data de nascimento', dtNascVar) &&
             validarTelefone('Telefone', telVar, 11)) {
-                
+
             console.log(fotoPerfilVar);
             if (fotoPerfilVar == undefined) {
-                // fetch sem foto
-                alert('no sem foto');
-
                 fetch(`/usuarios/editarSemFoto`, {
                     method: "PUT",
                     headers: {
@@ -252,8 +246,6 @@
                             res.text().then(texto => {
                                 console.error(texto);
                             });
-                            alert('Deu erro');
-
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Login inválido',
@@ -270,9 +262,6 @@
                     });
 
             } else {
-                // fetch com foto
-                alert('no com foto');
-
                 const formData = new FormData();
                 formData.append('idUsuarioVar', idUsuarioVar)
                 formData.append('nomeVar', nomeVar)
@@ -285,9 +274,6 @@
 
                 fetch(`/usuarios/editarComFoto`, {
                     method: "PUT",
-                    // headers: {
-                    //     "Content-Type": "application/json"
-                    // },
                     body: formData
                 })
                     .then(res => {
@@ -316,8 +302,6 @@
                             res.text().then(texto => {
                                 console.error(texto);
                             });
-                            alert('Deu erro');
-
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Login inválido',

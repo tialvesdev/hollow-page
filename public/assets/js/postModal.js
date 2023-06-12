@@ -2,6 +2,50 @@ var postSelected;
 var handleSave;
 var handleUnsave;
 
+function verificarSalvo(wrapper, idPostagem, isSalvo) {
+
+    fetch(`/posts/isSaved/${idPostagem}/${sessionStorage.ID_USUARIO}`, {
+        method: "GET"
+    })
+        .then(res => {
+            res.json().then(json => {
+
+                console.log(json);
+
+                handleSave = () => {
+                    salvarPost(idPostagem)
+                };
+
+                handleUnsave = () => {
+                    removerPostSalvo(idPostagem)
+                }
+
+                if (json.length > 0) {
+                    // botao de unsave
+                    document.getElementById('modal_save').classList.add('dark-btn');
+                    document.getElementById('modal_save').innerHTML = 'Salvo!';
+                    document.getElementById('modal_save').addEventListener('click', handleUnsave);
+
+                    console.log(idPostagem, sessionStorage.ID_USUARIO);
+
+                } else {
+                    document.getElementById('modal_save').classList.remove('dark-btn');
+                    document.getElementById('modal_save').innerHTML = 'Salvar';
+                    document.getElementById('modal_save').addEventListener('click', handleSave);
+
+                }
+
+            })
+        })
+        .catch(err => {
+            feed.innerHTML = '';
+            console.log(err);
+        })
+
+    openPostModal(wrapper, idPostagem, isSalvo)
+
+}
+
 function openPostModal(wrapper, idPost, isSalvo) {
     var wrapperTag = document.getElementById(wrapper);
     var postModal = document.getElementById('post_modal');
@@ -21,7 +65,6 @@ function openPostModal(wrapper, idPost, isSalvo) {
 
     }
 
-
     console.log(postSelected);
 
     wrapperTag.style.filter = 'brightness(50%)';
@@ -34,7 +77,13 @@ function openPostModal(wrapper, idPost, isSalvo) {
 
     document.getElementById('modal_prof_pic').src = `${postSelected.fotoPerfilSrc}`;
 
-    document.getElementById('modal_prof_info').setAttribute('href', `./profile.html`)
+    // document.getElementById('modal_prof_info').setAttribute('href', `./profile.html`)
+
+    document.getElementById('modal_prof_info').addEventListener('click', () => {
+        sessionStorage.PROFILE_ID = postSelected.postagemFkUsuario;
+        window.location = './profile.html'; 
+    });
+
     document.getElementById('modal_prof_name').innerHTML = postSelected.nome;
 
     document.getElementById('modal_post').src = `${postSelected.postagemSrc}`;

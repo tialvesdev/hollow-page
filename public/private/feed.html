@@ -30,21 +30,14 @@
                     <img class="side-opt-img" src="../assets/img/icon/home-icon.png" alt="">
                     <b>Home</b>
                 </a>
-                <a class="side-opt" href="">
-                    <img class="side-opt-img" src="../assets/img/icon/filter-icon.png" alt="">
-                    <b>Filtro</b>
-                </a>
-                <a class="side-opt" href="">
-                    <img class="side-opt-img" src="../assets/img/icon/search-icon.png" alt="">
-                    <b>Pesquisar</b>
-                </a>
-            </div>
-            <div class="side-down">
                 <a class="side-opt" href="./new-post.html">
                     <img class="side-opt-img" src="../assets/img/icon/plus-icon.png" alt="Postar">
                     <b>Postar</b>
                 </a>
-                <a class="side-opt" href="./profile.html">
+            </div>
+            <div class="side-down">
+                
+                <a class="side-opt" onclick="sessionStorage.PROFILE_ID = sessionStorage.ID_USUARIO; window.location = './profile.html'">
                     <img class="side-opt-img" src="../assets/img/icon/profile-icon.png" alt="Perfil">
                     <b>Perfil</b>
                 </a>
@@ -69,10 +62,10 @@
                     <a onclick="closePostModal('feed_content')" class="seta-voltar seta-modal">
                         <img src="../assets/img/icon/arrow-icon.png" alt="">
                     </a>
-                    <a href="" id="modal_prof_info" class="modal-prof-info">
+                    <span id="modal_prof_info" class="modal-prof-info">
                         <img class="modal-prof-pic" id="modal_prof_pic" src="" alt="Foto de Perfil">
                         <p class="text"> <b id="modal_prof_name"> Nome de Fulano </b> </p>
-                    </a>
+                    </span>
                 </div>
 
                 <div class="modal-content">
@@ -178,15 +171,12 @@
                         document.getElementById('modal_save').addEventListener('click', handleUnsave);
 
                         console.log(idPostagem, sessionStorage.ID_USUARIO);
-                        // alert('salvo');
 
                     } else {
-                        // botao de save
                         document.getElementById('modal_save').classList.remove('dark-btn');
                         document.getElementById('modal_save').innerHTML = 'Salvar';
                         document.getElementById('modal_save').addEventListener('click', handleSave);
 
-                        // alert('nao salvo');
                     }
 
                 })
@@ -199,31 +189,5 @@
         openPostModal('feed_content', idPostagem)
 
     }
-
-    // function salvarPost(idPostagem) {
-    //     fetch(`/posts/save/${idPostagem}/${sessionStorage.ID_USUARIO}`, {
-    //         method: "POST"
-    //     })
-    //         .then(res => {
-    //             if (res.ok) {
-    //                 Swal.fire({
-    //                     icon: 'success',
-    //                     title: 'Postagem salva!',
-    //                     background: '#000',
-    //                     color: '#FFF',
-    //                     confirmButtonText: 'Beleza!',
-    //                 });
-    //             } else {
-    //                 throw ("Houve um erro ao tentar salvar a postagem!");
-    //             }
-
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //         })
-    // }
-
-
-
 
 </script>

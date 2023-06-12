@@ -73,6 +73,7 @@ function mostrarPerfilPosts(idUsuario) {
             postagem.titulo,
             postagem.descricao,
             postagem.postagemSrc,
+            postagem.fkUsuario AS postagemFkUsuario,
             DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
             fundoPerfil.fundoSrc,
             fundoPerfil.nomeFundoPerfil,
@@ -153,14 +154,23 @@ function excluirPerfil(idUsuario) {
     `;
 
     var instrucao3 = `
+        DELETE FROM ficha WHERE fkUsuario = ${idUsuario};
+    `;
+
+    var instrucao4 = `
         DELETE FROM usuario WHERE idUsuario = ${idUsuario};
     `;
-    // console.log("Executando a instrução SQL: \n" + instrucao1);
+
+    console.log("Executando a instrução SQL: \n" + instrucao1);
+    console.log("Executando a instrução SQL: \n" + instrucao2);
+    console.log("Executando a instrução SQL: \n" + instrucao3);
+    console.log("Executando a instrução SQL: \n" + instrucao4);
 
     database.executar(instrucao1);
     database.executar(instrucao2);
+    database.executar(instrucao3);
         
-    return database.executar(instrucao3);
+    return database.executar(instrucao4);
 }
 
 

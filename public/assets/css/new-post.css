@@ -44,8 +44,6 @@
     align-self: center;
 }
 
-.ipt-file {}
-
 .ipt-file-label {
     display: flex;
     width: min-content;
@@ -63,14 +61,13 @@
 }
 
 .ipt-file-img {
-    max-width: 500px;
+    max-width: 350px;
     max-height: 350px;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .ipt-file-name,
 .ipt-file-a {
-    /* width: 100%; */
     white-space: nowrap;
     text-align: center;
 }

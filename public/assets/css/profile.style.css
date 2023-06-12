@@ -89,7 +89,6 @@ canvas {
     transition: all ease-in-out .2s;
     font-family: 'Lexend';
     cursor: pointer;
-    /* text-decoration: underline; */
     font-size: 20px;
 }
 
@@ -99,7 +98,6 @@ canvas {
 
 .prof-main-wrapper {
     width: 100%;
-    /* opacity: 1; */
     transition: all .4s ease-in-out;
 }
 
@@ -130,12 +128,9 @@ canvas {
 .testesla {
     width: 100%;
     height: 250px;
-    /* background-color: aqua; */
 }
 
 .edit-btn {
-    /* position: absolute;
-    left: 20vw; */
     align-self: self-end;
     position: absolute;
     transform: translate(-30px, 30px);
@@ -199,14 +194,11 @@ canvas {
     width: 225px;
     height: 150px;
     display: flex;
-    /* flex-direction: column; */
     padding: 10px;
     align-items: center;
     justify-content: space-evenly;
     gap: 15px;
-    /* background: rgba(255, 255, 255, 0.1); */
     background-color: var(--gray-bg);
-    /* box-shadow: 0 8px 32px 0 rgba(61, 61, 61, 0.37); */
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     border-radius: 10px;

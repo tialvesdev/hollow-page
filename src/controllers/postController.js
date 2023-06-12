@@ -118,10 +118,13 @@ function montarGrafico(req, res) {
         } else {
             res.status(204).send("Nenhum resultado encontrado!")
         }
+        console.log(resultado);
+
     }).catch(function (erro) {
         console.log(erro);
         console.log("Houve um erro ao buscar os posts dos últimos dias.", erro.sqlMessage);
         res.status(500).json(erro.sqlMessage);
+        
     });
 }
 
@@ -185,7 +188,7 @@ function menosSalvo(req, res) {
 
 function isSaved(req, res) {
 
-    const idUsuario = req.params.idPostagem;
+    const idUsuario = req.params.idUsuario;
     const idPostagem = req.params.idPostagem;
     // console.log(`var idUsuario = ${idUsuario}`);
 

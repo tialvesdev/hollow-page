@@ -33,11 +33,13 @@ CREATE TABLE usuario (
 CREATE TABLE ficha (
 	fkUsuario INT PRIMARY KEY,
 	genero CHAR(1) DEFAULT 'X',
-    tel CHAR(11) UNIQUE,
+    tel CHAR(11) DEFAULT 'Sem número!',
     fotoPerfilSrc VARCHAR(500) DEFAULT '../assets/img/icon/user-icon.png',
 		CONSTRAINT generoUsuario CHECK (genero IN('M', 'F', 'N', 'X')),
 		CONSTRAINT fichaFkUsuario FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
 );
+
+desc ficha;
 
 CREATE TABLE postagem (
 	idPostagem INT PRIMARY KEY AUTO_INCREMENT,
@@ -70,13 +72,21 @@ CREATE TABLE salvo (
 SELECT * FROM fundoPerfil;
 SELECT * FROM atributo;
 SELECT * FROM usuario;
-SELECT * FROM ficha;
+SELECT * FROM ficha; 
 SELECT * FROM postagem;
 SELECT * FROM filtro;
 SELECT * FROM salvo;
 
-desc usuario;
-alter table usuario modify column fotoPerfilSrc varchar(1000);
+desc ficha;
+alter table ficha modify column tel CHAR(11) DEFAULT 'Sem número!';
+ALTER TABLE ficha DROP KEY tel;
+
+delete from ficha where fkUsuario = 5;
+
+insert into ficha (fkUsuario) values
+	(5);
+
+DROP TABLE ficha;
 
 -- BASIC INSERTS
 INSERT INTO usuario (nome, email, senha, dtNasc) VALUES
@@ -104,6 +114,12 @@ SELECT
 SELECT * FROM usuario 
 	LEFT JOIN ficha ON idUsuario = fkUsuario
 		WHERE email = 'ti@gmail.com' AND senha = '12345';
+        
+        truncate table salvo;
+        delete from postagem where fkUsuario = 5;
+        truncate table filtro;
+        select * from filtro;
+        select * from postagem;
     
     
 -- ZONA
@@ -121,6 +137,32 @@ SELECT postagem.idPostagem,
                 JOIN usuario ON idUsuario = postagem.fkUsuario
 					WHERE salvo.fkUsuario = 1 OR salvo.fkUsuario is null
 						ORDER BY dtPostagem;
+                        
+SELECT 
+	COUNT(idPostagem) AS postMaisSalvo,
+    postagem.postagemSrc AS foto
+		FROM postagem
+            JOIN salvo ON idPostagem = fkPostagem
+            JOIN usuario ON idUsuario = postagem.fkUsuario
+				WHERE postagem.fkUsuario = 5
+					GROUP BY foto
+						ORDER BY postMaisSalvo DESC
+							LIMIT 1;
+                            
+SELECT 
+	COUNT(idPostagem) AS vezesSalvo,
+    postagem.postagemSrc AS foto
+		FROM postagem
+            JOIN salvo ON idPostagem = fkPostagem
+            JOIN usuario ON idUsuario = postagem.fkUsuario
+				WHERE postagem.fkUsuario = 5
+					GROUP BY foto
+						ORDER BY postMaisSalvo
+							LIMIT 1;
+                    
+SELECT MAX(COUNT(fkPostagem)) FROM salvo
+	JOIN postagem ON idPostagem = fkPostagem
+		GROUP BY postagem.titulo;
 
 UPDATE usuario 
 SET fotoPerfilSrc = null 
@@ -200,3 +242,143 @@ SELECT postagem.idPostagem,
 				FROM postagem
 					JOIN usuario ON idUsuario = fkUsuario
 						ORDER BY dtPostagem;
+
+SELECT postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postagemSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        postagem.fkUsuario,
+        usuario.nome,
+        ficha.fotoPerfilSrc,
+        salvo.fkUsuario
+            FROM postagem
+                LEFT JOIN salvo ON idPostagem = fkPostagem
+                JOIN usuario ON idUsuario = postagem.fkUsuario
+                JOIN ficha ON  idUsuario = ficha.fkUsuario
+					WHERE salvo.fkUsuario = 6 OR salvo.fkUsuario is null
+						ORDER BY dtPostagem;
+                        
+                        update ficha set fotoPerfilSrc = '../assets/bucket/f83b6c2e0f9f597679b5c5ae5ea01ead4526efd2cea99de3719e97f9a6b076ed35d3aa0d2dd2f092020f796a2ff8fc8769b79cc347b946ce686ee856cfaf3f9d.jpg' where fkUsuario = 7;
+SELECT postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postagemSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        postagem.fkUsuario as postagemFkUsuario,
+        -- usuario.nome,
+        -- ficha.fotoPerfilSrc,
+        salvo.fkUsuario as salvoFkUsuario
+            FROM postagem
+                LEFT JOIN salvo ON idPostagem = fkPostagem
+                JOIN usuario ON idUsuario = postagem.fkUsuario
+                JOIN ficha ON  idUsuario = ficha.fkUsuario
+					WHERE salvo.fkUsuario = 5 OR salvo.fkUsuario is null
+						ORDER BY dtPostagem;
+                        
+select * from postagem;
+select * from salvo;
+                    
+SELECT * from salvo;
+
+SELECT nome,
+            email,
+            DATE_FORMAT(usuario.dtNasc, '%d/%m/%Y') AS dtNasc,
+            fotoPerfilSrc,
+            genero,
+            tel,
+            fundoSrc,
+            nomeFundoPerfil
+                FROM usuario
+                    JOIN fundoPerfil ON idFundoPerfil = fkFundoPerfil
+                    JOIN ficha ON idUsuario = fkUsuario
+                        WHERE idUsuario = 5;
+                        
+SELECT postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postagemSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        postagem.fkUsuario AS postFkUsuario,
+        usuario.nome,
+        ficha.fotoPerfilSrc
+        , salvo.fkUsuario AS salvoFkUsuario
+            FROM postagem
+                JOIN usuario ON idUsuario = postagem.fkUsuario
+                JOIN ficha ON  idUsuario = ficha.fkUsuario
+                LEFT JOIN salvo ON idPostagem = salvo.fkPostagem
+					WHERE salvo.fkUsuario = 5 OR salvo.fkUsuario is null
+						ORDER BY dtPostagem;
+                        
+SELECT postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postagemSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        postagem.fkUsuario AS postFkUsuario,
+        usuario.nome,
+        ficha.fotoPerfilSrc,
+        salvo.fkUsuario AS salvoFkUsuario
+            FROM postagem
+                JOIN usuario ON idUsuario = postagem.fkUsuario
+                JOIN ficha ON  idUsuario = ficha.fkUsuario
+                LEFT JOIN salvo ON idPostagem = salvo.fkPostagem
+						ORDER BY dtPostagem;
+                            
+select * from salvo;
+select * from postagem;
+truncate table salvo;
+
+select * from postagem;
+
+SELECT postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postagemSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        postagem.fkUsuario,
+        salvo.fkUsuario AS salvoFkUsuario,
+        usuario.nome,
+        ficha.fotoPerfilSrc
+            FROM postagem
+                JOIN usuario ON idUsuario = fkUsuario
+                JOIN ficha ON idUsuario = ficha.fkUsuario
+                LEFT JOIN salvo ON idPostagem = salvo.fkPostagem
+                    WHERE salvo.fkUsuario = 6
+                        ORDER BY dtSalvo;
+                        
+SELECT postagem.idPostagem,
+        postagem.titulo,
+        postagem.descricao,
+        postagem.postagemSrc,
+        DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
+        postagem.fkUsuario AS postFkUsuario,
+        usuario.nome,
+        ficha.fotoPerfilSrc
+            FROM postagem
+                JOIN usuario ON idUsuario = postagem.fkUsuario
+                JOIN ficha ON  idUsuario = ficha.fkUsuario;
+                
+SELECT
+	fkUsuario
+		FROM salvo
+			WHERE fkPostagem = 7 AND fkUsuario = 7;
+                
+                
+SELECT 
+	idPostagem,
+	salvo.fkUsuario
+		FROM postagem
+			LEFT JOIN salvo ON idPostagem = fkPostagem
+				WHERE salvo.fkUsuario = 6;
+            
+SELECT * FROM postagem;
+UNION ALL
+SELECT 
+	idPostagem,
+	titulo,
+	salvo.fkUsuario
+		FROM postagem
+			RIGHT JOIN salvo ON idPostagem = fkPostagem;
+
+select * from salvo;

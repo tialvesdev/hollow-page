@@ -14,7 +14,6 @@
 
     <script type='text/javascript' src='http://www.youtube.com/player_api'></script>
 
-    <!-- <script src="./assets/js/global.js"></script> -->
     <script src="./assets/js/visuals.js"></script>
 
 </head>
@@ -319,10 +318,9 @@
 
                     json.forEach(post => {
                         samples.innerHTML += `
-                            <img class="post" src="../assets/bucket/${post.postSrc}" alt="${post.titulo}">
+                            <img class="sample post" src="${post.postagemSrc}" alt="${post.titulo}">
                         `;
 
-                        // posts.push(post);
                     });
 
                     samplesAnimation();
@@ -336,8 +334,6 @@
         setInterval(
             setHidden('embed_img'), 3000
         );
-
-        // samplesAnimation()
     }
 
     function abrirCores() {
@@ -359,17 +355,14 @@
 
     setInterval(dreamsVar, 1000);
 
-
-    // window.onload = samplesAnimation();
-
     function samplesAnimation() {
         var samplesWidth = samples.offsetWidth;
 
         var scrollSample = () => {
-            samples.style.transform == `rotate(-8deg) translateX(-${samplesWidth}px)`
+            samples.style.transform == `rotate(-8deg) translateX(-${samplesWidth / 2}px)`
 
-            if (!(samples.style.transform == `rotate(-8deg) translateX(-${samplesWidth}px)`)) {
-                samples.style.transform = `rotate(-8deg) translateX(-${samplesWidth}px)`;
+            if (!(samples.style.transform == `rotate(-8deg) translateX(-${samplesWidth / 2}px)`)) {
+                samples.style.transform = `rotate(-8deg) translateX(-${samplesWidth / 2}px)`;
 
             } else {
                 samples.style.transform = `rotate(-8deg)`;

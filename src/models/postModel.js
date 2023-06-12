@@ -17,18 +17,19 @@ function criarFeed(idUsuario) {
         postagem.descricao,
         postagem.postagemSrc,
         DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
-        postagem.fkUsuario AS postFkUsuario,
+        postagem.fkUsuario AS postagemFkUsuario,
         usuario.nome,
         ficha.fotoPerfilSrc
             FROM postagem
                 JOIN usuario ON idUsuario = postagem.fkUsuario
-                JOIN ficha ON  idUsuario = ficha.fkUsuario;
+                JOIN ficha ON  idUsuario = ficha.fkUsuario
+                    ORDER BY RAND();
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
 
-function verificarPostSalvo(idUsuario, idPostagem) {
+function verificarPostSalvo(idPostagem, idUsuario) {
     var instrucao = `
     SELECT
 	    fkUsuario
@@ -75,8 +76,9 @@ function montarGrafico(idUsuario, limite_linhas) {
                 DATE_FORMAT(dtPostagem, '%d/%m/%Y') AS dataPost
                     FROM postagem
                         WHERE fkUsuario = ${idUsuario}
-                            GROUP BY dataPost
-                                LIMIT ${limite_linhas};
+                                GROUP BY dataPost
+                                    ORDER BY dataPost DESC
+                                        LIMIT ${limite_linhas};
         `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -94,7 +96,8 @@ function atualizarGrafico(idUsuario) {
                     FROM postagem
                         WHERE fkUsuario = ${idUsuario}
                             GROUP BY dataPost
-                                LIMIT 1;
+                                ORDER BY dataPost DESC
+                                    LIMIT 1;
         `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -109,8 +112,8 @@ function postsSalvos(idUsuario) {
         postagem.descricao,
         postagem.postagemSrc,
         DATE_FORMAT(postagem.dtPostagem, '%d de %M de %Y') AS dtPostagem,
-        postagem.fkUsuario,
-        salvo.fkUsuario AS salvoFkUsuario,
+        postagem.fkUsuario AS postagemFkUsuario,
+        salvo.fkUsuario,
         usuario.nome,
         ficha.fotoPerfilSrc
             FROM postagem

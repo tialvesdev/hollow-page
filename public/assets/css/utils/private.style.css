@@ -24,8 +24,6 @@
     gap: 25px;
 }
 
-.side-down {}
-
 .side-opt {
     display: flex;
     align-items: center;
@@ -58,11 +56,9 @@
     height: 35px;
 }
 
-
 .post {
     width: 300px;
     height: 300px;
-    /* border: 2px solid white; */
     border-radius: 15px;
     transition: all .2s ease-in-out;
     object-fit: cover;
@@ -71,7 +67,6 @@
 }
 
 .post:hover {
-    /* transform: scale(1.2); */
     filter: brightness(40%);
 }
 
@@ -117,6 +112,7 @@
     align-items: center;
     gap: 20px;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .modal-prof-info:hover p {
@@ -132,7 +128,6 @@
 }
 
 .modal-content {
-    /* padding: 50px 0 0 0; */
     width: 100%;
     display: flex;
     gap: 50px;
@@ -152,7 +147,6 @@
 }
 
 .modal-date {
-    /* width: min-content; */
     margin: 0 auto;
 }
 

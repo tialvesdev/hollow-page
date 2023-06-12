@@ -72,11 +72,6 @@ select.select-adc-genero {
     border-bottom: 3px solid var(--white);
     padding: 5px 15px;
     font-size: 20px;
-    /* color: var(--black2); */
-}
-
-.select-adc-genero option {
-    /* color: var(--black2); */
 }
 
 @keyframes dreamsAnimation {

@@ -134,8 +134,6 @@ function createDreams(wrapper, isPrivate) {
     dream.classList.add('dream-efx-img');
 
     isPrivate == true ? dream.src = '../assets/img/icon/dream-particle.png' : dream.src = './assets/img/icon/dream-particle.png';
-    // isPrivate == true ? dream.classList.add('') : dream.src = './assets/img/icon/dream-particle.png';
-
 
     var size = Math.random() * 500;
     var randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -177,6 +175,4 @@ function previewImage (event, img, name) {
     imgTag.style.display = 'block';
     nameTag.innerHTML = imageFiles[0].name;
     nameTag.style.display = 'block';
-
-    // console.log(URL.createObjectURL(imageFiles[0]));
   }

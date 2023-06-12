@@ -50,7 +50,6 @@
 
                 <div class="ipt-wrapper">
                     <img src="../assets/img/icon/border-angle.png" alt="Angle" class="ipt-angle">
-                    <!-- <input class="ipt" type="date" id="ipt_cadastrar_dt_birth" placeholder="01/01/2001"> -->
                     <select class="select-adc-genero text" id="select_adc_genero">
                         <option value="X">Selecione um gênero...</option>
                         <option id="opt_edit_genero_1" value="M">Masculino</option>
@@ -93,13 +92,10 @@
     function cadastroAdicional(isAdded) {
 
         if (isAdded == 0) {
-            // fetch com insert vazio, só com fkUsuario
             fetch(`/fichas/fichaVazia/${sessionStorage.ID_USUARIO}`, {
                 method: "POST"
             })
                 .then(res => {
-                    alert('voltou do then');
-
                     window.location = './feed.html';
 
                 })
@@ -109,16 +105,13 @@
 
 
         } else {
-            // setar variaveis
             var adcFoto = adc_ipt_img.files[0];
             var adcGenero = select_adc_genero.value;
             var adcTel = ipt_adc_tel.value;
 
-            console.log(adcFoto, adcGenero, adcTel);
+            // console.log(adcFoto, adcGenero, adcTel);
 
             if (adcFoto == undefined) {
-                // fetch com insert e sem foto
-
                 fetch(`/fichas/fichaSemFoto/${sessionStorage.ID_USUARIO}`, {
                     method: "POST",
                     headers: {
@@ -130,8 +123,6 @@
                     })
                 })
                     .then(res => {
-                        alert('voltou do then');
-
                         changeSectionSmooth('cad_adc_modal', 'cad_sect_1', 'cad_sect_2', 'cad_sect_3')
 
                     })
@@ -140,7 +131,6 @@
                     });
 
             } else {
-                // fetch com insert e com foto
                 const formData = new FormData();
                 formData.append('foto', adcFoto);
                 formData.append('genero', adcGenero);
@@ -148,14 +138,9 @@
 
                 fetch(`/fichas/fichaComFoto/${sessionStorage.ID_USUARIO}`, {
                     method: "POST",
-                    // headers: {
-                    //     "Content-Type": "application/json"
-                    // },
                     body: formData
                 })
                     .then(res => {
-                        alert('voltou do then');
-
                         changeSectionSmooth('cad_adc_modal', 'cad_sect_1', 'cad_sect_2', 'cad_sect_3')
 
                     })
