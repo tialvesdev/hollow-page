@@ -3,7 +3,10 @@
   "private": true,
   "version": "2.0.0",
   "description": "Mural de fanarts de Hollow Knight: React + Node + Postgres",
-  "workspaces": ["packages/*", "apps/*"],
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "dev": "npm run dev -w @hp/api & npm run dev -w @hp/web",
     "build": "npm run build -w @hp/shared && npm run build -w @hp/web && npm run build -w @hp/api",
@@ -13,5 +16,11 @@
     "db:migrate": "npm run db:migrate -w @hp/api",
     "db:seed": "npm run db:seed -w @hp/api"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  },
+  "overrides": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
 }

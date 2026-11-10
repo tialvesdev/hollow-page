@@ -1,0 +1,12 @@
+# Postgres para desenvolvimento local
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: hp
+      POSTGRES_PASSWORD: hp
+      POSTGRES_DB: hollowpage
+    ports: ["5432:5432"]
+    volumes: [dados:/var/lib/postgresql/data]
+volumes:
+  dados:

@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1166.0",
+    "@hp/shared": "2.0.0",
     "bcryptjs": "3.0.3",
     "cookie-parser": "1.4.7",
     "drizzle-orm": "0.45.4",
@@ -24,8 +25,7 @@
     "multer": "2.5.0",
     "pg": "8.23.1",
     "sharp": "0.35.5",
-    "zod": "3.25.76",
-    "@hp/shared": "2.0.0"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@types/cookie-parser": "1.4.10",
@@ -38,6 +38,6 @@
     "supertest": "7.3.2",
     "tsx": "4.23.15",
     "typescript": "5.9.3",
-    "vitest": "5.1.0"
+    "vitest": "3.2.4"
   }
 }
