@@ -1,0 +1,17 @@
+{
+  "name": "hollow-page",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Mural de fanarts de Hollow Knight: React + Node + Postgres",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "dev": "npm run dev -w @hp/api & npm run dev -w @hp/web",
+    "build": "npm run build -w @hp/shared && npm run build -w @hp/web && npm run build -w @hp/api",
+    "start": "npm run start -w @hp/api",
+    "test": "npm run test -w @hp/api && npm run test -w @hp/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "db:migrate": "npm run db:migrate -w @hp/api",
+    "db:seed": "npm run db:seed -w @hp/api"
+  },
+  "engines": { "node": ">=20" }
+}
