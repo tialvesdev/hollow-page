@@ -5,6 +5,8 @@ const env = z
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
     PORT: z.coerce.number().default(3333),
     DATABASE_URL: z.string().url().default('postgresql://hp:hp@localhost:5432/hollowpage'),
+    // conexão direta (sem o pooler do Neon), usada só nas migrações; se faltar, usa DATABASE_URL
+    DATABASE_URL_UNPOOLED: z.string().url().optional(),
     DATABASE_SSL: z.enum(['true', 'false']).default('false'),
     JWT_SECRET: z.string().min(32, 'JWT_SECRET precisa de pelo menos 32 caracteres').default('troque-este-segredo-em-producao-0123456789'),
     STORAGE: z.enum(['local', 's3']).default('local'),

@@ -31,8 +31,20 @@ export async function migrar(pool: pg.Pool, log = console.log) {
   }
 }
 
+/** Migrações pela conexão direta: o pooler do Neon (PgBouncer em modo transação) não guarda estado de sessão. */
+export async function migrarProducao() {
+  const { config } = await import('../config.js');
+  const { criarPool } = await import('./index.js');
+  const direto = criarPool(config.DATABASE_URL_UNPOOLED ?? config.DATABASE_URL, 1);
+  try {
+    await migrar(direto);
+  } finally {
+    await direto.end();
+  }
+}
+
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+  await migrarProducao();
   const { pool } = await import('./index.js');
-  await migrar(pool);
   await pool.end();
 }

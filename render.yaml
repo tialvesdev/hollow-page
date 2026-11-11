@@ -14,7 +14,9 @@ services:
         value: "22"
       - key: JWT_SECRET
         generateValue: true
-      - key: DATABASE_URL
+      - key: DATABASE_URL          # URL com pooler do Neon (host com -pooler)
+        sync: false
+      - key: DATABASE_URL_UNPOOLED # URL direta do Neon, usada nas migrações
         sync: false
       - key: DATABASE_SSL
         value: "true"
