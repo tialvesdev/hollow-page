@@ -5,3 +5,6 @@ uploads
 *.log
 coverage
 .DS_Store
+.neon
+.env.local
+.env*.local
