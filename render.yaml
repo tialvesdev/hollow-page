@@ -1,0 +1,33 @@
+# Blueprint do Render: um único serviço web (API + front). Banco e imagens no Neon (Postgres + Object Storage).
+services:
+  - type: web
+    name: hollow-page
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/saude
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL          # URL com pooler do Neon (host com -pooler)
+        sync: false
+      - key: DATABASE_URL_UNPOOLED # URL direta do Neon, usada nas migrações
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
+      - key: STORAGE
+        value: s3
+      # Credenciais do Neon Object Storage: copie do seu .env.local depois de `npx neon deploy`
+      - key: AWS_ENDPOINT_URL_S3
+        sync: false
+      - key: AWS_REGION
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
