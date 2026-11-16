@@ -47,9 +47,8 @@ Para os testes da API, crie um banco separado (`createdb hollowpage_test`) ou de
 
 Uma combinação que cabe nos planos gratuitos:
 
-1. **Banco: [Neon](https://neon.tech).** Crie um projeto e copie a connection string (com `?sslmode=require`).
-2. **Imagens: [Cloudflare R2](https://developers.cloudflare.com/r2/).** Crie um bucket, ative o acesso público (domínio `r2.dev`) e gere uma chave de API com permissão de leitura e escrita nesse bucket.
-3. **Servidor: [Render](https://render.com).** Em *New › Blueprint*, aponte para este repositório. O `render.yaml` já define build, start e as variáveis. Preencha `DATABASE_URL`, `S3_ENDPOINT` (`https://<id-da-conta>.r2.cloudflarestorage.com`), `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` e `S3_PUBLIC_URL` (o endereço `https://pub-….r2.dev`).
+1. **Banco e imagens: [Neon](https://neon.tech).** Crie o projeto numa região com Object Storage (por exemplo *AWS US East 2, Ohio*), ligue a pasta ao projeto com `npx neon link --project-id <id> -y` e rode `npx neon deploy`. Isso cria o bucket `hollow-page` declarado no `neon.ts` e grava no `.env.local` a `DATABASE_URL` e as credenciais `AWS_*` do bucket.
+2. **Servidor: [Render](https://render.com).** Em *New › Blueprint*, aponte para este repositório (região *Ohio*, perto do banco). O `render.yaml` já define build, start e as variáveis. Copie do `.env.local` os valores de `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `AWS_ENDPOINT_URL_S3`, `AWS_REGION`, `AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY`.
 
 As tabelas são criadas sozinhas quando o servidor sobe. No plano gratuito do Render o serviço dorme depois de 15 minutos sem acesso, e a primeira visita seguinte leva alguns segundos.
 

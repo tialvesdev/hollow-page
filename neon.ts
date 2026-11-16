@@ -3,6 +3,10 @@ import { defineConfig } from "@neon/config/v1";
 export default defineConfig({
   // Declare your Neon services here
   auth: false,
+  // Imagens enviadas (posts e fotos de perfil). public_read: qualquer um lê, só a API grava.
+  buckets: {
+    "hollow-page": { access: "public_read" },
+  },
   // Branch policy: per-branch tuning
   branch: (branch) => {
     if (branch.isDefault) {
