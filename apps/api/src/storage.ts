@@ -1,5 +1,5 @@
 /* Onde as imagens ficam: pasta local (desenvolvimento) ou um bucket compatível com S3
-   (Cloudflare R2, Supabase Storage, AWS S3) em produção. */
+   (Neon Object Storage, Cloudflare R2, AWS S3) em produção. */
 import { mkdir, writeFile, unlink, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';

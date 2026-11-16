@@ -1,4 +1,4 @@
-# Blueprint do Render: um único serviço web (API + front). Banco no Neon e imagens no Cloudflare R2.
+# Blueprint do Render: um único serviço web (API + front). Banco e imagens no Neon (Postgres + Object Storage).
 services:
   - type: web
     name: hollow-page
@@ -22,13 +22,12 @@ services:
         value: "true"
       - key: STORAGE
         value: s3
-      - key: S3_ENDPOINT
+      # Credenciais do Neon Object Storage: copie do seu .env.local depois de `npx neon deploy`
+      - key: AWS_ENDPOINT_URL_S3
         sync: false
-      - key: S3_BUCKET
+      - key: AWS_REGION
         sync: false
-      - key: S3_ACCESS_KEY_ID
+      - key: AWS_ACCESS_KEY_ID
         sync: false
-      - key: S3_SECRET_ACCESS_KEY
-        sync: false
-      - key: S3_PUBLIC_URL
+      - key: AWS_SECRET_ACCESS_KEY
         sync: false
