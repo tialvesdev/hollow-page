@@ -2,7 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import { randomUUID } from 'node:crypto';
 import { eq, sql } from 'drizzle-orm';
-import { perfilSchema, LIMITES, type UsuarioPrivado, type UsuarioPublico, type CapaId } from '@hp/shared';
+import { ehUuid, perfilSchema, LIMITES, type UsuarioPrivado, type UsuarioPublico, type CapaId } from '@hp/shared';
 import { db, schema, pool } from '../db/index.js';
 import { conferirSenha, exigirLogin, fecharSessao } from '../auth.js';
 import { ErroHttp, rota, validar } from '../http.js';
@@ -27,7 +27,7 @@ async function linhaUsuario(id: string) {
 export async function usuarioPublico(s: Storage, id: string): Promise<UsuarioPublico | null> {
   const l = await linhaUsuario(id);
   if (!l) return null;
-  return { id: l.u.id, nome: l.u.nome, fotoUrl: l.u.fotoChave ? s.url(l.u.fotoChave) : null, capa: l.u.capa as CapaId, publicacoes: l.n };
+  return { id: l.u.id, nome: l.u.nome, fotoUrl: l.u.fotoChave ? s.url(l.u.fotoChave) : null, capa: l.u.capa as CapaId, publicacoes: l.n, bio: l.u.bio, link: l.u.link };
 }
 
 export async function usuarioPrivado(s: Storage, id: string): Promise<UsuarioPrivado | null> {
@@ -35,11 +35,10 @@ export async function usuarioPrivado(s: Storage, id: string): Promise<UsuarioPri
   if (!l) return null;
   return {
     id: l.u.id, nome: l.u.nome, fotoUrl: l.u.fotoChave ? s.url(l.u.fotoChave) : null, capa: l.u.capa as CapaId, publicacoes: l.n,
-    email: l.u.email, nascimento: l.u.nascimento, genero: l.u.genero as UsuarioPrivado['genero'], telefone: l.u.telefone,
+    bio: l.u.bio, link: l.u.link, email: l.u.email,
   };
 }
 
-const UUID = /^[0-9a-f-]{36}$/i;
 
 export function rotasUsuarios(s: Storage) {
   const r = Router();
@@ -91,13 +90,13 @@ export function rotasUsuarios(s: Storage) {
   }));
 
   r.get('/:id', rota(async (req, res) => {
-    const u = UUID.test(req.params.id!) ? await usuarioPublico(s, req.params.id!) : null;
+    const u = ehUuid(req.params.id!) ? await usuarioPublico(s, req.params.id!) : null;
     if (!u) throw new ErroHttp(404, 'Perfil não encontrado.');
     res.json(u);
   }));
 
   r.get('/:id/posts', rota(async (req, res) => {
-    if (!UUID.test(req.params.id!)) throw new ErroHttp(404, 'Perfil não encontrado.');
+    if (!ehUuid(req.params.id!)) throw new ErroHttp(404, 'Perfil não encontrado.');
     const f = validar(listarPostsSchema, req.query);
     res.json(await listarPosts(s, { leitor: req.usuarioId, autorId: req.params.id, cursor: f.cursor, limite: f.limite }));
   }));

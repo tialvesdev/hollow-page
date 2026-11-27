@@ -23,13 +23,13 @@ beforeAll(async () => {
 });
 afterAll(() => pool.end());
 
-const novo = (nome = 'Fulano da Silva', email = 'fulano@email.com') => ({ nome, email, senha: '123456', nascimento: '1999-02-03' });
+const novo = (nome = 'Fulano da Silva', email = 'fulano@email.com') => ({ nome, email, senha: 'senha-de-teste' });
 
 describe('cadastro e sessão', () => {
   it('rejeita dados inválidos com mensagens por campo', async () => {
-    const r = await request(app).post('/api/auth/cadastro').send({ nome: 'A', email: 'x', senha: '1', nascimento: '' });
+    const r = await request(app).post('/api/auth/cadastro').send({ nome: 'A', email: 'x', senha: '1' });
     expect(r.status).toBe(400);
-    expect(Object.keys(r.body.campos)).toEqual(expect.arrayContaining(['nome', 'email', 'senha', 'nascimento']));
+    expect(Object.keys(r.body.campos)).toEqual(expect.arrayContaining(['nome', 'email', 'senha']));
   });
 
   it('cadastra, guarda a senha com hash e abre sessão em cookie httpOnly', async () => {
@@ -48,16 +48,16 @@ describe('cadastro e sessão', () => {
 
   it('entra com a senha certa e recusa a errada com mensagem genérica', async () => {
     expect((await request(app).post('/api/auth/entrar').send({ email: 'fulano@email.com', senha: 'errada' })).body.erro).toBe('E-mail ou senha incorretos.');
-    expect((await request(app).post('/api/auth/entrar').send({ email: 'nao@existe.com', senha: '123456' })).body.erro).toBe('E-mail ou senha incorretos.');
+    expect((await request(app).post('/api/auth/entrar').send({ email: 'nao@existe.com', senha: 'senha-de-teste' })).body.erro).toBe('E-mail ou senha incorretos.');
     const ag = request.agent(app);
-    expect((await ag.post('/api/auth/entrar').send({ email: 'fulano@email.com', senha: '123456' })).status).toBe(200);
+    expect((await ag.post('/api/auth/entrar').send({ email: 'fulano@email.com', senha: 'senha-de-teste' })).status).toBe(200);
     expect((await ag.get('/api/auth/eu')).body.email).toBe('fulano@email.com');
     await ag.post('/api/auth/sair');
     expect((await ag.get('/api/auth/eu')).body).toBeNull();
   });
 
   it('bloqueia mudanças vindas de outro site', async () => {
-    const r = await request(app).post('/api/auth/entrar').set('Origin', 'https://site-malicioso.com').send({ email: 'fulano@email.com', senha: '123456' });
+    const r = await request(app).post('/api/auth/entrar').set('Origin', 'https://site-malicioso.com').send({ email: 'fulano@email.com', senha: 'senha-de-teste' });
     expect(r.status).toBe(403);
   });
 });
@@ -68,7 +68,7 @@ describe('publicações, filtro, salvos e perfil', () => {
   let postId = '';
 
   beforeAll(async () => {
-    await fulano.post('/api/auth/entrar').send({ email: 'fulano@email.com', senha: '123456' });
+    await fulano.post('/api/auth/entrar').send({ email: 'fulano@email.com', senha: 'senha-de-teste' });
     await lira.post('/api/auth/cadastro').send(novo('Lira Moraes', 'lira@email.com'));
   });
 
@@ -136,8 +136,8 @@ describe('publicações, filtro, salvos e perfil', () => {
   });
 
   it('edita o perfil e troca a foto', async () => {
-    const r = await fulano.patch('/api/usuarios/eu').send({ genero: 'M', telefone: '(11) 90000-0000', capa: 'pico-de-cristal' });
-    expect(r.body).toMatchObject({ genero: 'M', capa: 'pico-de-cristal' });
+    const r = await fulano.patch('/api/usuarios/eu').send({ bio: 'Desenho o reino desde 2017.', link: 'instagram.com/fulano', capa: 'pico-de-cristal' });
+    expect(r.body).toMatchObject({ bio: 'Desenho o reino desde 2017.', link: 'https://instagram.com/fulano', capa: 'pico-de-cristal' });
     expect((await fulano.patch('/api/usuarios/eu').send({ capa: 'inexistente' })).status).toBe(400);
     expect((await fulano.patch('/api/usuarios/eu').send({ email: 'lira@email.com' })).status).toBe(409);
     const f = await fulano.put('/api/usuarios/eu/foto').attach('foto', png, 'eu.png');
@@ -150,7 +150,7 @@ describe('publicações, filtro, salvos e perfil', () => {
 
   it('exclui a conta só com a senha certa e leva as publicações junto', async () => {
     expect((await fulano.delete('/api/usuarios/eu').send({ senha: 'errada' })).status).toBe(403);
-    expect((await fulano.delete('/api/usuarios/eu').send({ senha: '123456' })).status).toBe(204);
+    expect((await fulano.delete('/api/usuarios/eu').send({ senha: 'senha-de-teste' })).status).toBe(204);
     const r = await request(app).get('/api/posts');
     expect(r.body.itens.map((p: { titulo: string }) => p.titulo)).toEqual(['Amigos de papel']);
     expect([...arquivos.keys()].some((k) => k.startsWith('avatares/'))).toBe(false);
