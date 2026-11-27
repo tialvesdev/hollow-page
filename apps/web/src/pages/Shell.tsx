@@ -1,10 +1,8 @@
-import { useMemo, useState } from 'react';
-import { Navigate, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { Link, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { api, useEu } from '../api';
-import { Icone, Paleta, useAviso, type NomeIcone } from '../ui';
-
-const FRASES = ['Descenda até as profundezas', 'Aventure-se', 'Explore os mistérios', 'Não tenha medo'];
+import { EsqueletoShell, IconeNav, Logo, trilhoAbertoSalvo, useAviso, type NomeIconeNav } from '../ui';
 
 export function useSair() {
   const qc = useQueryClient();
@@ -19,72 +17,100 @@ export function useSair() {
   };
 }
 
+function Item({ para, icone, rotulo, ativo }: { para: string; icone: NomeIconeNav; rotulo: string; ativo: boolean }) {
+  return (
+    <Link className="ti" to={para} aria-current={ativo ? 'page' : undefined} title={rotulo}>
+      <IconeNav n={icone} />
+      <span className="ti-rot">{rotulo}</span>
+    </Link>
+  );
+}
+
+/** Barra lateral recolhida (só ícones) ou aberta (ícone e nome lado a lado); a escolha fica salva. */
+function useTrilhoAberto() {
+  const [aberto, setAberto] = useState(trilhoAbertoSalvo);
+  const alternar = () => {
+    setAberto((a) => {
+      try {
+        localStorage.setItem('hp-trilho', a ? 'recolhido' : 'aberto');
+      } catch {
+        /* sem armazenamento: só não lembra */
+      }
+      return !a;
+    });
+  };
+  return [aberto, alternar] as const;
+}
+
+/**
+ * Seletor da barra lateral: um só elemento (faixa clara e as setas da loja do jogo) que desliza
+ * até o item ativo, subindo ou descendo, em vez de aparecer de repente no item novo.
+ */
+function useSeletor(chave: string) {
+  const lista = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ y: number; h: number } | null>(null);
+  // ao carregar a página o seletor já aparece no lugar; só desliza nas trocas dentro do site
+  const [anima, setAnima] = useState(false);
+  useLayoutEffect(() => {
+    const medir = () => {
+      const a = lista.current?.querySelector<HTMLElement>('.ti[aria-current=page]');
+      setPos(a ? { y: a.offsetTop, h: a.offsetHeight } : null);
+    };
+    medir();
+    window.addEventListener('resize', medir);
+    return () => window.removeEventListener('resize', medir);
+  }, [chave]);
+  useLayoutEffect(() => {
+    if (!pos || anima) return;
+    const r = requestAnimationFrame(() => requestAnimationFrame(() => setAnima(true)));
+    return () => cancelAnimationFrame(r);
+  }, [pos, anima]);
+  return { lista, pos, anima };
+}
+
 export default function Shell() {
   const { data: eu, isLoading } = useEu();
   const { pathname, search } = useLocation();
-  const navigate = useNavigate();
-  const [params, setParams] = useSearchParams();
   const sair = useSair();
-  const [aberto, setAberto] = useState(false);
-  const frase = useMemo(() => FRASES[Math.floor(Math.random() * FRASES.length)], []);
+  const [aberto, alternarTrilho] = useTrilhoAberto();
+  const seletor = useSeletor(`${pathname}${search}${eu ? '|eu' : ''}`);
 
-  if (isLoading) return <div className="carregando">Carregando…</div>;
+  if (isLoading) return <EsqueletoShell />;
   if (!eu) return <Navigate to={`/entrar?volta=${encodeURIComponent(pathname + search)}`} replace />;
 
-  const noFeed = pathname === '/feed';
-  const painel = params.get('painel');
-  const q = params.get('q') ?? '';
-  const tags = params.get('tags');
-  const muda = (mudar: Record<string, string | null>) => {
-    const p = new URLSearchParams(params);
-    for (const [k, v] of Object.entries(mudar)) (v === null || v === '' ? p.delete(k) : p.set(k, v));
-    if (!noFeed) navigate(`/feed?${p}`); else setParams(p, { replace: true });
-  };
-  const meuPerfil = pathname === '/perfil' || pathname === `/perfil/${eu.id}`;
-  const titulo = noFeed ? `${frase}, ${eu.nome.split(' ')[0]}` : pathname.startsWith('/perfil') ? 'Perfil' : pathname === '/publicar' ? 'Nova publicação' : 'Editar perfil';
-
-  const Item = ({ icone, rotulo, ativo, pagina, onClick, classe, avatar }: { icone: NomeIcone; rotulo: string; ativo?: boolean; pagina?: boolean; onClick: () => void; classe?: string; avatar?: string | null }) => (
-    <button className={`si ${classe ?? ''}`} aria-current={pagina ? 'page' : undefined} aria-pressed={!pagina && ativo ? true : undefined} onClick={onClick} title={rotulo}>
-      {avatar ? <span className="avs" style={{ backgroundImage: `url(${avatar})` }} /> : <Icone n={icone} />}
-      <span className="lb">{rotulo}</span>
-    </button>
-  );
+  const perfil = pathname === '/perfil' || pathname === `/perfil/${eu.id}` || pathname === '/editar-perfil';
 
   return (
     <div className="shell">
-      <nav className={`side-nav${aberto ? ' open' : ''}`} aria-label="Menu" onMouseEnter={() => window.matchMedia('(hover:hover)').matches && setAberto(true)} onMouseLeave={() => setAberto(false)}>
-        <div className="grp">
-          <Item icone="home" rotulo="Início" pagina={noFeed && !painel && !q && !tags} onClick={() => navigate('/feed')} />
-          <Item icone="plus" rotulo="Publicar" pagina={pathname === '/publicar'} onClick={() => navigate('/publicar')} />
-          <Item icone="filter" classe="desk" rotulo="Filtrar" ativo={painel === 'filtro' || !!tags} onClick={() => muda({ painel: painel === 'filtro' ? null : 'filtro' })} />
-          <Item icone="search" rotulo="Pesquisar" ativo={painel === 'busca' || !!q} onClick={() => muda({ painel: painel === 'busca' ? null : 'busca' })} />
+      <nav className={`trilho${aberto ? ' aberto' : ''}`} aria-label="Principal">
+        <Link to="/feed" className="marca-hp" aria-label="Hollow Page, ir para o mural">
+          <Logo empilhada className="l-fechada" />
+          <Logo className="l-aberta" />
+        </Link>
+        <div className="itens" ref={seletor.lista}>
+          <span className={`seletor${seletor.pos ? '' : ' oculto'}${seletor.anima ? ' anima' : ''}`} aria-hidden="true"
+            style={seletor.pos ? { transform: `translateY(${seletor.pos.y}px)`, height: seletor.pos.h } : undefined}>
+            <i className="seta-lado" />
+          </span>
+          <Item para="/feed" icone="mural" rotulo="Mural" ativo={pathname === '/feed'} />
+          <Item para="/publicar" icone="publicar" rotulo="Publicar" ativo={pathname === '/publicar'} />
+          <Item para="/salvos" icone="salvo" rotulo="Salvos" ativo={pathname === '/salvos'} />
+          <Item para="/perfil" icone="perfil" rotulo="Perfil" ativo={perfil} />
         </div>
-        <div className="grp">
-          <Item icone="user" rotulo={eu.nome.split(' ')[0]!} avatar={eu.fotoUrl} pagina={meuPerfil} onClick={() => navigate('/perfil')} />
-          <Item icone="out" rotulo="Sair" classe="exit desk" onClick={sair} />
+        <div className="fim">
+          <button className="ti" onClick={sair} title="Sair"><IconeNav n="sair" /><span className="ti-rot">Sair</span></button>
         </div>
+        {/* alça na borda da barra: abre (mostra os nomes) ou recolhe (só ícones) */}
+        <button type="button" className="alca" onClick={alternarTrilho} aria-expanded={aberto} aria-label={aberto ? 'Recolher o menu' : 'Abrir o menu com os nomes'} title={aberto ? 'Recolher o menu' : 'Abrir o menu'} />
       </nav>
-      <div className="main">
-        <header className="top">
-          {noFeed && painel === 'busca' ? (
-            <div className="srch">
-              <Icone n="search" s={20} />
-              <label htmlFor="q" className="sr">Pesquisar</label>
-              <input id="q" className="inp" autoFocus placeholder="Pesquise por título, descrição ou autor" defaultValue={q} onChange={(e) => muda({ q: e.target.value })} />
-              <button className="xbtn" aria-label="Fechar pesquisa" onClick={() => muda({ q: null, painel: null })}><Icone n="x" s={20} /></button>
-            </div>
-          ) : (
-            <h1>{titulo}</h1>
-          )}
-          {noFeed && painel !== 'busca' && (
-            <button className={`ftog${painel === 'filtro' || tags ? ' on' : ''}`} aria-pressed={painel === 'filtro' || !!tags} onClick={() => muda({ painel: painel === 'filtro' ? null : 'filtro' })}>
-              <Icone n="filter" s={20} />Filtrar
-            </button>
-          )}
-          <Paleta />
-        </header>
+      <main className="conteudo">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
+}
+
+/** Logo que só aparece no topo das páginas no celular (no desktop está na barra lateral). */
+export function LogoTopo() {
+  return <Link to="/feed" className="marca-hp" aria-label="Hollow Page, ir para o mural"><Logo /></Link>;
 }

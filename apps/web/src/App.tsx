@@ -7,6 +7,8 @@ import Perfil from './pages/Perfil';
 import Publicar from './pages/Publicar';
 import EditarPerfil from './pages/EditarPerfil';
 import PostModal from './pages/PostModal';
+import Salvos from './pages/Salvos';
+import { Vazio } from './ui';
 
 function Raiz() {
   return (
@@ -22,12 +24,8 @@ function Erro() {
   const e = useRouteError();
   console.error(e);
   return (
-    <div className="center">
-      <div className="empty">
-        <img src="/img/knight-crying.webp" alt="" />
-        <p>Algo deu errado nesta página</p>
-        <a className="btn sm" href="/">Voltar ao início</a>
-      </div>
+    <div className="erro-pg">
+      <Vazio item="fragmento" titulo="Algo deu errado nesta página" texto="Tente recarregar. Se continuar, volte ao início." acao={<a className="btn" href="/">Voltar ao início</a>} />
     </div>
   );
 }
@@ -47,6 +45,7 @@ export const rotas = [
           { path: '/feed', element: <Feed /> },
           { path: '/perfil', element: <Perfil /> },
           { path: '/perfil/:id', element: <Perfil /> },
+          { path: '/salvos', element: <Salvos /> },
           { path: '/publicar', element: <Publicar /> },
           { path: '/editar-perfil', element: <EditarPerfil /> },
         ],

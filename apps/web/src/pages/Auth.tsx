@@ -1,9 +1,10 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { cadastroSchema, entrarSchema, GENEROS, type UsuarioPrivado } from '@hp/shared';
+import { CAPAS, cadastroSchema, entrarSchema, LIMITES, perfilSchema, type CapaId, type UsuarioPrivado } from '@hp/shared';
 import { api, camposDeErro, chaves, mensagemDeErro, useEu } from '../api';
-import { Avatar, Campo, Icone, Moldura, useIr } from '../ui';
+import { Avatar, Campo, Esq, Girando, Icone, Logo, Olho, useArquivoImagem, useAviso, useIr } from '../ui';
+import { EscolhaCapa } from './EditarPerfil';
 
 type Erros = Record<string, string | undefined>;
 const errosDe = (r: { success: true } | { success: false; error: { issues: { path: (string | number)[]; message: string }[] } }) => {
@@ -13,13 +14,40 @@ const errosDe = (r: { success: true } | { success: false; error: { issues: { pat
 };
 /** Mostra só os erros dos campos já tocados (ao sair do campo, ou enquanto digita nos campos de senha). */
 const visiveis = (e: Erros, tocados: Record<string, boolean>) => Object.fromEntries(Object.entries(e).filter(([k]) => tocados[k]));
+const descrito = (id: string, tem: unknown) => (tem ? { 'aria-describedby': `${id}-msg` } : {});
 
-function Voltar() {
+/** Arte oficial do jogo à esquerda, formulário emoldurado à direita sobre o mesmo preto do fundo. */
+/** Arte com o ponto focal medido: fx/fy é onde o personagem está na imagem, ar a proporção dela. */
+type Foco = { fx: number; fy: number; ar: number };
+
+/** `personagem`: quem aparece no ornamento de cima do painel, como nas lojas do jogo. */
+function LayoutAuth({ img, alt, credito, foco, personagem, children }: { img: string; alt: string; credito: string; foco: Foco; personagem: 'stag' | 'salubra'; children: ReactNode }) {
   const ir = useIr();
   return (
-    <a className="back" href="/" onClick={(e) => { e.preventDefault(); ir('/'); }}>
-      <Icone n="back" s={18} />Início
-    </a>
+    <div className="auth">
+      <section className="foto">
+        <div className="foco" style={{ '--fx': foco.fx, '--fy': foco.fy, '--ar': foco.ar } as React.CSSProperties}>
+          <img src={img} alt={alt} />
+        </div>
+        <a className="btn sec" href="/" onClick={(e) => { e.preventDefault(); ir('/'); }}><Icone n="voltar" s={18} traco={2} />Voltar ao início</a>
+        <div className="cabeca">
+          <Logo className="logo-foto" />
+          <span className="credito">{credito}</span>
+        </div>
+      </section>
+      <section className={`painel lunar p-${personagem}`}>{children}</section>
+    </div>
+  );
+}
+
+function CampoSenha({ id, mostrar, alternar, ...props }: React.InputHTMLAttributes<HTMLInputElement> & { id: string; mostrar: boolean; alternar: () => void }) {
+  return (
+    <div className="inp-grp">
+      <input id={id} className="inp" type={mostrar ? 'text' : 'password'} {...props} />
+      <button type="button" className="olho" onClick={alternar} aria-pressed={mostrar} aria-label={mostrar ? 'Esconder senha' : 'Mostrar senha'} title={mostrar ? 'Esconder senha' : 'Mostrar senha'}>
+        <Olho cerrado={mostrar} />
+      </button>
+    </div>
   );
 }
 
@@ -31,6 +59,7 @@ export function Entrar() {
   const [tocados, setTocados] = useState<Record<string, boolean>>({});
   const [servidor, setServidor] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
+  const [mostrar, setMostrar] = useState(false);
   const todos = errosDe(entrarSchema.safeParse(f));
   const e = visiveis(todos, tocados);
 
@@ -51,46 +80,53 @@ export function Entrar() {
   };
 
   return (
-    <div className="auth">
-      <Voltar />
-      <div className="art" style={{ backgroundImage: 'url(/img/bg-login.webp)' }} role="img" aria-label="Hornet" />
-      <div className="side">
-        <form onSubmit={enviar} noValidate>
-          <div><h1>Olá de novo!</h1><p className="sub">Entre no Hollow Page usando o cadastro que você já criou.</p></div>
-          {servidor && <p className="erro-box" role="alert">{servidor}</p>}
-          <Campo id="le" rotulo="E-mail" erro={e.email}>
-            <input id="le" className="inp" type="email" autoComplete="email" placeholder="fulano@email.com" value={f.email} aria-invalid={!!e.email}
-              onChange={(x) => setF({ ...f, email: x.target.value })} onBlur={() => f.email && setTocados({ ...tocados, email: true })} />
-          </Campo>
-          <Campo id="ls" rotulo="Senha" erro={e.senha}>
-            <input id="ls" className="inp" type="password" autoComplete="current-password" value={f.senha} aria-invalid={!!e.senha}
-              onChange={(x) => setF({ ...f, senha: x.target.value })} onBlur={() => f.senha && setTocados({ ...tocados, senha: true })} />
-          </Campo>
-          <p className="alt">Não tem cadastro ainda? <button type="button" onClick={() => ir('/cadastro')}>Cadastre-se aqui</button></p>
-          <div className="act"><button className="btn" type="submit" disabled={enviando}>{enviando ? 'Entrando…' : 'Entrar'}</button></div>
-        </form>
-      </div>
-    </div>
+    <LayoutAuth personagem="stag" img="/img/entrar.webp" foco={{ fx: 0.37, fy: 0.45, ar: 1800 / 1688 }} alt="O Cavaleiro numa caverna azul, cercado de mariposas que brilham" credito="Arte oficial de Hollow Knight · Team Cherry">
+      <form onSubmit={enviar} noValidate>
+        <div className="cabeca">
+          <h1 className="t-pag">Entrar</h1>
+          <p>Para publicar e ver o que você salvou.</p>
+        </div>
+        {servidor && <p className="erro-box" role="alert">{servidor}</p>}
+        <Campo id="le" rotulo="E-mail" erro={e.email}>
+          <input id="le" className="inp" type="email" autoComplete="email" maxLength={254} placeholder="nome@email.com" value={f.email} aria-invalid={!!e.email} {...descrito('le', e.email)}
+            onChange={(x) => setF({ ...f, email: x.target.value })} onBlur={() => f.email && setTocados({ ...tocados, email: true })} />
+        </Campo>
+        <Campo id="ls" rotulo="Senha" erro={e.senha}>
+          <CampoSenha id="ls" mostrar={mostrar} alternar={() => setMostrar(!mostrar)} autoComplete="current-password" value={f.senha} aria-invalid={!!e.senha} {...descrito('ls', e.senha)}
+            onChange={(x) => setF({ ...f, senha: x.target.value })} onBlur={() => f.senha && setTocados({ ...tocados, senha: true })} />
+        </Campo>
+        <button className="btn cheio" type="submit" disabled={enviando} aria-busy={enviando} style={{ marginTop: 6 }}>{enviando ? <><Girando />Entrando…</> : 'Entrar'}</button>
+        <p className="alt">Ainda não tem conta? <a href="/cadastro" onClick={(x) => { x.preventDefault(); ir('/cadastro'); }}>Criar conta</a></p>
+      </form>
+    </LayoutAuth>
   );
 }
 
 export function Cadastro() {
   const ir = useIr();
   const qc = useQueryClient();
-  const [f, setF] = useState({ nome: '', email: '', senha: '', conf: '', nascimento: '' });
+  const [f, setF] = useState({ nome: '', email: '', senha: '' });
   const [tocados, setTocados] = useState<Record<string, boolean>>({});
+  const [tentou, setTentou] = useState(false);
   const [servidor, setServidor] = useState<Erros>({});
   const [geral, setGeral] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
+  const [mostrar, setMostrar] = useState(false);
 
   const todos = errosDe(cadastroSchema.safeParse(f));
-  if (f.senha && f.senha.length < 6) todos.senha = `Faltam ${6 - f.senha.length} caracteres (mínimo de 6).`;
-  if (f.conf !== f.senha) todos.conf = 'As senhas não são iguais.';
+  const resto = LIMITES.senhaMin - f.senha.length;
+  const faltam = f.senha && resto > 0 ? `Faltam ${resto} ${resto === 1 ? 'caractere' : 'caracteres'} (mínimo de ${LIMITES.senhaMin}).` : null;
+  if (faltam) todos.senha = faltam;
   const e: Erros = { ...visiveis(todos, tocados) };
   for (const [k, v] of Object.entries(servidor)) if (v) e[k] = v;
+  // enquanto a pessoa digita, "faltam N caracteres" é dica; vira erro só depois de tentar enviar
+  const dicaSenha = !tentou && e.senha === faltam ? faltam ?? undefined : undefined;
+  const erroSenha = dicaSenha ? undefined : e.senha;
+  const IDS = { nome: 'cn', email: 'ce', senha: 'cs' } as const;
   const ao = (k: keyof typeof f, aoDigitar = false) => ({
     value: f[k],
-    'aria-invalid': !!e[k],
+    'aria-invalid': k === 'senha' ? !!erroSenha : !!e[k],
+    ...descrito(IDS[k], k === 'senha' ? erroSenha || dicaSenha : k === 'nome' || e[k]),
     onChange: (x: React.ChangeEvent<HTMLInputElement>) => {
       setF({ ...f, [k]: x.target.value });
       setServidor({ ...servidor, [k]: undefined });
@@ -101,11 +137,12 @@ export function Cadastro() {
 
   const enviar = async (ev: FormEvent) => {
     ev.preventDefault();
-    setTocados({ nome: true, email: true, senha: true, conf: true, nascimento: true });
+    setTentou(true);
+    setTocados({ nome: true, email: true, senha: true });
     if (Object.keys(todos).length) return;
     setEnviando(true); setGeral(null);
     try {
-      const u = await api<UsuarioPrivado>('/auth/cadastro', { method: 'POST', json: { nome: f.nome, email: f.email, senha: f.senha, nascimento: f.nascimento } });
+      const u = await api<UsuarioPrivado>('/auth/cadastro', { method: 'POST', json: f });
       qc.setQueryData(chaves.eu, u);
       ir('/boas-vindas', { replace: true });
     } catch (err) {
@@ -116,107 +153,114 @@ export function Cadastro() {
     }
   };
 
+  const emailJaExiste = servidor.email?.startsWith('Este e-mail já tem cadastro');
+  const erroEmail = emailJaExiste ? (
+    <>Esse e-mail já tem cadastro. <a href="/entrar" onClick={(x) => { x.preventDefault(); ir('/entrar'); }}>Entrar com ele</a></>
+  ) : e.email;
+
   return (
-    <div className="auth rev">
-      <Voltar />
-      <div className="art" style={{ backgroundImage: 'url(/img/bg-cadastro.webp)' }} role="img" aria-label="O Cavaleiro" />
-      <div className="side">
-        <form onSubmit={enviar} noValidate>
-          <div><h1>Olá pela primeira vez!</h1><p className="sub">Faça seu cadastro no Hollow Page aqui.</p></div>
-          {geral && <p className="erro-box" role="alert">{geral}</p>}
-          <Campo id="cn" rotulo="Nome" erro={e.nome}><input id="cn" className="inp" autoComplete="name" placeholder="Fulano da Silva" {...ao('nome')} /></Campo>
-          <Campo id="ce" rotulo="E-mail" erro={e.email}><input id="ce" className="inp" type="email" autoComplete="email" placeholder="fulano@email.com" {...ao('email')} /></Campo>
-          <Campo id="cs" rotulo="Senha" erro={e.senha}><input id="cs" className="inp" type="password" autoComplete="new-password" {...ao('senha', true)} /></Campo>
-          <Campo id="cc" rotulo="Confirme sua senha" erro={e.conf}><input id="cc" className="inp" type="password" autoComplete="new-password" {...ao('conf', true)} /></Campo>
-          <Campo id="cd" rotulo="Data de nascimento" erro={e.nascimento}><input id="cd" className="inp" type="date" max={new Date().toISOString().slice(0, 10)} {...ao('nascimento')} /></Campo>
-          <p className="alt">Já se cadastrou? <button type="button" onClick={() => ir('/entrar')}>Entre por aqui</button></p>
-          <div className="act"><button className="btn" type="submit" disabled={enviando}>{enviando ? 'Cadastrando…' : 'Cadastrar'}</button></div>
-        </form>
-      </div>
-    </div>
+    <LayoutAuth personagem="salubra" img="/img/cadastro.webp" foco={{ fx: 0.4, fy: 0.45, ar: 1800 / 1688 }} alt="O Cavaleiro sobre os restos do Falso Cavaleiro, sob a luz que vem de cima" credito="Arte oficial de Hollow Knight · Team Cherry">
+      <form onSubmit={enviar} noValidate>
+        <div className="cabeca">
+          <h1 className="t-pag">Criar conta</h1>
+          <p>Para publicar suas artes e guardar as que você gosta.</p>
+        </div>
+        {geral && <p className="erro-box" role="alert">{geral}</p>}
+        <Campo id="cn" rotulo="Nome" erro={e.nome} dica={e.nome ? undefined : 'É assim que você assina as artes. Pode ser um apelido.'}>
+          <input id="cn" className="inp" autoComplete="nickname" maxLength={LIMITES.nome} {...ao('nome')} />
+        </Campo>
+        <Campo id="ce" rotulo="E-mail" erro={erroEmail}><input id="ce" className="inp" type="email" autoComplete="email" maxLength={254} placeholder="nome@email.com" {...ao('email')} /></Campo>
+        <Campo id="cs" rotulo="Senha" erro={erroSenha} dica={dicaSenha}>
+          <CampoSenha id="cs" mostrar={mostrar} alternar={() => setMostrar(!mostrar)} autoComplete="new-password" {...ao('senha', true)} />
+        </Campo>
+        <button className="btn cheio" type="submit" disabled={enviando} aria-busy={enviando} style={{ marginTop: 6 }}>{enviando ? <><Girando />Criando conta…</> : 'Criar conta'}</button>
+        <p className="alt">Já tem conta? <a href="/entrar" onClick={(x) => { x.preventDefault(); ir('/entrar'); }}>Entrar</a></p>
+      </form>
+    </LayoutAuth>
   );
 }
 
+/**
+ * Logo depois do cadastro: uma tela só, toda opcional, para montar o perfil (foto, capa, bio e link).
+ * Salvar leva ao perfil pronto; pular leva ao mural.
+ */
 export function BoasVindas() {
   const ir = useIr();
   const qc = useQueryClient();
+  const avisar = useAviso();
   const { data: eu, isLoading } = useEu();
-  const [etapa, setEtapa] = useState(0);
-  const [foto, setFoto] = useState<{ arquivo: File; url: string } | null>(null);
-  const [extra, setExtra] = useState({ genero: '', telefone: '' });
+  const [foto, setFoto] = useArquivoImagem();
+  const [extra, setExtra] = useState({ bio: '', link: '', capa: '' as CapaId | '' });
+  const [erros, setErros] = useState<Erros>({});
   const [erro, setErro] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
-  if (isLoading) return null;
+  if (isLoading) return <div className="bv" aria-busy="true" aria-label="Carregando"><Esq w={220} h={34} /><Esq w="min(980px,100%)" h={520} /></div>;
   if (!eu) return <Navigate to="/entrar" replace />;
 
-  const confirmar = async (ev: FormEvent) => {
+  const capaId = (extra.capa || eu.capa) as CapaId;
+  const capa = CAPAS.find((c) => c.id === capaId) ?? CAPAS[3];
+
+  const salvar = async (ev: FormEvent) => {
     ev.preventDefault();
+    const r = perfilSchema.safeParse({ bio: extra.bio, link: extra.link, capa: capaId });
+    if (!r.success) return setErros(errosDe(r));
     setEnviando(true); setErro(null);
     try {
-      let u = await api<UsuarioPrivado>('/usuarios/eu', { method: 'PATCH', json: extra });
+      let u = await api<UsuarioPrivado>('/usuarios/eu', { method: 'PATCH', json: r.data });
       if (foto) {
         const fd = new FormData(); fd.append('foto', foto.arquivo);
         u = await api<UsuarioPrivado>('/usuarios/eu/foto', { method: 'PUT', body: fd });
       }
       qc.setQueryData(chaves.eu, u);
-      setEtapa(2);
+      avisar('Perfil salvo');
+      ir('/perfil', { replace: true });
     } catch (err) {
-      setErro(mensagemDeErro(err));
+      const c = camposDeErro(err);
+      if (Object.keys(c).length) setErros(c); else setErro(mensagemDeErro(err));
     } finally {
       setEnviando(false);
     }
   };
 
   return (
-    <div className="center">
-      <Moldura largura={620}>
-        <div className="step">
-          <div className="dots" role="img" aria-label={`Etapa ${etapa + 1} de 3`}>{[0, 1, 2].map((i) => <i key={i} className={i <= etapa ? 'on' : ''} />)}</div>
-          {etapa === 0 && (
-            <>
-              <h1>Cadastro realizado com sucesso!</h1>
-              <p>A partir daqui há alguns campos opcionais para você preencher, como foto de perfil e gênero.</p>
-              <img className="ill" src="/img/hornet-grub.webp" alt="" />
-              <button className="btn" onClick={() => setEtapa(1)}>Vamos lá</button>
-              <button className="lnk muted" onClick={() => setEtapa(2)}>Pular</button>
-            </>
-          )}
-          {etapa === 1 && (
-            <form onSubmit={confirmar}>
-              {erro && <p className="erro-box" role="alert">{erro}</p>}
-              <div className="avatar-pick">
-                <Avatar url={foto?.url ?? eu.fotoUrl} tamanho={110} />
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <span className="grp-t">Foto de perfil</span>
-                  <label className="lnk" htmlFor="bf" style={{ alignSelf: 'flex-start' }}>Importar foto</label>
-                  <input id="bf" className="sr" type="file" accept="image/jpeg,image/png,image/webp,image/gif"
-                    onChange={(e) => { const a = e.target.files?.[0]; if (a) setFoto({ arquivo: a, url: URL.createObjectURL(a) }); }} />
-                </div>
-              </div>
-              <Campo id="bg" rotulo="Gênero">
-                <select id="bg" className="inp" value={extra.genero} onChange={(e) => setExtra({ ...extra, genero: e.target.value })}>
-                  {GENEROS.map((g) => <option key={g.id} value={g.id}>{g.nome}</option>)}
-                </select>
-              </Campo>
-              <Campo id="bt" rotulo="Telefone">
-                <input id="bt" className="inp" type="tel" inputMode="tel" autoComplete="tel" placeholder="(11) 90000-0000" value={extra.telefone} onChange={(e) => setExtra({ ...extra, telefone: e.target.value })} />
-              </Campo>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, marginTop: 6 }}>
-                <button className="btn" type="submit" disabled={enviando}>{enviando ? 'Salvando…' : 'Confirmar'}</button>
-                <button type="button" className="lnk muted" onClick={() => setEtapa(2)}>Pular</button>
-              </div>
-            </form>
-          )}
-          {etapa === 2 && (
-            <>
-              <h1>Cadastro completo!</h1>
-              <img className="ill" src="/img/ok-knight.webp" alt="" />
-              <button className="btn" onClick={() => ir('/feed')}>Entrar</button>
-              <p style={{ fontSize: 13 }}>Você também pode preencher esses dados depois, em <Link to="/editar-perfil">Editar perfil</Link>.</p>
-            </>
-          )}
+    <div className="bv">
+      <Logo className="bv-logo" />
+      <form className="lunar largo" onSubmit={salvar} noValidate aria-labelledby="bv-t">
+        <div className="cabeca bv-cab">
+          <h1 id="bv-t" className="t-pag">Monte seu perfil</h1>
+          <p>Nada aqui é obrigatório. Dá para pular e preencher depois, em Editar perfil.</p>
         </div>
-      </Moldura>
+        {erro && <p className="erro-box" role="alert">{erro}</p>}
+        <div className="bv-grade">
+          <div className="col">
+            <h2 className="t-nome">Foto e capa</h2>
+            <div className="foto-esc">
+              {foto ? <Avatar url={foto.url} nome={eu.nome} tamanho={88} /> : <span className="foto-vazia" aria-hidden="true"><Icone n="camera" s={26} traco={1.6} /></span>}
+              <label className="btn sec" htmlFor="bf" style={{ cursor: 'pointer' }}>{foto ? 'Trocar foto' : 'Escolher foto'}</label>
+              <input id="bf" className="sr" type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={(e) => { const a = e.target.files?.[0]; if (a) setFoto(a); }} />
+            </div>
+            <fieldset>
+              <legend className="rot">Capa</legend>
+              <EscolhaCapa valor={capaId} mudar={(c) => setExtra({ ...extra, capa: c })} />
+            </fieldset>
+          </div>
+          <div className="col">
+            <h2 className="t-nome">Sobre você</h2>
+            <Campo id="bb" rotulo="Bio" erro={erros.bio} extra={<span className="cont">{extra.bio.length}/{LIMITES.bio}</span>}>
+              <textarea id="bb" className="inp" rows={3} maxLength={LIMITES.bio} placeholder="O que você desenha, sua área favorita do reino"
+                value={extra.bio} onChange={(e) => setExtra({ ...extra, bio: e.target.value })} aria-invalid={!!erros.bio} />
+            </Campo>
+            <Campo id="bl" rotulo="Link" erro={erros.link} dica={erros.link ? undefined : 'Portfólio ou rede social, para quem quiser ver mais do seu trabalho.'}>
+              <input id="bl" className="inp" type="url" inputMode="url" autoComplete="url" maxLength={LIMITES.link} placeholder="instagram.com/seu.perfil"
+                value={extra.link} onChange={(e) => { setExtra({ ...extra, link: e.target.value }); setErros({ ...erros, link: undefined }); }} aria-invalid={!!erros.link} />
+            </Campo>
+          </div>
+        </div>
+        <div className="fim">
+          <Link className="lnk suave" to="/feed">Pular e ir ao mural</Link>
+          <button className="btn" type="submit" disabled={enviando} aria-busy={enviando}>{enviando ? <><Girando />Salvando…</> : 'Salvar e ver meu perfil'}</button>
+        </div>
+      </form>
     </div>
   );
 }
