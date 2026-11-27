@@ -15,6 +15,7 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "db:migrate": "npm run db:migrate -w @hp/api",
     "db:seed": "npm run db:seed -w @hp/api",
+    "db:seed:producao": "npm run db:seed:producao -w @hp/api",
     "db:atualizar": "neon branches reset desenvolvimento --parent",
     "db:local": "neon checkout desenvolvimento --no-env-pull && neon env pull --branch desenvolvimento --file .env.local -s postgres"
   },

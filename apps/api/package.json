@@ -10,7 +10,8 @@
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "db:migrate": "tsx --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local src/db/migrate.ts",
-    "db:seed": "tsx --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local src/db/seed.ts"
+    "db:seed": "tsx --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local src/db/seed.ts",
+    "db:seed:producao": "tsx src/db/seed-producao.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1166.0",
