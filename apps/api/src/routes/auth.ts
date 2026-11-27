@@ -18,7 +18,7 @@ export function rotasAuth(s: Storage) {
     const d = validar(cadastroSchema, req.body);
     const existe = await db.query.usuarios.findFirst({ where: eq(schema.usuarios.email, d.email), columns: { id: true } });
     if (existe) throw new ErroHttp(409, 'Este e-mail já tem cadastro.', { email: 'Este e-mail já tem cadastro. Entre por aqui.' });
-    const [u] = await db.insert(schema.usuarios).values({ nome: d.nome, email: d.email, senhaHash: await hashSenha(d.senha), nascimento: d.nascimento }).returning();
+    const [u] = await db.insert(schema.usuarios).values({ nome: d.nome, email: d.email, senhaHash: await hashSenha(d.senha) }).returning();
     await abrirSessao(res, u!.id);
     res.status(201).json(await usuarioPrivado(s, u!.id));
   }));

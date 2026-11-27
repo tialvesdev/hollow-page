@@ -1,109 +1,176 @@
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { CAPAS } from '@hp/shared';
+import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
+import { CAPAS, type UsuarioPublico } from '@hp/shared';
 import { chaves, mensagemDeErro, useEstatisticas, useEu, useUsuario } from '../api';
-import { Avatar, Icone } from '../ui';
-import { Mural } from './Feed';
+import { Avatar, Colunas, Esq, FotoCapa, Icone, Vazio, diaMesDeDia, mesAno, useColunas } from '../ui';
+import { Mural, useAbrirPost } from './Feed';
 import { useSair } from './Shell';
 
-const fmtDia = (d: string) => d.split('-').reverse().slice(0, 2).join('/');
+const fmtNum = (n: number) => n.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
 
-function Estatisticas() {
+function Estatisticas({ u }: { u: UsuarioPublico }) {
   const { data, isPending, isError, error } = useEstatisticas(true);
-  const navigate = useNavigate();
-  if (isPending) return <div className="carregando">Carregando…</div>;
+  const abrir = useAbrirPost();
+  if (isPending)
+    return (
+      <div className="esq-est" aria-busy="true" aria-label="Carregando estatísticas">
+        <div className="kpis">{[0, 1, 2].map((i) => <Esq key={i} h={92} />)}</div>
+        <Esq h={300} />
+      </div>
+    );
   if (isError) return <p className="erro-box" role="alert">{mensagemDeErro(error)}</p>;
   if (!data.porDia.length)
-    return <div className="empty"><img src="/img/knight-crying.webp" alt="" /><p>Publique algo para ver suas estatísticas</p></div>;
+    return <Vazio item="cacador" titulo="Sem números por enquanto" texto="As estatísticas começam a contar a partir da primeira arte publicada." acao={<Link className="btn" to="/publicar">Publicar arte</Link>} />;
 
-  const vals = data.porDia.map((d) => d.publicacoes);
-  const max = Math.max(...vals, 1);
-  const W = 560, H = 220, L = 34, B = 34, T = 14, R = 10;
-  const passo = (W - L - R) / data.porDia.length, larg = Math.min(54, passo * 0.6);
-  const abrir = (id: string) => navigate({ search: `?post=${id}` });
-  const Kpi = ({ id, img, v, l }: { id: string; img: string; v: string; l: string }) => (
-    <button className="kpi" style={{ cursor: 'pointer', textAlign: 'left', color: 'inherit', font: 'inherit' }} onClick={() => abrir(id)}>
-      <img src={img} alt="" /><div><div className="v">{v}</div><div className="l">{l}</div></div>
-    </button>
-  );
+  const max = Math.max(...data.porDia.map((d) => d.publicacoes), 1);
+  const meses = [...new Set(data.porDia.map((d) => mesAno(d.dia)))];
+  const periodo = meses.length === 1 ? meses[0] : `${meses[0]} a ${meses[meses.length - 1]}`;
+  const kpis = [
+    { v: fmtNum(u.publicacoes), l: u.publicacoes === 1 ? 'publicação no seu perfil' : 'publicações no seu perfil' },
+    { v: fmtNum(data.totalSalvos), l: data.totalSalvos === 1 ? 'vez que salvaram suas artes' : 'vezes que salvaram suas artes' },
+    { v: fmtNum(u.publicacoes ? data.totalSalvos / u.publicacoes : 0), l: 'salvamentos por arte, em média' },
+  ];
+  const vezes = (n: number) => (n === 0 ? 'ainda não foi salva' : `salva ${n} ${n === 1 ? 'vez' : 'vezes'}`);
+  const destaques = [
+    data.maisSalvo && { r: 'Mais salva', p: data.maisSalvo },
+    data.menosSalvo && data.menosSalvo.id !== data.maisSalvo?.id && { r: 'Menos salva', p: data.menosSalvo },
+  ].filter(Boolean) as { r: string; p: NonNullable<typeof data.maisSalvo> }[];
+
   return (
-    <div className="adv">
-      <div className="chart">
-        <h3>Publicações por dia</h3>
-        <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Publicações por dia: ${data.porDia.map((d) => `${fmtDia(d.dia)} ${d.publicacoes}`).join(', ')}`}>
-          {Array.from({ length: max + 1 }, (_, t) => {
-            const y = H - B - ((H - B - T) * t) / max;
-            return <g key={t}><line x1={L} x2={W - R} y1={y} y2={y} stroke="#2B2932" /><text x={L - 8} y={y + 4} textAnchor="end" fontSize="11" fill="#9B98A3">{t}</text></g>;
-          })}
-          {data.porDia.map((d, i) => {
-            const h = ((H - B - T) * d.publicacoes) / max, x = L + passo * i + (passo - larg) / 2;
-            return <g key={d.dia}><rect x={x} y={H - B - h} width={larg} height={h} rx="4" fill="var(--acento)" /><text x={x + larg / 2} y={H - B + 18} textAnchor="middle" fontSize="11" fill="#9B98A3">{fmtDia(d.dia)}</text></g>;
-          })}
-        </svg>
-      </div>
+    <>
       <div className="kpis">
-        <div className="kpi"><div><div className="v">{data.totalSalvos}</div><div className="l">vezes que suas publicações foram salvas</div></div></div>
-        {data.maisSalvo && <Kpi id={data.maisSalvo.id} img={data.maisSalvo.imagemUrl} v={`${data.maisSalvo.salvos}x`} l={`Post mais salvo: ${data.maisSalvo.titulo}`} />}
-        {data.menosSalvo && <Kpi id={data.menosSalvo.id} img={data.menosSalvo.imagemUrl} v={`${data.menosSalvo.salvos}x`} l={`Post menos salvo: ${data.menosSalvo.titulo}`} />}
+        {kpis.map((k) => <div key={k.l} className="kpi pedra"><b>{k.v}</b><span>{k.l}</span></div>)}
       </div>
-    </div>
+      <figure className="grafico pedra">
+        <figcaption><span className="t-nome">Publicações por dia</span><span className="apoio">{periodo}</span></figcaption>
+        <div className="barras" role="img" aria-label={`Publicações por dia: ${data.porDia.map((d) => `${diaMesDeDia(d.dia)}, ${d.publicacoes}`).join('; ')}`}>
+          <div className="area">
+            {data.porDia.map((d) => (
+              <div key={d.dia} className="col" aria-hidden="true">
+                <b>{d.publicacoes}</b>
+                <i style={{ height: Math.round((d.publicacoes / max) * 160) }} />
+              </div>
+            ))}
+          </div>
+          <div className="dias" aria-hidden="true">{data.porDia.map((d) => <span key={d.dia}>{diaMesDeDia(d.dia)}</span>)}</div>
+        </div>
+      </figure>
+      {destaques.length > 0 && (
+        <div className="destaques">
+          {destaques.map(({ r, p }) => (
+            <button key={r} className="dest pedra" onClick={() => abrir(p.id)}>
+              <img src={p.imagemUrl} alt="" />
+              <span><span className="r">{r}</span><span className="t-nome">{p.titulo}</span><span className="apoio">{vezes(p.salvos)}</span></span>
+            </button>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 
+type Aba = 'posts' | 'estatisticas';
+
+/**
+ * Perfil como vitrine de quem desenha: a capa no topo, o avatar sobreposto à borda dela e, ao lado,
+ * nome, bio, link e números; embaixo, as artes na largura toda. No seu perfil há também as estatísticas.
+ * (Os salvos são privados e ficam na página Salvos.)
+ */
 export default function Perfil() {
   const { id: param } = useParams();
   const { data: eu } = useEu();
   const id = param ?? eu?.id;
   const meu = id === eu?.id;
   const { data: u, isError, error } = useUsuario(id);
-  const navigate = useNavigate();
+  const { data: est } = useEstatisticas(!!meu);
+  const [params, setParams] = useSearchParams();
   const sair = useSair();
-  const [aba, setAba] = useState<'posts' | 'salvos' | 'estatisticas'>('posts');
-  const abaAtual = meu ? aba : 'posts';
+  const [colunas, mudarColunas] = useColunas();
+  const aba: Aba = meu && params.get('aba') === 'estatisticas' ? 'estatisticas' : 'posts';
+  const irAba = (a: Aba) => {
+    const n = new URLSearchParams(params);
+    if (a === 'posts') n.delete('aba'); else n.set('aba', a);
+    setParams(n, { replace: true });
+  };
 
-  if (isError) return <div className="page"><p className="erro-box" role="alert">{mensagemDeErro(error)}</p></div>;
-  if (!u) return <div className="carregando">Carregando…</div>;
+  // o endereço antigo da aba de salvos leva à página nova
+  if (meu && params.get('aba') === 'salvos') return <Navigate to="/salvos" replace />;
+  if (isError) return <p className="erro-box" role="alert">{mensagemDeErro(error)}</p>;
+  if (!u)
+    return (
+      <div className="perfil" aria-busy="true" aria-label="Carregando perfil">
+        <Esq className="perfil-capa" />
+        <div className="perfil-cab">
+          <Esq w={136} h={136} r="50%" className="perfil-av" />
+          <div className="perfil-id"><Esq w={260} h={34} /><Esq w={360} h={14} /><Esq w={220} h={14} /></div>
+        </div>
+        <div className="esq-grade tres">{Array.from({ length: 6 }, (_, i) => <Esq key={i} h={200} />)}</div>
+      </div>
+    );
   const capa = CAPAS.find((c) => c.id === u.capa) ?? CAPAS[3];
-  const abas = meu ? ([['posts', 'POSTS'], ['salvos', 'SALVOS'], ['estatisticas', 'ESTATÍSTICAS']] as const) : ([['posts', 'POSTS']] as const);
+  const primeiroNome = u.nome.split(' ')[0];
 
   return (
-    <div>
-      <div className="cover" style={{ backgroundImage: `url(/capas/${capa.id}.webp)` }} role="img" aria-label={`Capa: ${capa.nome}`} />
-      <div className="phead">
-        <Avatar url={u.fotoUrl} tamanho={132} />
-        <div className="nm"><h1>{u.nome}</h1><small>{u.publicacoes} {u.publicacoes === 1 ? 'publicação' : 'publicações'}</small></div>
-        <div className="acts">
+    <div className="perfil">
+      <div className="perfil-capa">
+        <FotoCapa capa={capa} alt={`Capa: ${capa.nome}`} />
+      </div>
+      <header className="perfil-cab">
+        <Avatar url={u.fotoUrl} nome={u.nome} tamanho={136} className="perfil-av" />
+        <div className="perfil-id">
+          <h1 className="t-pag">{u.nome}</h1>
+          {u.bio && <p className="bio">{u.bio}</p>}
+          <div className="perfil-meta">
+            <span><b>{fmtNum(u.publicacoes)}</b> {u.publicacoes === 1 ? 'arte' : 'artes'}</span>
+            {meu && est && <span><b>{fmtNum(est.totalSalvos)}</b> {est.totalSalvos === 1 ? 'vez salva' : 'vezes salvas'}</span>}
+            {u.link && (
+              <a className="link" href={u.link} target="_blank" rel="noopener noreferrer ugc">
+                <Icone n="link" s={16} traco={2} />{u.link.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+              </a>
+            )}
+          </div>
+        </div>
+        {meu && (
+          <div className="perfil-acoes">
+            <Link className="btn sec" to="/editar-perfil">Editar perfil</Link>
+            <button className="btn perigo so-cel" onClick={sair}><Icone n="sair" s={18} traco={2} />Sair</button>
+          </div>
+        )}
+      </header>
+
+      <section className="perfil-conteudo" aria-label={meu ? 'Suas artes' : `Artes de ${primeiroNome}`}>
+        {/* mesma barra nos dois perfis: abas (ou o título da única seção) à esquerda, colunas da grade à direita */}
+        <div className="barra-perfil">
           {meu ? (
-            <>
-              <button className="btn sm" onClick={() => navigate('/editar-perfil')}><Icone n="edit" s={18} />Editar perfil</button>
-              <button className="btn sm danger mob" onClick={sair}><Icone n="out" s={18} />Sair</button>
-            </>
+            <div className="abas-perfil" role="tablist" aria-label="Seções do perfil">
+              {([['posts', 'Publicações'], ['estatisticas', 'Estatísticas']] as const).map(([k, l]) => (
+                <button key={k} role="tab" id={`aba-${k}`} aria-selected={aba === k} aria-controls="painel-perfil" onClick={() => irAba(k)}>{l}</button>
+              ))}
+            </div>
           ) : (
-            <button className="btn sm out" onClick={() => navigate('/perfil')}>Ver meu perfil</button>
+            <div className="abas-perfil"><h2 className="aba-unica">Publicações</h2></div>
+          )}
+          {aba === 'posts' && u.publicacoes > 0 && <Colunas n={colunas} mudar={mudarColunas} />}
+        </div>
+        <div id="painel-perfil" className="painel-perfil" role={meu ? 'tabpanel' : undefined} aria-labelledby={meu ? `aba-${aba}` : undefined}>
+          {aba === 'estatisticas' ? (
+            <Estatisticas u={u} />
+          ) : (
+            <Mural
+              key={id}
+              grade
+              colunas={colunas}
+              chave={chaves.postsDe(id!)}
+              caminho={(c) => `/usuarios/${id}/posts?limite=12${c ? `&cursor=${c}` : ''}`}
+              vazio={
+                meu ? (
+                  <Vazio titulo="Nenhuma arte publicada" texto="A primeira que você publicar aparece aqui e no mural." acao={<Link className="btn" to="/publicar">Publicar arte</Link>} />
+                ) : (
+                  <Vazio titulo={`${primeiroNome} ainda não publicou artes`} />
+                )
+              }
+            />
           )}
         </div>
-      </div>
-      <section className="pbox">
-        <div className="tabs" role="tablist">
-          {abas.map(([k, l]) => <button key={k} role="tab" aria-selected={abaAtual === k} onClick={() => setAba(k)}>{l}</button>)}
-        </div>
-        {abaAtual === 'estatisticas' ? (
-          <Estatisticas />
-        ) : (
-          <Mural
-            key={abaAtual + id}
-            grade
-            chave={abaAtual === 'salvos' ? chaves.salvos : chaves.postsDe(id!)}
-            caminho={(c) => `${abaAtual === 'salvos' ? '/usuarios/eu/salvos' : `/usuarios/${id}/posts`}?limite=12${c ? `&cursor=${c}` : ''}`}
-            vazio={
-              <div className="empty">
-                <img src="/img/knight-crying.webp" alt="" />
-                <p>{abaAtual === 'salvos' ? 'Você não salvou nenhuma postagem ainda' : meu ? 'Você não fez nenhuma postagem ainda' : 'Nenhuma postagem por aqui'}</p>
-                {meu && abaAtual === 'posts' && <button className="btn sm" onClick={() => navigate('/publicar')}>Fazer a primeira publicação</button>}
-              </div>
-            }
-          />
-        )}
       </section>
     </div>
   );

@@ -1,9 +1,9 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { CAPAS, GENEROS, perfilSchema, type CapaId, type UsuarioPrivado } from '@hp/shared';
+import { CAPAS, LIMITES, perfilSchema, type CapaId, type UsuarioPrivado } from '@hp/shared';
 import { api, camposDeErro, chaves, mensagemDeErro, useEu } from '../api';
-import { Avatar, Campo, Icone, useAviso } from '../ui';
+import { Avatar, Campo, Faixa, Girando, useArquivoImagem, useAviso } from '../ui';
 
 export default function EditarPerfil() {
   const { data: eu } = useEu();
@@ -11,19 +11,33 @@ export default function EditarPerfil() {
   return <Formulario eu={eu} />;
 }
 
+/** Escolha de capa: o mesmo estado de chip, com a miniatura redonda. */
+export function EscolhaCapa({ valor, mudar, tres }: { valor: CapaId; mudar: (c: CapaId) => void; tres?: boolean }) {
+  return (
+    <div className={`capas${tres ? ' tres' : ''}`} role="group" aria-label="Capas">
+      {CAPAS.map((c) => (
+        <button type="button" key={c.id} className="capa-op" aria-pressed={valor === c.id} onClick={() => mudar(c.id)}>
+          <img src={`/capas/${c.id}.webp`} alt="" /><span>{c.nome}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function Formulario({ eu }: { eu: UsuarioPrivado }) {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const avisar = useAviso();
-  const [f, setF] = useState({ nome: eu.nome, email: eu.email, nascimento: eu.nascimento, genero: eu.genero, telefone: eu.telefone, capa: eu.capa as CapaId });
-  const [foto, setFoto] = useState<{ arquivo: File; url: string } | null>(null);
+  const [f, setF] = useState({ nome: eu.nome, email: eu.email, bio: eu.bio, link: eu.link, capa: eu.capa as CapaId });
+  const [foto, setFoto] = useArquivoImagem();
   const [erros, setErros] = useState<Record<string, string | undefined>>({});
   const [geral, setGeral] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [excluir, setExcluir] = useState(false);
   const [senha, setSenha] = useState('');
   const [erroSenha, setErroSenha] = useState<string | null>(null);
-  const s = (k: keyof typeof f) => (x: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => { setF({ ...f, [k]: x.target.value }); setErros({ ...erros, [k]: undefined }); };
+  const s = (k: keyof typeof f) => (x: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => { setF({ ...f, [k]: x.target.value }); setErros({ ...erros, [k]: undefined }); };
+  const inv = (k: string) => ({ 'aria-invalid': !!erros[k], 'aria-describedby': erros[k] ? `e${k[0]}-msg` : undefined });
 
   const salvar = async (ev: FormEvent) => {
     ev.preventDefault();
@@ -66,62 +80,60 @@ function Formulario({ eu }: { eu: UsuarioPrivado }) {
 
   const capa = CAPAS.find((c) => c.id === f.capa)!;
   return (
-    <div className="formpage">
-      <form className="edit" onSubmit={salvar} noValidate>
-        <div className="hd">
-          <button type="button" className="xbtn" aria-label="Voltar ao perfil" onClick={() => navigate('/perfil')}><Icone n="x" /></button>
-          <h1>Editar perfil</h1><span />
+    <form onSubmit={salvar} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <Faixa
+        alta
+        capa={capa}
+        alt={`Capa escolhida: ${capa.nome}`}
+        quem={<Avatar url={foto?.url ?? eu.fotoUrl} nome={f.nome || eu.nome} tamanho={112} />}
+        titulo="Editar perfil"
+        acoes={
+          <>
+            <label className="btn sec" htmlFor="ef" style={{ cursor: 'pointer' }}>Trocar foto</label>
+            <input id="ef" className="sr" type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={(x) => { const a = x.target.files?.[0]; if (a) setFoto(a); }} />
+          </>
+        }
+      />
+      {geral && <p className="erro-box" role="alert">{geral}</p>}
+      <div className="edit-grid">
+        <section className="cartao pedra" aria-labelledby="capa-t">
+          <h2 id="capa-t" className="t-nome">Capa</h2>
+          <EscolhaCapa valor={f.capa} mudar={(c) => setF({ ...f, capa: c })} />
+        </section>
+        <section className="cartao pedra" aria-labelledby="dados-t">
+          <h2 id="dados-t" className="t-nome">Sobre você</h2>
+          <Campo id="en" rotulo="Nome" erro={erros.nome}><input id="en" className="inp" autoComplete="nickname" maxLength={LIMITES.nome} value={f.nome} onChange={s('nome')} {...inv('nome')} /></Campo>
+          <Campo id="eb" rotulo="Bio" erro={erros.bio} extra={<span className="cont">{f.bio.length}/{LIMITES.bio}</span>}>
+            <textarea id="eb" className="inp" rows={2} maxLength={LIMITES.bio} value={f.bio} onChange={s('bio')} {...inv('bio')} />
+          </Campo>
+          <Campo id="el" rotulo="Link" erro={erros.link}>
+            <input id="el" className="inp" type="url" inputMode="url" autoComplete="url" maxLength={LIMITES.link} placeholder="instagram.com/seu.perfil" value={f.link} onChange={s('link')} {...inv('link')} />
+          </Campo>
+          <Campo id="ee" rotulo="E-mail" erro={erros.email}><input id="ee" className="inp" type="email" autoComplete="email" maxLength={254} value={f.email} onChange={s('email')} {...inv('email')} /></Campo>
+        </section>
+      </div>
+      <div className="rodape-form">
+        <Link className="btn sec" to="/perfil">Descartar</Link>
+        <button className="btn" type="submit" disabled={enviando} aria-busy={enviando}>{enviando ? <><Girando />Salvando…</> : 'Salvar alterações'}</button>
+      </div>
+      <section className="perigo-card pedra" aria-labelledby="perigo-t">
+        <div className="txt">
+          <h2 id="perigo-t" className="t-nome">Excluir conta</h2>
+          <p>Apaga seu perfil e {eu.publicacoes === 1 ? 'sua publicação' : `suas ${eu.publicacoes} publicações`}. Não dá para desfazer.</p>
         </div>
-        {geral && <p className="erro-box" role="alert">{geral}</p>}
-        <div className="egrid">
-          <div className="col">
-            <span className="grp-t">Dados pessoais</span>
-            <Campo id="en" rotulo="Nome" erro={erros.nome}><input id="en" className="inp" autoComplete="name" value={f.nome} onChange={s('nome')} /></Campo>
-            <Campo id="ee" rotulo="E-mail" erro={erros.email}><input id="ee" className="inp" type="email" autoComplete="email" value={f.email} onChange={s('email')} /></Campo>
-            <Campo id="ed" rotulo="Data de nascimento" erro={erros.nascimento}><input id="ed" className="inp" type="date" value={f.nascimento} onChange={s('nascimento')} /></Campo>
-            <span className="grp-t" style={{ marginTop: 10 }}>Dados opcionais</span>
-            <Campo id="eg" rotulo="Gênero"><select id="eg" className="inp" value={f.genero} onChange={s('genero')}>{GENEROS.map((g) => <option key={g.id} value={g.id}>{g.nome}</option>)}</select></Campo>
-            <Campo id="et" rotulo="Telefone" erro={erros.telefone}><input id="et" className="inp" type="tel" autoComplete="tel" placeholder="(11) 90000-0000" value={f.telefone} onChange={s('telefone')} /></Campo>
+        {excluir ? (
+          <div className="conf">
+            <Campo id="xs" rotulo="Digite sua senha para confirmar" erro={erroSenha ?? undefined}>
+              <input id="xs" className="inp" type="password" autoComplete="current-password" autoFocus value={senha} aria-invalid={!!erroSenha} onChange={(e) => setSenha(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (senha) excluirConta(); } }} />
+            </Campo>
+            <button type="button" className="btn sec" onClick={() => { setExcluir(false); setSenha(''); setErroSenha(null); }}>Cancelar</button>
+            <button type="button" className="btn perigo" disabled={!senha} onClick={excluirConta}>Excluir de vez</button>
           </div>
-          <div className="col" style={{ alignItems: 'center' }}>
-            <Avatar url={foto?.url ?? eu.fotoUrl} tamanho={180} />
-            <span className="grp-t">Foto de perfil</span>
-            <label className="lnk" htmlFor="ef" style={{ marginTop: -12 }}>Importar foto</label>
-            <input id="ef" className="sr" type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={(x) => { const a = x.target.files?.[0]; if (a) setFoto({ arquivo: a, url: URL.createObjectURL(a) }); }} />
-            <div className="capa-pv" style={{ backgroundImage: `url(/capas/${capa.id}.webp)` }} role="img" aria-label={`Prévia da capa: ${capa.nome}`} />
-            <span className="grp-t" style={{ alignSelf: 'flex-start', marginBottom: -12 }}>Capa de perfil</span>
-            <div className="capas" style={{ width: '100%' }}>
-              {CAPAS.map((c) => (
-                <button type="button" key={c.id} aria-pressed={f.capa === c.id} aria-label={`Capa ${c.nome}`} onClick={() => setF({ ...f, capa: c.id })}>
-                  <img src={`/capas/${c.id}.webp`} alt="" /><span>{c.nome}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button className="btn" type="submit" disabled={enviando} style={{ minWidth: 220 }}>{enviando ? 'Salvando…' : 'Salvar alterações'}</button>
-        </div>
-        <div className="danger-zone">
-          {excluir ? (
-            <>
-              <span>Excluir a conta apaga seu perfil e suas publicações. Para confirmar, digite sua senha.</span>
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end' }}>
-                <Campo id="xs" rotulo="Senha atual" erro={erroSenha ?? undefined}>
-                  <input id="xs" className="inp" type="password" autoComplete="current-password" value={senha} onChange={(e) => setSenha(e.target.value)} />
-                </Campo>
-                <button type="button" className="btn sm" onClick={() => { setExcluir(false); setSenha(''); }}>Cancelar</button>
-                <button type="button" className="btn sm danger" disabled={!senha} onClick={excluirConta}>Excluir conta</button>
-              </div>
-            </>
-          ) : (
-            <>
-              <span>Quer sair do Hollow Page de vez?</span>
-              <button type="button" className="btn sm danger" onClick={() => setExcluir(true)}>Excluir conta</button>
-            </>
-          )}
-        </div>
-      </form>
-    </div>
+        ) : (
+          <button type="button" className="btn perigo" onClick={() => setExcluir(true)}>Excluir minha conta…</button>
+        )}
+      </section>
+    </form>
   );
 }

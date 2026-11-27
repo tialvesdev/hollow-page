@@ -1,13 +1,12 @@
-import { pgTable, uuid, varchar, text, date, integer, timestamp, smallserial, smallint, primaryKey } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, text, integer, timestamp, smallserial, smallint, primaryKey } from 'drizzle-orm/pg-core';
 
 export const usuarios = pgTable('usuarios', {
   id: uuid('id').primaryKey().defaultRandom(),
   nome: varchar('nome', { length: 80 }).notNull(),
   email: varchar('email', { length: 254 }).notNull().unique(),
   senhaHash: text('senha_hash').notNull(),
-  nascimento: date('nascimento').notNull(),
-  genero: varchar('genero', { length: 1 }).notNull().default(''),
-  telefone: varchar('telefone', { length: 20 }).notNull().default(''),
+  bio: varchar('bio', { length: 160 }).notNull().default(''),
+  link: varchar('link', { length: 200 }).notNull().default(''),
   fotoChave: text('foto_chave'),
   capa: varchar('capa', { length: 40 }).notNull().default('o-cavaleiro'),
   criadoEm: timestamp('criado_em', { withTimezone: true }).notNull().defaultNow(),

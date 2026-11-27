@@ -1,5 +1,5 @@
 /* Consultas de leitura que juntam várias tabelas (mural, perfil, estatísticas). */
-import type { Post, Tag } from '@hp/shared';
+import { ehUuid, type Post, type Tag } from '@hp/shared';
 import { pool } from './db/index.js';
 import type { Storage } from './storage.js';
 
@@ -43,7 +43,7 @@ export interface FiltroPosts {
 const codificar = (d: Date, id: string) => Buffer.from(`${d.toISOString()}|${id}`).toString('base64url');
 function decodificar(c: string): [string, string] | null {
   const [t, id] = Buffer.from(c, 'base64url').toString().split('|');
-  if (!t || !id || Number.isNaN(Date.parse(t)) || !/^[0-9a-f-]{36}$/i.test(id)) return null;
+  if (!t || !id || Number.isNaN(Date.parse(t)) || !ehUuid(id)) return null;
   return [t, id];
 }
 
@@ -76,7 +76,7 @@ export async function listarPosts(s: Storage, f: FiltroPosts) {
 }
 
 export async function buscarPost(s: Storage, id: string, leitor?: string) {
-  if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+  if (!ehUuid(id)) return null;
   const { rows } = await pool.query<LinhaPost>(`${SELECT} WHERE p.id = $2::uuid`, [leitor ?? null, id]);
   return rows[0] ? paraPost(s)(rows[0]) : null;
 }

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { randomUUID } from 'node:crypto';
 import { and, eq, inArray } from 'drizzle-orm';
-import { novoPostSchema, listarPostsSchema, TAGS } from '@hp/shared';
+import { ehUuid, novoPostSchema, listarPostsSchema, TAGS } from '@hp/shared';
 import { db, schema } from '../db/index.js';
 import { exigirLogin } from '../auth.js';
 import { ErroHttp, rota, validar } from '../http.js';
@@ -75,7 +75,7 @@ export function rotasPosts(s: Storage) {
   }));
 
   r.get('/:id/baixar', rota(async (req, res) => {
-    const p = await db.query.posts.findFirst({ where: eq(schema.posts.id, /^[0-9a-f-]{36}$/i.test(req.params.id!) ? req.params.id! : '00000000-0000-0000-0000-000000000000') });
+    const p = await db.query.posts.findFirst({ where: eq(schema.posts.id, ehUuid(req.params.id!) ? req.params.id! : '00000000-0000-4000-8000-000000000000') });
     if (!p) throw new ErroHttp(404, 'Publicação não encontrada.');
     const dados = await s.ler(p.imagemChave);
     const nome = p.titulo.normalize('NFD').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-').toLowerCase() || 'hollow-page';

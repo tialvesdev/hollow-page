@@ -1,5 +1,6 @@
 /* Onde as imagens ficam: pasta local (desenvolvimento) ou um bucket compatível com S3
    (Neon Object Storage, Cloudflare R2, AWS S3) em produção. */
+import { existsSync } from 'node:fs';
 import { mkdir, writeFile, unlink, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
@@ -12,8 +13,13 @@ export interface Storage {
   url(chave: string): string;
 }
 
+/**
+ * Pasta local. No desenvolvimento, o banco é uma cópia da produção e aponta para imagens que estão
+ * no bucket de produção: se o arquivo não existe aqui, a URL vai para lá, só para leitura.
+ * Gravar e apagar mexem apenas na pasta local, nunca no bucket.
+ */
 class StorageLocal implements Storage {
-  constructor(private pasta: string) {}
+  constructor(private pasta: string, private remota?: string) {}
   private caminho(chave: string) {
     const p = path.resolve(this.pasta, chave);
     if (!p.startsWith(path.resolve(this.pasta) + path.sep)) throw new Error('chave inválida');
@@ -31,6 +37,7 @@ class StorageLocal implements Storage {
     return readFile(this.caminho(chave));
   }
   url(chave: string) {
+    if (this.remota && !existsSync(this.caminho(chave))) return `${this.remota.replace(/\/$/, '')}/${chave}`;
     return `/uploads/${chave}`;
   }
 }
@@ -63,5 +70,5 @@ class StorageS3 implements Storage {
 }
 
 export function criarStorage(): Storage {
-  return config.STORAGE === 's3' ? new StorageS3() : new StorageLocal(config.UPLOAD_DIR);
+  return config.STORAGE === 's3' ? new StorageS3() : new StorageLocal(config.UPLOAD_DIR, config.IMAGENS_PRODUCAO_URL);
 }
