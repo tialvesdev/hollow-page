@@ -5,20 +5,15 @@
    Não apaga nada que já esteja no banco: só acrescenta as contas de exemplo (e-mails @exemplo.test).
    Com --forcar, apaga e recria apenas essas contas de exemplo (e o que elas publicaram).
    Todas as contas usam a senha SENHA_EXEMPLO, abaixo. */
-import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pool } from './index.js';
-import { migrar } from './migrate.js';
-import { hashSenha } from '../auth.js';
-import { prepararImagem } from '../imagens.js';
-import { criarStorage } from '../storage.js';
+import { semear, type Pessoa, type Publicacao } from './semear.js';
 
 const SENHA_EXEMPLO = 'hallownest';
 const DOMINIO = 'exemplo.test';
 const pasta = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../seed');
 
-type Pessoa = { k: string; nome: string; capa: string; bio: string; link: string; foto?: string };
 const PESSOAS: Pessoa[] = [
   { k: 'fulano', nome: 'Fulano da Silva', capa: 'o-vazio', foto: 'avatar-cavaleiro', bio: 'Desenho o reino desde 2017, quase sempre a Trilha Verde.', link: 'https://instagram.com/fulano.desenha' },
   { k: 'lira', nome: 'Lira Moraes', capa: 'pico-de-cristal', foto: 'avatar-hornet', bio: 'Hornet é minha personagem favorita. Aquarela e nanquim.', link: 'https://www.artstation.com/liramoraes' },
@@ -30,7 +25,7 @@ const PESSOAS: Pessoa[] = [
   { k: 'nina', nome: 'Nina Prado', capa: 'lago-azul', bio: 'Só venho olhar e salvar as artes dos outros.', link: '' },
 ];
 
-const POSTS: [string, string, string, string, string[], string][] = [
+const POSTS: Publicacao[] = [
   ['p02', 'fulano', 'Musgo e silêncio', 'O Cavaleiro descansando no meio da Trilha Verde, cercado de folhas.', ['Cavaleiro', 'Trilha Verde'], '2026-10-02T10:12'],
   ['p09', 'fulano', 'Ruínas cobertas', 'Dois viajantes entre colunas antigas tomadas pela vegetação.', ['Cenário', 'Trilha Verde'], '2026-10-02T19:40'],
   ['p18', 'fulano', 'Fim de tarde', 'O Cavaleiro olhando o horizonte em tons de rosa e laranja.', ['Cavaleiro', 'Cenário'], '2026-10-04T21:03'],
@@ -60,55 +55,6 @@ const POSTS: [string, string, string, string, string[], string][] = [
 // quantas pessoas salvam cada arte: algumas muito salvas, outras nunca (para estatísticas e o carrossel)
 const SALVOS_POR_POST = [6, 2, 5, 0, 3, 1, 6, 4, 2, 0, 3, 1, 5, 2, 4, 0, 1, 2, 3, 0, 6, 5, 4, 3];
 
-await migrar(pool);
-const emails = PESSOAS.map((p) => `${p.k}@${DOMINIO}`);
-const { rows: existentes } = await pool.query<{ id: string }>('SELECT id FROM usuarios WHERE email = ANY($1::text[])', [emails]);
-if (existentes.length && !process.argv.includes('--forcar')) {
-  console.log('As contas de exemplo já existem. Rode com --forcar para apagá-las e recriar (o resto do banco não é tocado).');
-  process.exit(0);
-}
-if (existentes.length) await pool.query('DELETE FROM usuarios WHERE email = ANY($1::text[])', [emails]); // posts e salvos saem em cascata
-
-const s = criarStorage();
-const senha = await hashSenha(SENHA_EXEMPLO);
-const ids: Record<string, string> = {};
-for (const p of PESSOAS) {
-  let fotoChave: string | null = null;
-  if (p.foto) {
-    const img = await prepararImagem(await readFile(path.join(pasta, `${p.foto}.webp`)), 'avatar');
-    fotoChave = `avatares/exemplo-${p.k}.webp`;
-    await s.salvar(fotoChave, img.dados, 'image/webp');
-  }
-  const r = await pool.query(
-    'INSERT INTO usuarios (nome, email, senha_hash, capa, bio, link, foto_chave) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id',
-    [p.nome, `${p.k}@${DOMINIO}`, senha, p.capa, p.bio, p.link, fotoChave],
-  );
-  ids[p.k] = r.rows[0].id;
-}
-
-const postIds: string[] = [];
-for (const [arq, autor, titulo, desc, tags, data] of POSTS) {
-  const img = await prepararImagem(await readFile(path.join(pasta, `${arq}.webp`)), 'post');
-  const chave = `posts/exemplo-${arq}.webp`;
-  await s.salvar(chave, img.dados, 'image/webp');
-  const r = await pool.query(
-    `INSERT INTO posts (autor_id, titulo, descricao, imagem_chave, largura, altura, criado_em) VALUES ($1,$2,$3,$4,$5,$6,$7::timestamp AT TIME ZONE 'America/Sao_Paulo') RETURNING id`,
-    [ids[autor], titulo, desc, chave, img.largura, img.altura, data],
-  );
-  postIds.push(r.rows[0].id);
-  await pool.query('INSERT INTO post_tags (post_id, tag_id) SELECT $1, id FROM tags WHERE nome = ANY($2::text[])', [r.rows[0].id, tags]);
-}
-
-// salvos: quem salva cada arte varia; ninguém salva a própria
-const todos = PESSOAS.map((p) => p.k);
-for (const [i, pid] of postIds.entries()) {
-  const autor = POSTS[i]![1];
-  const outros = todos.filter((k) => k !== autor);
-  const n = Math.min(SALVOS_POR_POST[i] ?? 0, outros.length);
-  for (let j = 0; j < n; j++) {
-    const quem = outros[(i + j * 2) % outros.length]!;
-    await pool.query('INSERT INTO salvos (usuario_id, post_id) VALUES ($1,$2) ON CONFLICT DO NOTHING', [ids[quem], pid]);
-  }
-}
-console.log(`Exemplos criados: ${PESSOAS.length} pessoas e ${POSTS.length} publicações. Entre com fulano@${DOMINIO} (ou outra conta do arquivo) e a senha que está em src/db/seed.ts.`);
+await semear({ pessoas: PESSOAS, posts: POSTS, salvosPorPost: SALVOS_POR_POST, senha: SENHA_EXEMPLO, dominio: DOMINIO, pasta, prefixo: 'exemplo', forcar: process.argv.includes('--forcar') });
+console.log(`Entre com fulano@${DOMINIO} (ou outra conta do arquivo) e a senha que está em src/db/seed.ts.`);
 await pool.end();

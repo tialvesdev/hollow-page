@@ -41,6 +41,8 @@ npm run dev                   # API em :3333 e front em http://localhost:5173
 
 Os exemplos criam 7 contas (`fulano@exemplo.test`, `lira@exemplo.test` e outras; a senha de todas está em `apps/api/src/db/seed.ts`), 24 artes e salvos variados. O seed só acrescenta essas contas; `npm run db:seed -- --forcar` recria apenas elas.
 
+O site no ar tem um seed próprio, `npm run db:seed:producao`, com 10 contas e 50 publicações feitas só com arte oficial. A senha dessas contas vem de `SEED_SENHA`, guardada no `.env.producao.local`. Para rodar, de propósito: `PERMITIR_PRODUCAO=1` com as variáveis desse arquivo.
+
 Para os testes da API, crie um banco separado (`createdb hollowpage_test`) ou defina `TEST_DATABASE_URL`, e rode `npm test`.
 
 ### Bancos: desenvolvimento e produção
@@ -80,7 +82,7 @@ packages/
 
 ## Sobre as imagens
 
-As artes em `apps/api/seed` são de fãs e servem só para testar localmente. Antes de usar qualquer uma delas no site público, peça permissão e dê crédito a quem desenhou. Os itens dos estados vazios (`apps/web/public/img/itens`: pena, diários, lanterna e fragmento de máscara) são sprites oficiais do jogo, tirados da [Hollow Knight Wiki](https://hollowknight.wiki). De lá também vêm os separadores das lojas com os personagens no topo dos painéis (`apps/web/public/ornamentos/personagens`: Sly, Iselda, Salubra, Lemm, Comedor de Pernas e Besouro-cervo) e a cabeça do Knight do ícone de perfil, recortada da arte oficial.
+As artes em `apps/api/seed` (fora da subpasta `producao`) são de fãs e servem só para testar localmente. Antes de usar qualquer uma delas no site público, peça permissão e dê crédito a quem desenhou. Os itens dos estados vazios (`apps/web/public/img/itens`: pena, diários, lanterna e fragmento de máscara) são sprites oficiais do jogo, tirados da [Hollow Knight Wiki](https://hollowknight.wiki). De lá também vêm os separadores das lojas com os personagens no topo dos painéis (`apps/web/public/ornamentos/personagens`: Sly, Iselda, Salubra, Lemm, Comedor de Pernas e Besouro-cervo) e a cabeça do Knight do ícone de perfil, recortada da arte oficial. As imagens de `apps/api/seed/producao` são artes oficiais da Team Cherry (artes promocionais, retratos de personagens, esboços e aquarelas de Ari Gibson) tiradas da mesma wiki, com o crédito na descrição de cada publicação.
 
 Hollow Knight é marca da Team Cherry; este é um projeto de fã, sem fins lucrativos.
 
